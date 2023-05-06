@@ -30,409 +30,264 @@
 </select><span th:text="#{index.receipt.table.day}"></span></div></td>
 
 <td><select th:field="*{aTAArr[0].account}">
-  <span th:each="item:${accountMap}"><option th:value="${item.value}" th:text="${item.key}"></option></span>
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
 <select th:field="*{aTAArr[0].taxRate}">
-  <span th:each="item:${taxRateMap}"><option th:value="${item.value}" th:text="${item.key}"></option></span>
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
 <input type="text" th:field="*{aTAArr[0].amount}"></td>
 
-<td><select name="account1">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[1].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate1">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[1].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price1"></td>
+<input type="text" th:field="*{aTAArr[1].amount}"></td>
 
-<td><select name="account2">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[2].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate2">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[2].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price2"></td>
+<input type="text" th:field="*{aTAArr[2].amount}"></td>
 
-<td><select name="account3">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[3].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate3">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[3].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price3"></td>
+<input type="text" th:field="*{aTAArr[3].amount}"></td>
 
-<td><select name="account4">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[4].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate4">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[4].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price4"></td>
+<input type="text" th:field="*{aTAArr[4].amount}"></td>
 </tr>
 
 <!-- 2行目 -->
 <tr>
 
-<td><select name="account05">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[5].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate05">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[5].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price05"></td>
+<input type="text" th:field="*{aTAArr[5].amount}"></td>
 
-<td><select name="account06">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[6].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate06">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[6].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price06"></td>
+<input type="text" th:field="*{aTAArr[6].amount}"></td>
 
-<td><select name="account07">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[7].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate07">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[7].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price07"></td>
+<input type="text" th:field="*{aTAArr[7].amount}"></td>
 
-<td><select name="account08">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[8].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate08">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[8].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price08"></td>
+<input type="text" th:field="*{aTAArr[8].amount}"></td>
 
-<td><select name="account09">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[9].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate09">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[9].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price09"></td>
+<input type="text" th:field="*{aTAArr[9].amount}"></td>
 </tr>
 
 <!-- 3行目 -->
 <tr>
 
-<td><select name="account10">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[10].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate10">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[10].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price10"></td>
+<input type="text" th:field="*{aTAArr[10].amount}"></td>
 
-<td><select name="account11">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[11].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate11">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[11].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price11"></td>
+<input type="text" th:field="*{aTAArr[11].amount}"></td>
 
-<td><select name="account12">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[12].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate12">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[12].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price12"></td>
+<input type="text" th:field="*{aTAArr[12].amount}"></td>
 
-<td><select name="account13">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[13].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate13">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[13].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price13"></td>
+<input type="text" th:field="*{aTAArr[13].amount}"></td>
 
-<td><select name="account14">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[14].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate14">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[14].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price14"></td>
+<input type="text" th:field="*{aTAArr[14].amount}"></td>
 </tr>
 
 <!-- 4行目 -->
 <tr>
 
-<td><select name="account15">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[15].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate15">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[15].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price15"></td>
+<input type="text" th:field="*{aTAArr[15].amount}"></td>
 
-<td><select name="account16">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[16].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate16">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[16].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price16"></td>
+<input type="text" th:field="*{aTAArr[16].amount}"></td>
 
-<td><select name="account17">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[17].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate17">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[17].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price17"></td>
+<input type="text" th:field="*{aTAArr[17].amount}"></td>
 
-<td><select name="account18">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[18].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate18">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[18].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price18"></td>
+<input type="text" th:field="*{aTAArr[18].amount}"></td>
 
-<td><select name="account19">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[19].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate19">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[19].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price19"></td>
+<input type="text" th:field="*{aTAArr[19].amount}"></td>
 </tr>
 
 <!-- 5行目 -->
 <tr>
 
-<td><select name="account20">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[20].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate20">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[20].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price20"></td>
+<input type="text" th:field="*{aTAArr[20].amount}"></td>
 
-<td><select name="account21">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[21].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate21">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[21].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price21"></td>
+<input type="text" th:field="*{aTAArr[21].amount}"></td>
 
-<td><select name="account22">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[22].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate22">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[22].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price22"></td>
+<input type="text" th:field="*{aTAArr[22].amount}"></td>
 
-<td><select name="account23">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[23].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate23">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[23].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price23"></td>
+<input type="text" th:field="*{aTAArr[23].amount}"></td>
 
-<td><select name="account24">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[24].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate24">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[24].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price24"></td>
+<input type="text" th:field="*{aTAArr[24].amount}"></td>
 </tr>
 
 <!-- 6行目 -->
 <tr>
 
-<td><select name="account25">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[25].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate25">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[25].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price25"></td>
+<input type="text" th:field="*{aTAArr[25].amount}"></td>
 
-<td><select name="account26">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[26].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate26">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[26].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price26"></td>
+<input type="text" th:field="*{aTAArr[26].amount}"></td>
 
-<td><select name="account27">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[27].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate27">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[27].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price27"></td>
+<input type="text" th:field="*{aTAArr[27].amount}"></td>
 
-<td><select name="account28">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[28].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate28">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[28].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price28"></td>
+<input type="text" th:field="*{aTAArr[28].amount}"></td>
 
-<td><select name="account29">
-  <option value=""></option>
-  <option value="shokuhi">食費</option>
-  <option value="shomohinhi">消耗品費</option>
-  <option value="suidokonetsuhi">水道光熱費</option>
+<td><select th:field="*{aTAArr[29].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select name="taxRate29">
-  <option value=""></option>
-  <option value="8">8</option>
-  <option value="10">10</option>
+<select th:field="*{aTAArr[29].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" name="price29"></td>
+<input type="text" th:field="*{aTAArr[29].amount}"></td>
 </tr>
 
 </table>

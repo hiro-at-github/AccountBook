@@ -14,12 +14,12 @@
 <table rules="cols" class="table_for_input">
 
 <tr>
-<th th:text="#{index.receipt.table.date}"></th><th th:text="#{index.receipt.table.account}"></th><th th:text="#{index.receipt.table.account}"></th><th th:text="#{index.receipt.table.account}"></th><th th:text="#{index.receipt.table.account}"></th><th th:text="#{index.receipt.table.account}"></th>
+<th th:text="#{index.receipt.table.date}"></th><th th:text="#{index.receipt.table.account}"></th><th th:text="#{index.receipt.table.account}"></th><th th:text="#{index.receipt.table.account}"></th><th th:text="#{index.receipt.table.account}"></th>
 </tr>
 
 <!-- 1行目 -->
 <tr>
-<td rowspan="6" class="v_a_t"><div><select th:field="*{year}">
+<td rowspan="8" class="v_a_t"><div><select th:field="*{year}">
   <option th:each="item:${yearArr}" th:value="${item}" th:text="${item}"></option>
 </select><span th:text="#{index.receipt.table.year}"></span></div>
 <div><select th:field="*{month}">
@@ -60,7 +60,10 @@
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
 <input type="text" th:field="*{aTAArr[3].amount}"></td>
+</tr>
 
+<!-- 2行目 -->
+<tr>
 <td><select th:field="*{aTAArr[4].account}">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
@@ -68,11 +71,6 @@
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
 <input type="text" th:field="*{aTAArr[4].amount}"></td>
-</tr>
-
-<!-- 2行目 -->
-<tr>
-
 <td><select th:field="*{aTAArr[5].account}">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
@@ -96,7 +94,10 @@
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
 <input type="text" th:field="*{aTAArr[7].amount}"></td>
+</tr>
 
+<!-- 3行目 -->
+<tr>
 <td><select th:field="*{aTAArr[8].account}">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
@@ -112,10 +113,6 @@
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
 <input type="text" th:field="*{aTAArr[9].amount}"></td>
-</tr>
-
-<!-- 3行目 -->
-<tr>
 
 <td><select th:field="*{aTAArr[10].account}">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
@@ -132,7 +129,10 @@
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
 <input type="text" th:field="*{aTAArr[11].amount}"></td>
+</tr>
 
+<!-- 4行目 -->
+<tr>
 <td><select th:field="*{aTAArr[12].account}">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
@@ -156,10 +156,6 @@
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
 <input type="text" th:field="*{aTAArr[14].amount}"></td>
-</tr>
-
-<!-- 4行目 -->
-<tr>
 
 <td><select th:field="*{aTAArr[15].account}">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
@@ -168,7 +164,10 @@
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
 <input type="text" th:field="*{aTAArr[15].amount}"></td>
+</tr>
 
+<!-- 5行目 -->
+<tr>
 <td><select th:field="*{aTAArr[16].account}">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
@@ -202,9 +201,8 @@
 <input type="text" th:field="*{aTAArr[19].amount}"></td>
 </tr>
 
-<!-- 5行目 -->
+<!-- 6行目 -->
 <tr>
-
 <td><select th:field="*{aTAArr[20].account}">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
@@ -236,7 +234,10 @@
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
 <input type="text" th:field="*{aTAArr[23].amount}"></td>
+</tr>
 
+<!-- 7行目 -->
+<tr>
 <td><select th:field="*{aTAArr[24].account}">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
@@ -244,10 +245,6 @@
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
 <input type="text" th:field="*{aTAArr[24].amount}"></td>
-</tr>
-
-<!-- 6行目 -->
-<tr>
 
 <td><select th:field="*{aTAArr[25].account}">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
@@ -272,7 +269,10 @@
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
 <input type="text" th:field="*{aTAArr[27].amount}"></td>
+</tr>
 
+<!-- 8行目 -->
+<tr>
 <td><select th:field="*{aTAArr[28].account}">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
@@ -288,6 +288,22 @@
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
 <input type="text" th:field="*{aTAArr[29].amount}"></td>
+
+<td><select th:field="*{aTAArr[30].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
+</select>
+<select th:field="*{aTAArr[30].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
+</select>
+<input type="text" th:field="*{aTAArr[30].amount}"></td>
+
+<td><select th:field="*{aTAArr[31].account}">
+  <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
+</select>
+<select th:field="*{aTAArr[31].taxRate}">
+  <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
+</select>
+<input type="text" th:field="*{aTAArr[31].amount}"></td>
 </tr>
 
 </table>

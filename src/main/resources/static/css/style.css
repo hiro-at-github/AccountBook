@@ -5,7 +5,7 @@
 
 * { font-weight: normal; font-size: medium; line-height: 1.8em; padding: 0; margin: 0;}
 
-body {background-color: #f1f1f1;}
+body {background-color: /*#f1f1f1*/#EEE;}
 
 body > div {margin-left: 10px;}
 
@@ -17,16 +17,26 @@ th {font-weight: normal;}
 
 input[type="submit"] {display: block; padding: 0 10px; margin-top: 10px; margin-left: auto;}
 
-.v_a_t {vertical-align: top;}
+/* .v_a_t {vertical-align: top;} */
 
 .table_for_input {border-color: #7CC0EF;}
 
 .table_for_input th {color: #FFF; background-color: #42A2E6; padding-top: 2px;}
 
-.table_for_input td {background-color: #FFF;  padding: 2px 4px;}
+.table_for_input td {background-color: #EEE;  padding: 2px 4px;}
 
-.table_for_input tr:nth-child(odd) td {background-color: #EEE;}
+.table_for_input tr:nth-child(odd) td {background-color: #FFF;}
+
+.table_for_input td.date_etc {vertical-align: top; background-color: #FFF;}
 
 .table_for_input input[type="select"] {width: 200px; margin-top: 10px!important;}
 
-.table_for_input input[type="text"] {width: 80px; height: 17px;}
+.table_for_input input[type="text"] {text-align: right; width: 80px; height: 17px;}
+
+.table_for_input input[type="number"] {text-align: right; width: 80px; height: 17px; -moz-appearance: textfield; appearance: textfield;}
+.table_for_input input[type="number"]::-webkit-inner-spin-button,
+.table_for_input input[type="number"]::-webkit-outer-spin-button {margin: 0; -webkit-appearance: none;}
+
+
+
+

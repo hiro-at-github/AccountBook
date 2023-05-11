@@ -17,6 +17,9 @@ public class ReceiptForm {
     /** 勘定科目、税率、金額の配列 */
     private AccountTaxrateAmount[] aTAArr;
 
+    /** 税額 */
+    private String taxAmount;
+
     /** コンストラクタ */
     public ReceiptForm(String prmYear, String prmMonth, String prmDay, Integer prmLength) {
 

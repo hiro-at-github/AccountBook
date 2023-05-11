@@ -33,6 +33,9 @@ public class IndexController {
     /**  */
     private static final String RECEIPT_FORM = "receiptForm";
 
+    /** 遷移先 */
+    private static final String INDEX = "index/index";
+
     @Autowired
     private HttpSession httpSession;
 
@@ -40,19 +43,19 @@ public class IndexController {
     private IndexService indexService;
 
     @GetMapping("/index")
-    public String getIndex(Model model) {
+    public String getIndex(Model prmModel) {
 
         IndexCalendar indexCalendar = indexService.getIndexCalendar();
 
-        initOption(indexCalendar, model);
+        initOption(indexCalendar, prmModel);
 
         ReceiptForm receiptForm = new ReceiptForm(indexCalendar.getCurrentYear(),
                 indexCalendar.getCurrentMonth(),
                 indexCalendar.getCurrentDay(),
-                30);
-        model.addAttribute(RECEIPT_FORM, receiptForm);
+                32);
+        prmModel.addAttribute(RECEIPT_FORM, receiptForm);
 
-        return "index/index";
+        return INDEX;
 
     }
 
@@ -63,7 +66,7 @@ public class IndexController {
 
         initOption(indexCalendar, model);
 
-        return "index/index";
+        return INDEX;
 
     }
 

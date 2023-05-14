@@ -3,13 +3,23 @@
 <head>
 <meta charset="UTF-8"></meta>
 <link rel="stylesheet" th:href="@{/css/style.css}">
+<script th:inline="javascript">
+  const amountSum = /*[[${amountSum}]]*/"amountSum";
+  if (amountSum) {
+    const yesOrNo = window.confirm(amountSum);
+
+    if (yesOrNo) {
+      window.document.receiptFrm.submit();
+    }
+  }
+</script>
 <title th:text="#{index.title}"></title>
 </head>
 <body>
 <div>
 <h1 th:text="#{index.title}"></h1>
 <h2 th:text="#{index.h2.receipt}"></h2>
-<form method="post" action="/index/index" th:object="${receiptForm}">
+<form name="receiptFrm" method="post" action="/index/index" th:object="${receiptForm}">
 
 <table rules="cols" class="table_for_input">
 
@@ -311,7 +321,7 @@
 
 </table>
 
-<input type="submit" th.value="#{index.receipt.submit.create}" tabindex="7010">
+<input type="submit" name="create" th.value="#{index.receipt.submit.create}" tabindex="7010">
 
 </form>
 </div>

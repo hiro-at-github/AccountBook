@@ -59,12 +59,29 @@ public class IndexController {
 
     }
 
-    @PostMapping("/index")
-    public String postIndex(Model model, ReceiptForm receiptForm) {
+    @PostMapping(value = "/index", params = "create")
+    public String postIndex(ReceiptForm prmReceiptForm, Model prmModel) {
 
         IndexCalendar indexCalendar = indexService.getIndexCalendar();
 
-        initOption(indexCalendar, model);
+        initOption(indexCalendar, prmModel);
+
+        int amountSum = 0;
+        AccountTaxrateAmount[] aTAArr = prmReceiptForm.getATAArr();
+
+        for (AccountTaxrateAmount elem : aTAArr) {
+            String amount = elem.getAmount();
+
+            if (amount == null || amount.length() == 0 ) {
+                continue;
+            }
+
+            Integer intAmount = Integer.valueOf(elem.getAmount());
+
+            amountSum += intAmount;
+        }
+
+        prmModel.addAttribute("amountSum", String.valueOf(amountSum));
 
         return INDEX;
 

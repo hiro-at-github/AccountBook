@@ -5,6 +5,9 @@ import lombok.Data;
 @Data
 public class AccountTaxrateAmount {
 
+    /** 番号 */
+    private String number;
+
     /** 勘定科目 */
     private String account;
 

@@ -55,6 +55,7 @@ public class IndexController {
                 indexCalendar.getCurrentMonth(),
                 indexCalendar.getCurrentDay(),
                 32);
+        
         prmModel.addAttribute(RECEIPT_FORM, receiptForm);
 
         return INDEX;

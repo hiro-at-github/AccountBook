@@ -29,6 +29,10 @@ public class ReceiptForm {
 
         if (prmLength != null) {
             aTAArr = new AccountTaxrateAmount[prmLength];
+
+            for (int i = 0; i < prmLength; i++) {
+                aTAArr[i].setNumber(String.format("%02d", i));
+            }
         }
 
     }

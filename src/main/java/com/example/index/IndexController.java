@@ -7,7 +7,9 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -43,7 +45,7 @@ public class IndexController {
     private IndexService indexService;
 
     @GetMapping("/index")
-    public String getIndex(Model prmModel) {
+    public String getIndex(Model prmModel, @ModelAttribute ReceiptForm prmReceiptForm) {
 
         IndexCalendar indexCalendar = indexService.getIndexCalendar();
 
@@ -60,17 +62,22 @@ public class IndexController {
     }
 
     @PostMapping(value = "/index", params = "create")
-    public String postIndex(ReceiptForm prmReceiptForm, Model prmModel) {
+    public String postIndex(Model prmModel, @ModelAttribute ReceiptForm prmReceiptForm, BindingResult prmBindingResult) {
 
         IndexCalendar indexCalendar = indexService.getIndexCalendar();
 
         initOption(indexCalendar, prmModel);
 
+        if (prmBindingResult.hasErrors()) {
+
+            return INDEX;
+        }
+
         int amountSum = 0;
         AccountTaxrateAmount[] aTAArr = prmReceiptForm.getATAArr();
 
         for (AccountTaxrateAmount elem : aTAArr) {
-            String amount = elem.getAmount();
+            String amount = String.valueOf(elem.getAmount());
 
             if (amount == null || amount.length() == 0 ) {
                 continue;

@@ -18,7 +18,7 @@ public class ReceiptForm {
     private AccountTaxrateAmount[] aTAArr;
 
     /** 税額 */
-    private String taxAmount;
+    private Integer taxAmount;
 
     /** コンストラクタ */
     public ReceiptForm(String prmYear, String prmMonth, String prmDay, Integer prmLength) {

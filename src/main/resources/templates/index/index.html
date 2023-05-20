@@ -21,6 +21,9 @@
 <h2 th:text="#{index.h2.receipt}"></h2>
 <form name="receiptFrm" method="post" action="/index/index" th:object="${receiptForm}">
 
+<div th:errors="*{taxAmount}"></div>
+<div th:errors="*{aTAArr[0].amount}"></div>
+
 <table rules="cols" class="table_for_input">
 
 <tr>
@@ -45,7 +48,7 @@
 <select th:field="*{aTAArr[0].taxRate}" tabindex="120">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="number" th:field="*{aTAArr[0].amount}" tabindex="130"></td>
+<input type="text" th:field="*{aTAArr[0].amount}" tabindex="130"></td>
 
 <td><select th:field="*{aTAArr[1].account}" tabindex="210">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
@@ -71,7 +74,7 @@
 </select>
 <input type="number" th:field="*{aTAArr[3].amount}" tabindex="430"></td>
 
-<td rowspan="8" class="date_etc"><input type="number" th:field="*{taxAmount}" tabindex="6010"></td>
+<td rowspan="8" class="date_etc"><input type="text" th:field="*{taxAmount}" tabindex="6010"></td>
 </tr>
 
 <!-- 2行目 -->
@@ -321,7 +324,7 @@
 
 </table>
 
-<input type="submit" name="create" th.value="#{index.receipt.submit.create}" tabindex="7010">
+<input type="submit" name="create" th:value="#{index.receipt.submit.create}" tabindex="7010">
 
 </form>
 </div>

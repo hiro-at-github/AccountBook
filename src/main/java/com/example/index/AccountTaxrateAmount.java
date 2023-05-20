@@ -12,6 +12,7 @@ public class AccountTaxrateAmount {
     private String taxRate;
 
     /** 金額 */
-    private String amount;
+//    private String amount;
+    private Integer amount;
 
 }

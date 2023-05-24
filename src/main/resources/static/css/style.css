@@ -23,7 +23,7 @@ input[type="submit"] {display: block; padding: 0 10px; margin-top: 10px; margin-
 
 .table_for_input th {color: #FFF; background-color: #42A2E6; padding-top: 2px;}
 
-.table_for_input td {background-color: #EEE;  padding: 2px 4px;}
+.table_for_input td {white-space: nowrap; background-color: #EEE;  padding: 2px 4px;}
 
 .table_for_input tr:nth-child(odd) td {background-color: #FFF;}
 

@@ -1,5 +1,8 @@
 package com.example.index;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+
 import lombok.Data;
 
 @Data
@@ -16,6 +19,8 @@ public class AccountTaxrateAmount {
 
     /** 金額 */
 //    private String amount;
+    @Min(0)
+    @Max(9999999)
     private Integer amount;
 
 }

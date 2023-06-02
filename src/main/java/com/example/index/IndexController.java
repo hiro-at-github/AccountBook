@@ -72,6 +72,50 @@ public class IndexController {
 
         if (prmBindingResult.hasErrors()) {
 
+//            //TODO:チェックはビジネスか？←ビジネス
+//            List<String> itemList = new ArrayList<>();
+//            List<FieldError> fErrList = prmBindingResult.getFieldErrors();
+//
+//            for(FieldError elem : fErrList) {
+//                String field = elem.getField();
+//                String[] splitArr = field.split(java.util.regex.Pattern.quote("."));
+//
+//
+//
+//
+//                switch (splitArr.length) {
+//                case 1:
+//                    if (splitArr[0].equals("taxAmount")) {
+//                        itemList.add("税額");
+//                    }
+//
+//                    break;
+//
+//                case 2:
+//                    if (splitArr[1].equals("amount")) {
+//                        itemList.add("金額");
+//                    }
+//
+//                    break;
+//
+//                default:
+//                    break;
+//                }
+//            }
+//
+//            if (itemList.size() > 0) {
+//                List<String> tempList = new ArrayList<>(new HashSet<>(itemList));
+//
+//                List<String> temp2List = tempList;
+//
+//
+//            }
+
+            String errMsg = indexService.buildErrMsg(prmBindingResult);
+
+            String errMsgCp = errMsg;
+
+
             return INDEX;
         }
 

@@ -31,12 +31,12 @@ input[type="submit"] {display: block; padding: 0 10px; margin-top: 10px; margin-
 
 .table_for_input input[type="select"] {width: 200px; margin-top: 10px!important;}
 
-.table_for_input input[type="text"] {text-align: right; width: 80px; height: 17px;}
+.table_for_input input[type="text"] {text-align: right; width: 70px; height: 17px;}
 
-.table_for_input input[type="number"] {text-align: right; width: 80px; height: 17px; -moz-appearance: textfield; appearance: textfield;}
+.table_for_input input[type="number"] {text-align: right; width: 70px; height: 17px; -moz-appearance: textfield; appearance: textfield;}
 .table_for_input input[type="number"]::-webkit-inner-spin-button,
 .table_for_input input[type="number"]::-webkit-outer-spin-button {margin: 0; -webkit-appearance: none;}
 
-
+.error_for_text {background-color: #ffb3da;}
 
 

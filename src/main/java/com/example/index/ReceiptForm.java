@@ -27,6 +27,9 @@ public class ReceiptForm {
     @Max(9999999)
     private Integer taxAmount;
 
+    /** エラーメッセージ */
+    private String errorMessage;
+
     /** コンストラクタ */
     public ReceiptForm(String prmYear, String prmMonth, String prmDay, Integer prmLength) {
 

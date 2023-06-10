@@ -1,8 +1,10 @@
 package com.example.index;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +36,16 @@ public class SelectOptions {
     private List<String> keyList2;
 
 
+    public void init() {
+        Map<String, List<String>> selectOptionsKeysMap = getSelectOptionsKeysMap();
 
+
+
+
+
+
+
+    }
 
     private void initOptionKeyList() {
         if (optionKeyList != null) {
@@ -100,24 +111,28 @@ public class SelectOptions {
     }
 
 
-    public void tmpMtd2() {
+    public Map<String, List<String>> getSelectOptionsKeysMap() {
         String msg = messageSource.getMessage("select_options.keys", null, Locale.JAPAN);
         String[] msgArr = msg.split(",");
-        List<String>
-        
+        Map<String, List<String>> selectOptionsKeysMap = new LinkedHashMap<>();
+
         for (String elem : msgArr) {
-            
+            String[] elemArr = elem.split(Pattern.quote("."));
+            List<String> valueList = selectOptionsKeysMap.get(elemArr[0]);
+
+            if (valueList == null) {
+                List<String> newValueList = new ArrayList<>();
+                newValueList.add(elem);
+                selectOptionsKeysMap.put(elemArr[0], newValueList);
+            } else {
+                valueList.add(elem);
+            }
         }
-        
-        
-        
-        
-        
-        
-        
+
+        return selectOptionsKeysMap;
     }
-    
-    
-    
-    
+
+
+
+
 }

@@ -30,15 +30,25 @@ public class SelectOptions {
     private List<String> optionKeyList;
 
     /**  */
-    private List<String> keyList1;
+    private List<String> keyList;
 
     /**  */
     private List<String> keyList2;
 
+    /**  */
+    private String[] keyArr;
+    
+    
 
+    public SelectOptions() {
+    	keyArr = new String[] {"account", "tax_rate"};
+    }
+    
+    
+    
     public void init() {
         Map<String, List<String>> selectOptionsKeysMap = getSelectOptionsKeysMap();
-
+        tempMtd(selectOptionsKeysMap);
 
 
 
@@ -111,7 +121,7 @@ public class SelectOptions {
     }
 
 
-    public Map<String, List<String>> getSelectOptionsKeysMap() {
+    private Map<String, List<String>> getSelectOptionsKeysMap() {
         String msg = messageSource.getMessage("select_options.keys", null, Locale.JAPAN);
         String[] msgArr = msg.split(",");
         Map<String, List<String>> selectOptionsKeysMap = new LinkedHashMap<>();
@@ -132,7 +142,17 @@ public class SelectOptions {
         return selectOptionsKeysMap;
     }
 
-
+    private Object tempMtd(Map<String, List<String>> prmMap) {
+    	for (Map.Entry<String, List<String>> entry : prmMap.entrySet()) {
+    		System.out.println(entry.getKey());
+    		System.out.println(entry.getValue());
+    	}
+    	
+    	
+    	
+    	
+    	return null;
+    }
 
 
 }

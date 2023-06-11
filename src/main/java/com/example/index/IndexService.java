@@ -78,7 +78,7 @@ public class IndexService {
             String msg = messageSource.getMessage("tax_rate." + elem, null, Locale.JAPAN);
             taxRateMap.put(msg, Integer.valueOf(msg));
         }
-        selectOptions.getSelectOptionsKeysMap();
+        selectOptions.init();
 
         return taxRateMap;
     }

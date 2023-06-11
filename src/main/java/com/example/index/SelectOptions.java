@@ -1,158 +1,111 @@
 package com.example.index;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
-import lombok.Data;
-
+//--------------------------------------------------------------------------------
+/**
+ * selectのoption用クラス
+ */
+//--------------------------------------------------------------------------------
 @Component
-@Data
 public class SelectOptions {
-    /**  */
-
+    /** 空文字列 */
+    private static final String EMPTY = "";
+    /** ドット */
+    private static final String DOT = ".";
+    
+    /** メッセージソース */
     @Autowired
     private MessageSource messageSource;
 
-
-
-
-
-
-    /**  */
-    private List<String> optionKeyList;
-
-    /**  */
-    private List<String> keyList;
-
-    /**  */
-    private List<String> keyList2;
-
-    /**  */
-    private String[] keyArr;
+    /** 科目のキー */
+    private String[] accountKeyArr;
+    /** 消費税率のキー */
+    private String[] taxRateKeyArr;
+    /** 科目のマップ */
+    private Map<String, String> accountMap;
+    /** 消費税率のマップ */
+    private Map<String, Integer> taxRateMap;
     
-    
-
+    //--------------------------------------------------------------------------------
+    /**
+     *  コンストラクタ
+     */
+    //--------------------------------------------------------------------------------
     public SelectOptions() {
-    	keyArr = new String[] {"account", "tax_rate"};
+        accountKeyArr = new String[] {"shokuhi", "shomohinhi", "suidokonetsuhi"};
+        taxRateKeyArr = new String[] {"no1", "no2"};
+    }
+
+    //--------------------------------------------------------------------------------
+    /**
+     * 科目のマップを返却する
+     * 
+     * @return 科目のマップ
+     */
+    //--------------------------------------------------------------------------------
+    public Map<String, String> getAccountMap() {
+        if (accountMap != null) {
+            return accountMap;
+        }
+        
+        accountMap = new LinkedHashMap<>();
+        accountMap.put(EMPTY, EMPTY);
+        
+        for (String elem : accountKeyArr) {
+            accountMap.put(messageSource.getMessage("account" + DOT + elem, null, Locale.JAPAN), elem);
+        }
+        
+        return accountMap;
     }
     
+    //--------------------------------------------------------------------------------
+    /**
+     * 消費税率のマップを返却する
+     * 
+     * @return 消費税率のマップ
+     */
+    //--------------------------------------------------------------------------------
+    public Map<String, Integer> getTaxRateMap() {
+        if (taxRateMap != null) {
+            return taxRateMap;
+        }
+        
+        taxRateMap = new LinkedHashMap<>();
+        taxRateMap.put(EMPTY, null);
+        
+        for (String elem : taxRateKeyArr) {
+            String msg = messageSource.getMessage("tax_rate" + DOT + elem, null, Locale.JAPAN);
+            taxRateMap.put(msg, Integer.valueOf(msg));
+        }
+        
+        return taxRateMap;
+    }
     
-    
-    public void init() {
-        Map<String, List<String>> selectOptionsKeysMap = getSelectOptionsKeysMap();
-        tempMtd(selectOptionsKeysMap);
-
-
-
-
-
-
-    }
-
-    private void initOptionKeyList() {
-        if (optionKeyList != null) {
-            return;
-        }
-
-        List<String> beforeDot = getBeforeDot();
-
-
-
-
-
-
-
-    }
-
-    private List<String> getBeforeDot() {
-        String msg = messageSource.getMessage("select_options.keys", null, Locale.JAPAN);
-        String[] msgArr = msg.split(",");
-        List<String> beforeDot = new ArrayList<>();
-
-        for (String elem : msgArr) {
-            String[] split = elem.split(Pattern.quote("."));
-
-            if (!beforeDot.contains(split[0])) {
-                beforeDot.add(split[0]);
-            }
-        }
-
-        for (String elem : beforeDot) {
-
-        }
-
-        return beforeDot;
-    }
-
-    public void tmpMtd() {
-        String msg = messageSource.getMessage("select_options.keys", null, Locale.JAPAN);
-        String[] msgArr = msg.split(",");
-        String lastElemArr0 = null;
-        List<List<String>> tmpList = new ArrayList<>();
-        List<String> tempList = new ArrayList<>();
-
-        for (String elem : msgArr) {
-            String[] elemArr = elem.split(Pattern.quote("."));
-
-//            if (lastBeforeDot == null || !lastBeforeDot.equals(elemArr[0])) {
-//                lastBeforeDot = elemArr[0];
-//                tempList = new ArrayList<>();
+//    private Map<String, List<String>> getSelectOptionsKeysMap() {
+//        String msg = messageSource.getMessage("select_options.keys", null, Locale.JAPAN);
+//        String[] msgArr = msg.split(",");
+//        Map<String, List<String>> selectOptionsKeysMap = new LinkedHashMap<>();
+//        
+//        for (String elem : msgArr) {
+//            String[] elemArr = elem.split(Pattern.quote("."));
+//            List<String> valueList = selectOptionsKeysMap.get(elemArr[0]);
+//            
+//            if (valueList == null) {
+//                List<String> newValueList = new ArrayList<>();
+//                newValueList.add(elem);
+//                selectOptionsKeysMap.put(elemArr[0], newValueList);
+//            } else {
+//                valueList.add(elem);
 //            }
-
-            if (lastElemArr0 != null || lastElemArr0 != null && !lastElemArr0.equals(elemArr[0])) {
-                tmpList.add(tempList);
-                tempList = new ArrayList<>();
-            }
-
-
-            tempList.add(elem);
-            lastElemArr0 = elemArr[0];
-        }
-
-        System.out.println();
-    }
-
-
-    private Map<String, List<String>> getSelectOptionsKeysMap() {
-        String msg = messageSource.getMessage("select_options.keys", null, Locale.JAPAN);
-        String[] msgArr = msg.split(",");
-        Map<String, List<String>> selectOptionsKeysMap = new LinkedHashMap<>();
-
-        for (String elem : msgArr) {
-            String[] elemArr = elem.split(Pattern.quote("."));
-            List<String> valueList = selectOptionsKeysMap.get(elemArr[0]);
-
-            if (valueList == null) {
-                List<String> newValueList = new ArrayList<>();
-                newValueList.add(elem);
-                selectOptionsKeysMap.put(elemArr[0], newValueList);
-            } else {
-                valueList.add(elem);
-            }
-        }
-
-        return selectOptionsKeysMap;
-    }
-
-    private Object tempMtd(Map<String, List<String>> prmMap) {
-    	for (Map.Entry<String, List<String>> entry : prmMap.entrySet()) {
-    		System.out.println(entry.getKey());
-    		System.out.println(entry.getValue());
-    	}
-    	
-    	
-    	
-    	
-    	return null;
-    }
-
-
+//        }
+//        
+//        return selectOptionsKeysMap;
+//    }
 }

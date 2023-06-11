@@ -16,74 +16,36 @@ import org.springframework.validation.FieldError;
 
 @Service
 public class IndexService {
+    /** メッセージソース */
     @Autowired
     private MessageSource messageSource;
 
     @Autowired
     private IndexCalendar indexCalendar;
-
-    private String[] accountKeyArr;
-
-    private String[] taxKeyArr;
-
-    private String[] errorKeyArr;
-
+    /** 科目のマップ */
     private Map<String, String> accountMap;
-
+    /** 消費税率のマップ */
     private Map<String, Integer> taxRateMap;
-
+    /**  */
     private Map<String, String> errMsgMap;
 
     @Autowired
     private SelectOptions selectOptions;
 
+    //--------------------------------------------------------------------------------
+    /**
+     * コンストラクタ
+     */
+    //--------------------------------------------------------------------------------
     public IndexService() {
-        accountKeyArr = new String[] {"shokuhi", "shomohinhi", "suidokonetsuhi"};
-        taxKeyArr = new String[] {"no1", "no2"};
-        errorKeyArr = new String[] {"amount", "tax_amount", "amount_message"};
-
         selectOptions = new SelectOptions();
-
     }
-
-
-
-
-    /** 科目のマップ */
-    public Map<String, String> getAccountMap() {
-        if (accountMap != null) {
-            return accountMap;
-        }
-
-        accountMap = new HashMap<>();
-        accountMap.put("", "");
-
-        for (String elem : accountKeyArr) {
-            accountMap.put(messageSource.getMessage("account." + elem, null, Locale.JAPAN), elem);
-        }
-
-        return accountMap;
-    }
-
-    /** 消費税率のマップ */
-    public Map<String, Integer> getTaxRateMap() {
-        if (taxRateMap != null) {
-            return taxRateMap;
-        }
-
-        taxRateMap = new HashMap<>();
-        taxRateMap.put("", null);
-
-        for (String elem : taxKeyArr) {
-            String msg = messageSource.getMessage("tax_rate." + elem, null, Locale.JAPAN);
-            taxRateMap.put(msg, Integer.valueOf(msg));
-        }
-        selectOptions.init();
-
-        return taxRateMap;
-    }
-
-    /**  */
+    
+    //--------------------------------------------------------------------------------
+    /**
+     * 現在の月を返却する
+     */
+    //--------------------------------------------------------------------------------
     public int getCurrentMonth() {
 
         Calendar cal = GregorianCalendar.getInstance();
@@ -92,10 +54,45 @@ public class IndexService {
 
     }
 
-    /**  */
+    //--------------------------------------------------------------------------------
+    /**
+     * 
+     */
+    //--------------------------------------------------------------------------------
     public IndexCalendar getIndexCalendar() {
         return indexCalendar;
     }
+
+    //--------------------------------------------------------------------------------
+    /**
+     * 科目のマップを返却する
+     * 
+     * @return 科目のマップ
+     */
+    //--------------------------------------------------------------------------------
+    public Map<String, String> getAccountMap() {
+        if (accountMap != null) {
+            return accountMap;
+        }
+
+        return selectOptions.getAccountMap();
+    }
+
+    //--------------------------------------------------------------------------------
+    /**
+     * 消費税率のマップを返却する
+     * 
+     * @return 消費税率のマップ
+     */
+    //--------------------------------------------------------------------------------
+    public Map<String, Integer> getTaxRateMap() {
+        if (taxRateMap != null) {
+            return taxRateMap;
+        }
+
+        return selectOptions.getTaxRateMap();
+    }
+
 
     /** 戻り値：エラーメッセージの文字列 */
     public String buildErrMsg(BindingResult prmBResult) {
@@ -148,10 +145,6 @@ public class IndexService {
         return errMsg + errMsgMap.get("amount_error_message");
     }
 
-
-    private void tempMtd() {
-//        messageSource.
-    }
 
     private void initErrMsgMap() {
         if (errMsgMap != null) {

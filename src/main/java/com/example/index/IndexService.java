@@ -151,13 +151,34 @@ public class IndexService {
             return;
         }
 
+        //TODO:イテレータの元は先、イテレータで作るものは後
+        //TODO:イテレータの元のコンストラクタでの初期化を検討
+        String[] keyArr = {"amount", "tax_amount", "amount_message"};
         errMsgMap = new HashMap<>();
-        errMsgMap.put("amount", messageSource.getMessage("amount", null, Locale.JAPAN));
-        errMsgMap.put("taxAmount", messageSource.getMessage("taxAmount", null, Locale.JAPAN));
-        errMsgMap.put("amount_error_message", messageSource.getMessage("amount_error_message", null, Locale.JAPAN));
+        errMsgMap.put(null, null);
+        
+        for (String elem : keyArr) {
+            errMsgMap.put(snakeToCamel(elem), messageSource.getMessage(elem, null, Locale.JAPAN));
+        }
     }
 
-
+    //--------------------------------------------------------------------------------
+    /**
+     * スネークケースからキャメルケースに変換して返却する
+     * 
+     * @param 処理対象文字列
+     */
+    //--------------------------------------------------------------------------------
+    private String snakeToCamel(String prmTarget) {
+        String[] split = prmTarget.split("_");
+        StringBuilder builder = new StringBuilder(split[0]);
+        
+        for (int i = 1; i < split.length; i++) {
+            builder.append(split[i].substring(0, 1).toUpperCase());
+        }
+        
+        return builder.toString();
+    }
 
 
 

@@ -16,6 +16,9 @@ import org.springframework.validation.FieldError;
 
 @Service
 public class IndexService {
+    /**  */
+    private static final String ERR_MSG_KEY = "amount_message";
+
     /** メッセージソース */
     @Autowired
     private MessageSource messageSource;
@@ -40,7 +43,7 @@ public class IndexService {
     public IndexService() {
         selectOptions = new SelectOptions();
     }
-    
+
     //--------------------------------------------------------------------------------
     /**
      * 現在の月を返却する
@@ -56,7 +59,7 @@ public class IndexService {
 
     //--------------------------------------------------------------------------------
     /**
-     * 
+     *
      */
     //--------------------------------------------------------------------------------
     public IndexCalendar getIndexCalendar() {
@@ -66,7 +69,7 @@ public class IndexService {
     //--------------------------------------------------------------------------------
     /**
      * 科目のマップを返却する
-     * 
+     *
      * @return 科目のマップ
      */
     //--------------------------------------------------------------------------------
@@ -81,7 +84,7 @@ public class IndexService {
     //--------------------------------------------------------------------------------
     /**
      * 消費税率のマップを返却する
-     * 
+     *
      * @return 消費税率のマップ
      */
     //--------------------------------------------------------------------------------
@@ -142,7 +145,7 @@ public class IndexService {
         }
 
 //        throw new Exception(errMsg + "は半角数字を入力する");
-        return errMsg + errMsgMap.get("amount_error_message");
+        return errMsg + errMsgMap.get(snakeToCamel(ERR_MSG_KEY));
     }
 
 
@@ -153,30 +156,29 @@ public class IndexService {
 
         //TODO:イテレータの元は先、イテレータで作るものは後
         //TODO:イテレータの元のコンストラクタでの初期化を検討
-        String[] keyArr = {"amount", "tax_amount", "amount_message"};
+        String[] keyArr = {"amount", "tax_amount", ERR_MSG_KEY};
         errMsgMap = new HashMap<>();
-        errMsgMap.put(null, null);
-        
+
         for (String elem : keyArr) {
-            errMsgMap.put(snakeToCamel(elem), messageSource.getMessage(elem, null, Locale.JAPAN));
+            errMsgMap.put(snakeToCamel(elem), messageSource.getMessage("error." + elem, null, Locale.JAPAN));
         }
     }
 
     //--------------------------------------------------------------------------------
     /**
      * スネークケースからキャメルケースに変換して返却する
-     * 
+     *
      * @param 処理対象文字列
      */
     //--------------------------------------------------------------------------------
     private String snakeToCamel(String prmTarget) {
         String[] split = prmTarget.split("_");
         StringBuilder builder = new StringBuilder(split[0]);
-        
+
         for (int i = 1; i < split.length; i++) {
-            builder.append(split[i].substring(0, 1).toUpperCase());
+            builder.append(split[i].substring(0, 1).toUpperCase()).append(split[i].substring(1));
         }
-        
+
         return builder.toString();
     }
 

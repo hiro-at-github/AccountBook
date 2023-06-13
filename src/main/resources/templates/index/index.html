@@ -26,8 +26,7 @@
 <h2 th:text="#{index.h2.receipt}"></h2>
 <form name="receiptFrm" method="post" action="/index/index" th:object="${receiptForm}">
 
-<div th:errors="*{taxAmount}"></div>
-<div th:errors="*{aTAArr[0].amount}"></div>
+<p th:errors="*{aTAArr[0].amount}"></p>
 <p th:text="*{errorMessage}"></p>
 
 <table rules="cols" class="table_for_input">

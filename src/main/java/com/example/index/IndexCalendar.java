@@ -7,31 +7,38 @@ import org.springframework.stereotype.Component;
 
 import lombok.Data;
 
+//--------------------------------------------------------------------------------
+/**
+ * 日付の選択肢のクラス
+ */
+//--------------------------------------------------------------------------------
 @Component
 @Data
 public class IndexCalendar {
-
-    /**  */
+    /** 年の選択肢 */
     private String[] yearArr;
 
-    /**  */
+    /** 月の選択肢 */
     private String[] monthArr;
 
-    /**  */
+    /** 日の選択肢 */
     private String[] dayArr;
 
-    /**  */
+    /** 本日の年 */
     private String currentYear;
 
-    /**  */
+    /** 本日の月 */
     private String currentMonth;
 
-    /**  */
+    /** 本日の日 */
     private String currentDay;
 
-    /**  */
+    //--------------------------------------------------------------------------------
+    /**
+     * コンストラクタ
+     */
+    //--------------------------------------------------------------------------------
     public IndexCalendar() {
-
         Calendar calendar = GregorianCalendar.getInstance();
 
         // 年の設定
@@ -64,7 +71,5 @@ public class IndexCalendar {
         }
 
         currentDay = String.format("%02d", calendar.get(Calendar.DATE));
-
     }
-
 }

@@ -1,7 +1,6 @@
 package com.example.index;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -16,24 +15,31 @@ import org.springframework.validation.FieldError;
 
 @Service
 public class IndexService {
-    /**  */
+    /** エラーメッセージのキー */
     private static final String ERR_MSG_KEY = "amount_message";
+
+    //TODO:定数クラスに移動
+    private static final String S_SPRTR = System.getProperty("line.separator");
+    private static final String S_EMPTY = "";
 
     /** メッセージソース */
     @Autowired
     private MessageSource messageSource;
 
+    /** 日付の選択肢 */
     @Autowired
     private IndexCalendar indexCalendar;
+
+    /** 科目と消費税率の選択肢 */
+    @Autowired
+    private SelectOptions selectOptions;
+
     /** 科目のマップ */
     private Map<String, String> accountMap;
     /** 消費税率のマップ */
     private Map<String, Integer> taxRateMap;
-    /**  */
+    /** エラーメッセージのマップ */
     private Map<String, String> errMsgMap;
-
-    @Autowired
-    private SelectOptions selectOptions;
 
     //--------------------------------------------------------------------------------
     /**
@@ -41,25 +47,23 @@ public class IndexService {
      */
     //--------------------------------------------------------------------------------
     public IndexService() {
-        selectOptions = new SelectOptions();
+//        selectOptions = new SelectOptions();
     }
+
+//    //--------------------------------------------------------------------------------
+//    /**
+//     * 現在の月を返却する
+//     */
+//    //--------------------------------------------------------------------------------
+//    public int getCurrentMonth() {
+//        Calendar cal = GregorianCalendar.getInstance();
+//
+//        return cal.get(Calendar.MONTH);
+//    }
 
     //--------------------------------------------------------------------------------
     /**
-     * 現在の月を返却する
-     */
-    //--------------------------------------------------------------------------------
-    public int getCurrentMonth() {
-
-        Calendar cal = GregorianCalendar.getInstance();
-
-        return cal.get(Calendar.MONTH);
-
-    }
-
-    //--------------------------------------------------------------------------------
-    /**
-     *
+     * 日付の選択肢を返却する
      */
     //--------------------------------------------------------------------------------
     public IndexCalendar getIndexCalendar() {
@@ -96,69 +100,107 @@ public class IndexService {
         return selectOptions.getTaxRateMap();
     }
 
-
-    /** 戻り値：エラーメッセージの文字列 */
-    public String buildErrMsg(BindingResult prmBResult) {
+    //--------------------------------------------------------------------------------
+    /**
+     * バインディングリザルトのデータを元に、エラーメッセージを組み立てて返却する
+     *
+     * @param prmResult バインディングリザルト
+     * @return エラーメッセージ
+     */
+    //--------------------------------------------------------------------------------
+    public String buildErrMsg(BindingResult prmResult) {
         initErrMsgMap();
-//        StringBuilder errMsgBuilder = new StringBuilder();
-        String errMsg = new String();
-//        List<String> errMsgLst = new ArrayList<>();
-        List<FieldError> fErrLst = prmBResult.getFieldErrors();
+        StringBuilder errMsgBuilder = new StringBuilder();
 
-        for (FieldError elem : fErrLst) {
+        List<FieldError> errLst = prmResult.getFieldErrors();
+        for (FieldError elem : errLst) {
             String field = elem.getField();
             String[] keyArr = field.split(Pattern.quote("."));
 
-//            switch(keyArr.length) {
-//            case 1:
-//                errMsgLst.add(errMsgMap.get(keyArr[0]));
-//
-//                break;
-//
-//            case 2:
-//                errMsgLst.add(errMsgMap.get(keyArr[1]));
-//
-//                break;
-//
-//            default:
-//
-//                break;
-//            }
-
             String msg = errMsgMap.get(keyArr[keyArr.length - 1]);
 
-//            if (errMsgLst.contains(msg)) {
-//                continue;
-//            }
+            if (errMsgBuilder.indexOf(msg) > -1) {
+                errMsgBuilder.append("、");
+            }
 
-            if (errMsg.contains(msg)) {
+            if (errMsgBuilder.length() > 0) {
+                errMsgBuilder.append("、");
+            }
+
+            errMsgBuilder.append(msg);
+        }
+
+        return errMsgBuilder.toString() + errMsgMap.get(snakeToCamel(ERR_MSG_KEY));
+    }
+
+    //TODO:一通りなめてデータを返すこともできるが、一先ずチェック結果だけを返すこととする
+    public String checkTmpMtd(AccountTaxrateAmount[] prmATAArr) {
+
+        StringBuilder errMsgBuilder = new StringBuilder();
+
+        for (int i = 0; i < prmATAArr.length; i++) {
+            AccountTaxrateAmount elem = prmATAArr[i];
+            String num = String.valueOf(i + 1);
+
+            //TODO:エラー項目リストに変更
+            List<String> errMsgLst = new ArrayList<>();
+
+            //TODO:空文字他の定数化
+
+            if (S_EMPTY.equals(elem.getAccount())) {
+                errMsgLst.add("科目" + num);
+            }
+
+            if (S_EMPTY.equals(elem.getTaxRate())) {
+                errMsgLst.add("税率" + num);
+            }
+
+            if (elem.getAmount() == null) {
+                errMsgLst.add("金額" + num);
+            }
+
+            int size = errMsgLst.size();
+
+            if (size == 0 || size == 3) {
                 continue;
             }
 
-//            errMsgLst.add(msg);
+            errMsgBuilder.append(errMsgLst.get(0));
 
-            if (errMsg.length() > 0) {
-                errMsg += "、";
+            if (errMsgLst.size() == 2) {
+                errMsgBuilder.append("、").append(errMsgLst.get(1));
             }
 
-            errMsg += msg;
+            errMsgBuilder.append("が入力されていない").append(S_SPRTR);
         }
 
-//        throw new Exception(errMsg + "は半角数字を入力する");
-        return errMsg + errMsgMap.get(snakeToCamel(ERR_MSG_KEY));
+        if (errMsgBuilder.length() > 0) {
+            return errMsgBuilder.deleteCharAt(errMsgBuilder.length() - 1).toString();
+        }
+
+        return null;
     }
 
 
+
+
+
+    // privateメソッド ---------------------------------------------------------------
+
+    //--------------------------------------------------------------------------------
+    /**
+     * エラーメッセージを初期化する
+     */
+    //--------------------------------------------------------------------------------
     private void initErrMsgMap() {
         if (errMsgMap != null) {
             return;
         }
 
-        //TODO:イテレータの元は先、イテレータで作るものは後
-        //TODO:イテレータの元のコンストラクタでの初期化を検討
-        String[] keyArr = {"amount", "tax_amount", ERR_MSG_KEY};
         errMsgMap = new HashMap<>();
 
+        //TODO:イテレータの元になる配列のコンストラクタでの初期化を検討
+        String[] keyArr = {"amount", "tax_amount", ERR_MSG_KEY};
         for (String elem : keyArr) {
             errMsgMap.put(snakeToCamel(elem), messageSource.getMessage("error." + elem, null, Locale.JAPAN));
         }
@@ -182,9 +224,10 @@ public class IndexService {
         return builder.toString();
     }
 
-
-
-
+    //TODO:空文字はEmptyか否か
+    private boolean isNullOrEmpty(String prmTarget) {
+        return true;
+    }
 
 
 

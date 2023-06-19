@@ -5,16 +5,20 @@ import javax.validation.constraints.Min;
 
 import lombok.Data;
 
+//--------------------------------------------------------------------------------
+/**
+ * 勘定科目、消費税率、金額のクラス
+ */
+//--------------------------------------------------------------------------------
 @Data
 public class AccountTaxrateAmount {
-
     /** 番号 */
     private String number;
 
     /** 勘定科目 */
     private String account;
 
-    /** 税率 */
+    /** 消費税率 */
     private String taxRate;
 
     /** 金額 */
@@ -22,5 +26,4 @@ public class AccountTaxrateAmount {
     @Min(0)
     @Max(9999999)
     private Integer amount;
-
 }

@@ -1,5 +1,7 @@
 package com.example.index;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -47,7 +50,6 @@ public class IndexController {
 
     @GetMapping("/index")
     public String getIndex(Model prmModel, @ModelAttribute ReceiptForm prmReceiptForm) {
-
         IndexCalendar indexCalendar = indexService.getIndexCalendar();
 
         initOption(indexCalendar, prmModel);
@@ -60,12 +62,10 @@ public class IndexController {
         prmModel.addAttribute(RECEIPT_FORM, receiptForm);
 
         return INDEX;
-
     }
 
     @PostMapping(value = "/index", params = "create")
     public String postIndex(Model prmModel, @ModelAttribute @Validated ReceiptForm prmReceiptForm, BindingResult prmBindingResult) {
-
         IndexCalendar indexCalendar = indexService.getIndexCalendar();
 
         initOption(indexCalendar, prmModel);
@@ -76,8 +76,55 @@ public class IndexController {
             return INDEX;
         }
 
+        String errMsg = indexService.checkTmpMtd(prmReceiptForm.getATAArr());
+
+        if (errMsg != null) {
+            prmReceiptForm.setErrorMessage(errMsg);
+
+            List<Errors> errLst = new ArrayList<>();
+//            Errors err = new Errors();
+
+
+
+            return INDEX;
+        }
+
+
+
+
+
         int amountSum = 0;
         AccountTaxrateAmount[] aTAArr = prmReceiptForm.getATAArr();
+
+        for (int i = 0; i < aTAArr.length; i++) {
+            AccountTaxrateAmount elem = aTAArr[i];
+
+            if ("".equals(elem.getAccount()) && "".equals(elem.getTaxRate()) && elem.getAmount() == null) {
+                continue;
+            }
+
+            Integer amount = elem.getAmount();
+            String[] temp = {elem.getAccount(), elem.getTaxRate(), amount == null ? null : amount.toString()};
+
+
+
+        }
+
+        for (AccountTaxrateAmount elem : aTAArr) {
+            Integer amount = elem.getAmount();
+            String[] temp = {elem.getAccount(), elem.getTaxRate(), amount == null ? null : amount.toString()};
+
+
+
+
+        }
+
+
+
+
+
+
+
 
         for (AccountTaxrateAmount elem : aTAArr) {
             String amount = String.valueOf(elem.getAmount());
@@ -94,17 +141,16 @@ public class IndexController {
         prmModel.addAttribute("amountSum", String.valueOf(amountSum));
 
         return INDEX;
-
     }
 
     @SuppressWarnings("unchecked")
     private void initOption(IndexCalendar prmIndexCalendar, Model prmModel) {
-
         // 科目を設定
         Map<String, String> accountMap = (Map<String, String>) httpSession.getAttribute(ACCOUNT_MAP);
 
         if (accountMap == null) {
             accountMap = indexService.getAccountMap();
+            httpSession.setAttribute(ACCOUNT_MAP, accountMap);
         }
 
         prmModel.addAttribute(ACCOUNT_MAP, accountMap);
@@ -114,6 +160,7 @@ public class IndexController {
 
         if (taxRateMap == null) {
             taxRateMap = indexService.getTaxRateMap();
+            httpSession.setAttribute(TAX_RATE_MAP, taxRateMap);
         }
 
         prmModel.addAttribute(TAX_RATE_MAP, taxRateMap);
@@ -122,7 +169,5 @@ public class IndexController {
         prmModel.addAttribute(YEAR_ARR, prmIndexCalendar.getYearArr());
         prmModel.addAttribute(MONTH_ARR, prmIndexCalendar.getMonthArr());
         prmModel.addAttribute(DAY_ARR, prmIndexCalendar.getDayArr());
-
     }
-
 }

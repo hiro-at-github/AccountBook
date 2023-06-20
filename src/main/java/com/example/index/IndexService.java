@@ -35,9 +35,9 @@ public class IndexService {
     private SelectOptions selectOptions;
 
     /** 科目のマップ */
-    private Map<String, String> accountMap;
+//    private Map<String, String> accountMap;
     /** 消費税率のマップ */
-    private Map<String, Integer> taxRateMap;
+//    private Map<String, Integer> taxRateMap;
     /** エラーメッセージのマップ */
     private Map<String, String> errMsgMap;
 
@@ -78,10 +78,6 @@ public class IndexService {
      */
     //--------------------------------------------------------------------------------
     public Map<String, String> getAccountMap() {
-        if (accountMap != null) {
-            return accountMap;
-        }
-
         return selectOptions.getAccountMap();
     }
 
@@ -93,10 +89,6 @@ public class IndexService {
      */
     //--------------------------------------------------------------------------------
     public Map<String, Integer> getTaxRateMap() {
-        if (taxRateMap != null) {
-            return taxRateMap;
-        }
-
         return selectOptions.getTaxRateMap();
     }
 

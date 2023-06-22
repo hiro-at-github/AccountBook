@@ -1,6 +1,7 @@
 package com.example.index;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -66,9 +67,10 @@ public class IndexService {
      * 日付の選択肢を返却する
      */
     //--------------------------------------------------------------------------------
-    public IndexCalendar getIndexCalendar() {
-        return indexCalendar;
-    }
+    public Map<String, String[]> getIndexCalendar() {
+//        return indexCalendar;
+            return selectOptions.getDateArrMap(GregorianCalendar.getInstance());
+        }
 
     //--------------------------------------------------------------------------------
     /**

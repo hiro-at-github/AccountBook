@@ -1,5 +1,7 @@
 package com.example.index;
 
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -15,6 +17,9 @@ import org.springframework.stereotype.Component;
 //--------------------------------------------------------------------------------
 @Component
 public class SelectOptions {
+    //TODO:定数の定数クラスへの移動検討
+    /** 年の選択肢の個数 */
+    private static final int LENGTH_OF_YEAR =2;
     /** 空文字列 */
     private static final String EMPTY = "";
     /** ドット */
@@ -23,15 +28,10 @@ public class SelectOptions {
     /** メッセージソース */
     @Autowired
     private MessageSource messageSource;
-
     /** 科目のキー */
     private String[] accountKeyArr;
     /** 消費税率のキー */
     private String[] taxRateKeyArr;
-    /** 科目のマップ */
-    private Map<String, String> accountMap;
-    /** 消費税率のマップ */
-    private Map<String, Integer> taxRateMap;
 
     //--------------------------------------------------------------------------------
     /**
@@ -45,17 +45,52 @@ public class SelectOptions {
 
     //--------------------------------------------------------------------------------
     /**
+     * 年月日のマップを返却する
+     *
+     * @return 年月日のマップ
+     */
+    //--------------------------------------------------------------------------------
+    public Map<String, String[]> getDateArrMap(Calendar prmCalendar) {
+        // 年の設定
+        String[] yearArr = new String[LENGTH_OF_YEAR];
+        int thisYear = prmCalendar.get(Calendar.YEAR);
+
+        for (int i = 0; i < LENGTH_OF_YEAR; i++) {
+            yearArr[i] = String.valueOf(thisYear - LENGTH_OF_YEAR + 1 + i).substring(2);
+        }
+
+        // 月の設定
+        int lengthOfMonth = 12;
+        String[] monthArr = new String[lengthOfMonth];
+
+        for (int i = 0; i < lengthOfMonth; i++) {
+            monthArr[i] = String.format("%02d", i + 1);
+        }
+
+        // 日の設定
+        int lengthOfDay = 31;
+        String[] dayArr = new String[lengthOfDay];
+
+        for (int i = 0; i < lengthOfDay; i++) {
+            dayArr[i] = String.format("%02d", i + 1);
+        }
+
+        return new HashMap<String, String[]>() {
+                {put("yearArr", yearArr);
+                put("monthArr", monthArr);
+                put("dayArr", dayArr);}
+            };
+    }
+
+    //--------------------------------------------------------------------------------
+    /**
      * 科目のマップを返却する
      *
      * @return 科目のマップ
      */
     //--------------------------------------------------------------------------------
     public Map<String, String> getAccountMap() {
-        if (accountMap != null) {
-            return accountMap;
-        }
-
-        accountMap = new LinkedHashMap<>();
+        Map<String, String> accountMap = new LinkedHashMap<>();
         accountMap.put(EMPTY, EMPTY);
 
         for (String elem : accountKeyArr) {
@@ -73,11 +108,7 @@ public class SelectOptions {
      */
     //--------------------------------------------------------------------------------
     public Map<String, Integer> getTaxRateMap() {
-        if (taxRateMap != null) {
-            return taxRateMap;
-        }
-
-        taxRateMap = new LinkedHashMap<>();
+        Map<String, Integer> taxRateMap = new LinkedHashMap<>();
         taxRateMap.put(EMPTY, null);
 
         for (String elem : taxRateKeyArr) {

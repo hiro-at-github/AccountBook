@@ -1,6 +1,7 @@
 package com.example.index;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Locale;
@@ -12,18 +13,20 @@ import org.springframework.stereotype.Component;
 
 //--------------------------------------------------------------------------------
 /**
- * 科目と消費税率の選択肢のクラス
+ * 日付、科目、消費税率の選択肢のクラス
  */
 //--------------------------------------------------------------------------------
 @Component
 public class SelectOptions {
-    //TODO:定数の定数クラスへの移動検討
-    /** 年の選択肢の個数 */
-    private static final int LENGTH_OF_YEAR =2;
-    /** 空文字列 */
-    private static final String EMPTY = "";
-    /** ドット */
-    private static final String DOT = ".";
+    /** 年の選択肢のキー */
+    public static final String YEAR_ARR = "yearArr";
+
+    /** 月の選択肢のキー */
+    public static final String MONTH_ARR = "monthArr";
+
+    /** 日の選択肢のキー */
+    public static final String DAY_ARR = "dayArr";
+
 
     /** メッセージソース */
     @Autowired
@@ -50,13 +53,21 @@ public class SelectOptions {
      * @return 年月日のマップ
      */
     //--------------------------------------------------------------------------------
-    public Map<String, String[]> getDateArrMap(Calendar prmCalendar) {
-        // 年の設定
-        String[] yearArr = new String[LENGTH_OF_YEAR];
-        int thisYear = prmCalendar.get(Calendar.YEAR);
+    public Map<String, String[]> getDateArrMap(Integer prmYear) {
+        Integer thisYear = null;
 
-        for (int i = 0; i < LENGTH_OF_YEAR; i++) {
-            yearArr[i] = String.valueOf(thisYear - LENGTH_OF_YEAR + 1 + i).substring(2);
+        //TODO:年の定数化
+        if (prmYear == null || (prmYear < 2000 || 2100 < prmYear)) {
+            thisYear = GregorianCalendar.getInstance().get(Calendar.YEAR);
+        } else {
+            thisYear = prmYear;
+        }
+
+        // 年の設定
+        String[] yearArr = new String[Cnst.LENGTH_OF_YEAR];
+
+        for (int i = 0; i < Cnst.LENGTH_OF_YEAR; i++) {
+            yearArr[i] = String.valueOf(thisYear - Cnst.LENGTH_OF_YEAR + 1 + i).substring(2);
         }
 
         // 月の設定
@@ -76,9 +87,9 @@ public class SelectOptions {
         }
 
         return new HashMap<String, String[]>() {
-                {put("yearArr", yearArr);
-                put("monthArr", monthArr);
-                put("dayArr", dayArr);}
+                {put(YEAR_ARR, yearArr);
+                put(MONTH_ARR, monthArr);
+                put(DAY_ARR, dayArr);}
             };
     }
 
@@ -91,10 +102,10 @@ public class SelectOptions {
     //--------------------------------------------------------------------------------
     public Map<String, String> getAccountMap() {
         Map<String, String> accountMap = new LinkedHashMap<>();
-        accountMap.put(EMPTY, EMPTY);
+        accountMap.put(Cnst.EMPTY, Cnst.EMPTY);
 
         for (String elem : accountKeyArr) {
-            accountMap.put(messageSource.getMessage("account" + DOT + elem, null, Locale.JAPAN), elem);
+            accountMap.put(messageSource.getMessage("account" + Cnst.DOT + elem, null, Locale.JAPAN), elem);
         }
 
         return accountMap;
@@ -109,10 +120,10 @@ public class SelectOptions {
     //--------------------------------------------------------------------------------
     public Map<String, Integer> getTaxRateMap() {
         Map<String, Integer> taxRateMap = new LinkedHashMap<>();
-        taxRateMap.put(EMPTY, null);
+        taxRateMap.put(Cnst.EMPTY, null);
 
         for (String elem : taxRateKeyArr) {
-            String msg = messageSource.getMessage("tax_rate" + DOT + elem, null, Locale.JAPAN);
+            String msg = messageSource.getMessage("tax_rate" + Cnst.DOT + elem, null, Locale.JAPAN);
             taxRateMap.put(msg, Integer.valueOf(msg));
         }
 

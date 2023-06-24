@@ -1,6 +1,7 @@
 package com.example.index;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -27,18 +28,19 @@ public class IndexService {
     @Autowired
     private MessageSource messageSource;
 
-    /** 日付の選択肢 */
-    @Autowired
-    private IndexCalendar indexCalendar;
-
     /** 科目と消費税率の選択肢 */
     @Autowired
     private SelectOptions selectOptions;
 
-    /** 科目のマップ */
-//    private Map<String, String> accountMap;
-    /** 消費税率のマップ */
-//    private Map<String, Integer> taxRateMap;
+    /** 現在の年(整数) */
+    private int thisYear;
+    /** 現在の年 */
+    private String currentYear;
+    /** 現在の月 */
+    private String currentMonth;
+    /** 現在の日 */
+    private String currentDay;
+
     /** エラーメッセージのマップ */
     private Map<String, String> errMsgMap;
 
@@ -48,35 +50,62 @@ public class IndexService {
      */
     //--------------------------------------------------------------------------------
     public IndexService() {
-//        selectOptions = new SelectOptions();
+        Calendar calendar = GregorianCalendar.getInstance();
+        thisYear = calendar.get(Calendar.YEAR);
+        currentYear = String.valueOf(thisYear).substring(2);
+        currentMonth = String.format("%02d", calendar.get(Calendar.MONTH) + 1);
+        currentDay = String.format("%02d", calendar.get(Calendar.DATE));
     }
 
-//    //--------------------------------------------------------------------------------
-//    /**
-//     * 現在の月を返却する
-//     */
-//    //--------------------------------------------------------------------------------
-//    public int getCurrentMonth() {
-//        Calendar cal = GregorianCalendar.getInstance();
-//
-//        return cal.get(Calendar.MONTH);
-//    }
+    //--------------------------------------------------------------------------------
+    /**
+     * 現在の年を返却する
+     *
+     * @return 現在の年
+     */
+    //--------------------------------------------------------------------------------
+    public String getCurrentYear() {
+        return currentYear;
+    }
+
+    //--------------------------------------------------------------------------------
+    /**
+     * 現在の月を返却する
+     *
+     * @return 現在の月
+     */
+    //--------------------------------------------------------------------------------
+    public String getCurrentMonth() {
+        return currentMonth;
+    }
+
+    //--------------------------------------------------------------------------------
+    /**
+     * 現在の日を返却する
+     *
+     * @return 現在の日
+     */
+    //--------------------------------------------------------------------------------
+    public String getCurrentDay() {
+        return currentDay;
+    }
 
     //--------------------------------------------------------------------------------
     /**
      * 日付の選択肢を返却する
+     *
+     * @return 日付の選択肢
      */
     //--------------------------------------------------------------------------------
-    public Map<String, String[]> getIndexCalendar() {
-//        return indexCalendar;
-            return selectOptions.getDateArrMap(GregorianCalendar.getInstance());
+    public Map<String, String[]> getDateArrMap() {
+            return selectOptions.getDateArrMap(thisYear);
         }
 
     //--------------------------------------------------------------------------------
     /**
-     * 科目のマップを返却する
+     * 科目の選択肢を返却する
      *
-     * @return 科目のマップ
+     * @return 科目の選択肢
      */
     //--------------------------------------------------------------------------------
     public Map<String, String> getAccountMap() {
@@ -85,9 +114,10 @@ public class IndexService {
 
     //--------------------------------------------------------------------------------
     /**
-     * 消費税率のマップを返却する
+     * 消費税率の選択肢を返却する
      *
-     * @return 消費税率のマップ
+     * @return 消費税率の選択肢
+     *
      */
     //--------------------------------------------------------------------------------
     public Map<String, Integer> getTaxRateMap() {

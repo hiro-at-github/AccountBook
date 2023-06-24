@@ -50,13 +50,10 @@ public class IndexController {
 
     @GetMapping("/index")
     public String getIndex(Model prmModel, @ModelAttribute ReceiptForm prmReceiptForm) {
-        IndexCalendar indexCalendar = indexService.getIndexCalendar();
-
-        initOption(indexCalendar, prmModel);
-
-        ReceiptForm receiptForm = new ReceiptForm(indexCalendar.getCurrentYear(),
-                indexCalendar.getCurrentMonth(),
-                indexCalendar.getCurrentDay(),
+        initOption(prmModel);
+        ReceiptForm receiptForm = new ReceiptForm(indexService.getCurrentYear(),
+                indexService.getCurrentMonth(),
+                indexService.getCurrentDay(),
                 32);
 
         prmModel.addAttribute(RECEIPT_FORM, receiptForm);
@@ -66,9 +63,7 @@ public class IndexController {
 
     @PostMapping(value = "/index", params = "create")
     public String postIndex(Model prmModel, @ModelAttribute @Validated ReceiptForm prmReceiptForm, BindingResult prmBindingResult) {
-        IndexCalendar indexCalendar = indexService.getIndexCalendar();
-
-        initOption(indexCalendar, prmModel);
+        initOption(prmModel);
 
         if (prmBindingResult.hasErrors()) {
             prmReceiptForm.setErrorMessage(indexService.buildErrMsg(prmBindingResult));
@@ -144,8 +139,19 @@ public class IndexController {
     }
 
     @SuppressWarnings("unchecked")
-    private void initOption(IndexCalendar prmIndexCalendar, Model prmModel) {
-        // 科目を設定
+    private void initOption(Model prmModel) {
+        // 日付の設定
+        Map<String, String[]> dateArrMap = (Map<String, String[]>) httpSession.getAttribute("");
+
+        if (dateArrMap == null) {
+            dateArrMap = indexService.getDateArrMap();
+        }
+
+        prmModel.addAttribute(YEAR_ARR, dateArrMap.get(YEAR_ARR));
+        prmModel.addAttribute(MONTH_ARR, dateArrMap.get(MONTH_ARR));
+        prmModel.addAttribute(DAY_ARR, dateArrMap.get(DAY_ARR));
+
+        // 科目の設定
         Map<String, String> accountMap = (Map<String, String>) httpSession.getAttribute(ACCOUNT_MAP);
 
         if (accountMap == null) {
@@ -155,7 +161,7 @@ public class IndexController {
 
         prmModel.addAttribute(ACCOUNT_MAP, accountMap);
 
-        // 消費税率を設定
+        // 消費税率の設定
         Map<String, Integer> taxRateMap = (Map<String, Integer>) httpSession.getAttribute(TAX_RATE_MAP);
 
         if (taxRateMap == null) {
@@ -164,10 +170,5 @@ public class IndexController {
         }
 
         prmModel.addAttribute(TAX_RATE_MAP, taxRateMap);
-
-        // 日付を設定
-        prmModel.addAttribute(YEAR_ARR, prmIndexCalendar.getYearArr());
-        prmModel.addAttribute(MONTH_ARR, prmIndexCalendar.getMonthArr());
-        prmModel.addAttribute(DAY_ARR, prmIndexCalendar.getDayArr());
     }
 }

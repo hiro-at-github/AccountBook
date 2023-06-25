@@ -5,6 +5,8 @@ public class Cnst {
     public static final int LENGTH_OF_YEAR = 2;
 
     //--------------------------------------------------------------------------------
+    /** 改行コード */
+    public static final String SPRT = System.getProperty("line.separator");
     /** 空文字列 */
     public static final String EMPTY = "";
     /** ドット */

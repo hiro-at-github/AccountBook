@@ -21,8 +21,6 @@ public class IndexService {
     private static final String ERR_MSG_KEY = "amount_message";
 
     //TODO:定数クラスに移動
-    private static final String S_SPRTR = System.getProperty("line.separator");
-    private static final String S_EMPTY = "";
 
     /** メッセージソース */
     @Autowired
@@ -30,7 +28,7 @@ public class IndexService {
 
     /** 科目と消費税率の選択肢 */
     @Autowired
-    private SelectOptions selectOptions;
+    private SelOpts selOpts;
 
     /** 現在の年(整数) */
     private int thisYear;
@@ -98,8 +96,42 @@ public class IndexService {
      */
     //--------------------------------------------------------------------------------
     public Map<String, String[]> getDateArrMap() {
-            return selectOptions.getDateArrMap(thisYear);
+            return selOpts.getDateArrMap(thisYear);
         }
+
+
+    //--------------------------------------------------------------------------------
+    /**
+     * 年の選択肢を返却する
+     *
+     * @return 年の選択肢
+     */
+    //--------------------------------------------------------------------------------
+    public String[] getYearArr() {
+        return selOpts.getYearArr(thisYear);
+    }
+
+    //--------------------------------------------------------------------------------
+    /**
+     * 月の選択肢を返却する
+     *
+     * @return 月の選択肢
+     */
+    //--------------------------------------------------------------------------------
+    public String[] getMonthArr() {
+        return selOpts.getMonthArr();
+    }
+
+    //--------------------------------------------------------------------------------
+    /**
+     * 日の選択肢を返却する
+     *
+     * @return 日の選択肢
+     */
+    //--------------------------------------------------------------------------------
+    public String[] getDayArr() {
+        return selOpts.getDayArr();
+    }
 
     //--------------------------------------------------------------------------------
     /**
@@ -109,7 +141,7 @@ public class IndexService {
      */
     //--------------------------------------------------------------------------------
     public Map<String, String> getAccountMap() {
-        return selectOptions.getAccountMap();
+        return selOpts.getAccountMap();
     }
 
     //--------------------------------------------------------------------------------
@@ -121,7 +153,7 @@ public class IndexService {
      */
     //--------------------------------------------------------------------------------
     public Map<String, Integer> getTaxRateMap() {
-        return selectOptions.getTaxRateMap();
+        return selOpts.getTaxRateMap();
     }
 
     //--------------------------------------------------------------------------------
@@ -171,11 +203,11 @@ public class IndexService {
 
             //TODO:空文字他の定数化
 
-            if (S_EMPTY.equals(elem.getAccount())) {
+            if (Cnst.EMPTY.equals(elem.getAccount())) {
                 errMsgLst.add("科目" + num);
             }
 
-            if (S_EMPTY.equals(elem.getTaxRate())) {
+            if (Cnst.EMPTY.equals(elem.getTaxRate())) {
                 errMsgLst.add("税率" + num);
             }
 
@@ -195,7 +227,7 @@ public class IndexService {
                 errMsgBuilder.append("、").append(errMsgLst.get(1));
             }
 
-            errMsgBuilder.append("が入力されていない").append(S_SPRTR);
+            errMsgBuilder.append("が入力されていない").append(Cnst.SPRT);
         }
 
         if (errMsgBuilder.length() > 0) {

@@ -51,12 +51,23 @@ public class IndexController {
     @GetMapping("/index")
     public String getIndex(Model prmModel, @ModelAttribute ReceiptForm prmReceiptForm) {
         initOption(prmModel);
-        ReceiptForm receiptForm = new ReceiptForm(indexService.getCurrentYear(),
-                indexService.getCurrentMonth(),
-                indexService.getCurrentDay(),
-                32);
+//        ReceiptForm receiptForm = new ReceiptForm(indexService.getCurrentYear(),
+//                indexService.getCurrentMonth(),
+//                indexService.getCurrentDay(),
+//                32);
+//
+//        prmModel.addAttribute(RECEIPT_FORM, receiptForm);
 
-        prmModel.addAttribute(RECEIPT_FORM, receiptForm);
+//        prmReceiptForm = new ReceiptForm(indexService.getCurrentYear(),
+//                indexService.getCurrentMonth(),
+//                indexService.getCurrentDay(),
+//                32);
+
+        prmReceiptForm.setYear(indexService.getCurrentYear());
+        prmReceiptForm.setMonth(indexService.getCurrentMonth());
+        prmReceiptForm.setDay(indexService.getCurrentDay());
+
+
 
         return INDEX;
     }
@@ -142,6 +153,17 @@ public class IndexController {
     private void initOption(Model prmModel) {
         // 日付の設定
         Map<String, String[]> dateArrMap = (Map<String, String[]>) httpSession.getAttribute("");
+
+        //
+        String[] yearArr = (String[]) httpSession.getAttribute("");
+
+        if (yearArr == null) {
+            yearArr = indexService.getYearArr();
+
+        }
+
+
+
 
         if (dateArrMap == null) {
             dateArrMap = indexService.getDateArrMap();

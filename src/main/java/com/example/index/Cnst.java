@@ -20,3 +20,13 @@ public class Cnst {
 
 
 }
+
+enum Opt {
+    CURRENT_DATE,
+    YEAR_ARR, MONTH_ARR, DAY_ARR,
+    ACCOUNT_MAP, TAX_RATE_MAP
+}
+
+enum CrntDt {
+    YEAR, MONTH, DAY
+}

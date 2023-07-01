@@ -20,12 +20,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/index")
 public class IndexController {
+    /** 現在の年 */
+    private static final String CURRENT_YEAR = "currentYear";
 
-    /** 勘定科目のマップ */
-    private static final String ACCOUNT_MAP = "accountMap";
+    /** 現在の月 */
+    private static final String CURRENT_MONTH = "currentMonth";
 
-    /** 消費税率のマップ */
-    private static final String TAX_RATE_MAP = "taxRateMap";
+    /** 現在の日 */
+    private static final String CURRENT_DAY = "currentDay";
 
     /** 年の配列 */
     private static final String YEAR_ARR = "yearArr";
@@ -35,6 +37,16 @@ public class IndexController {
 
     /** 日の配列 */
     private static final String DAY_ARR = "dayArr";
+
+    /** 勘定科目のマップ */
+    private static final String ACCOUNT_MAP = "accountMap";
+
+    /** 消費税率のマップ */
+    private static final String TAX_RATE_MAP = "taxRateMap";
+
+    /**  */
+    private static final String OPTION_ARR = "optionArr";
+
 
     /**  */
     private static final String RECEIPT_FORM = "receiptForm";
@@ -48,33 +60,53 @@ public class IndexController {
     @Autowired
     private IndexService indexService;
 
+    /**  */
+    private String[] attrNameArr;
+
+    /**  */
+    private String[] stringKeyArr;
+    /**  */
+    private String[] arrayKeyArr;
+    /**  */
+    private String[] mapKeyArr;
+
+
+    public IndexController() {
+        attrNameArr = new String[] {CURRENT_YEAR, CURRENT_MONTH, CURRENT_DAY,
+                YEAR_ARR, MONTH_ARR, DAY_ARR, ACCOUNT_MAP, TAX_RATE_MAP};
+
+        stringKeyArr = new String[] {CURRENT_YEAR, CURRENT_MONTH, CURRENT_DAY};
+        arrayKeyArr = new String[] {YEAR_ARR, MONTH_ARR, DAY_ARR};
+        mapKeyArr = new String[] {ACCOUNT_MAP, TAX_RATE_MAP};
+
+
+    }
+
+
+
+
     @GetMapping("/index")
-    public String getIndex(Model prmModel, @ModelAttribute ReceiptForm prmReceiptForm) {
-        initOption(prmModel);
-//        ReceiptForm receiptForm = new ReceiptForm(indexService.getCurrentYear(),
-//                indexService.getCurrentMonth(),
-//                indexService.getCurrentDay(),
-//                32);
-//
-//        prmModel.addAttribute(RECEIPT_FORM, receiptForm);
+    public String getIndex(Model prmModel/*, @ModelAttribute ReceiptForm prmReceiptForm*/) {
+        Object[] optionArr = (Object[]) httpSession.getAttribute(OPTION_ARR);
 
-//        prmReceiptForm = new ReceiptForm(indexService.getCurrentYear(),
-//                indexService.getCurrentMonth(),
-//                indexService.getCurrentDay(),
-//                32);
+        if (optionArr == null) {
+            optionArr = initOptionArr();
+            httpSession.setAttribute(OPTION_ARR, optionArr);
+        }
 
-        prmReceiptForm.setYear(indexService.getCurrentYear());
-        prmReceiptForm.setMonth(indexService.getCurrentMonth());
-        prmReceiptForm.setDay(indexService.getCurrentDay());
+        addOptionArr(optionArr, prmModel);
 
-
+        String[] date = (String[]) optionArr[Opt.CURRENT_DATE.ordinal()];
+        ReceiptForm receiptForm
+            = new ReceiptForm(date[CrntDt.YEAR.ordinal()], date[CrntDt.MONTH.ordinal()], date[CrntDt.DAY.ordinal()], 32);
+        prmModel.addAttribute(RECEIPT_FORM, receiptForm);
 
         return INDEX;
     }
 
     @PostMapping(value = "/index", params = "create")
     public String postIndex(Model prmModel, @ModelAttribute @Validated ReceiptForm prmReceiptForm, BindingResult prmBindingResult) {
-        initOption(prmModel);
+//        initOption(prmModel);
 
         if (prmBindingResult.hasErrors()) {
             prmReceiptForm.setErrorMessage(indexService.buildErrMsg(prmBindingResult));
@@ -98,62 +130,58 @@ public class IndexController {
 
 
 
-
-        int amountSum = 0;
-        AccountTaxrateAmount[] aTAArr = prmReceiptForm.getATAArr();
-
-        for (int i = 0; i < aTAArr.length; i++) {
-            AccountTaxrateAmount elem = aTAArr[i];
-
-            if ("".equals(elem.getAccount()) && "".equals(elem.getTaxRate()) && elem.getAmount() == null) {
-                continue;
-            }
-
-            Integer amount = elem.getAmount();
-            String[] temp = {elem.getAccount(), elem.getTaxRate(), amount == null ? null : amount.toString()};
-
-
-
-        }
-
-        for (AccountTaxrateAmount elem : aTAArr) {
-            Integer amount = elem.getAmount();
-            String[] temp = {elem.getAccount(), elem.getTaxRate(), amount == null ? null : amount.toString()};
-
-
-
-
-        }
-
-
-
-
-
-
-
-
-        for (AccountTaxrateAmount elem : aTAArr) {
-            String amount = String.valueOf(elem.getAmount());
-
-            if (amount == null || amount.length() == 0 ) {
-                continue;
-            }
-
-            Integer intAmount = Integer.valueOf(elem.getAmount());
-
-            amountSum += intAmount;
-        }
-
-        prmModel.addAttribute("amountSum", String.valueOf(amountSum));
+//        int amountSum = 0;
+//        AccountTaxrateAmount[] aTAArr = prmReceiptForm.getATAArr();
+//
+//        for (int i = 0; i < aTAArr.length; i++) {
+//            AccountTaxrateAmount elem = aTAArr[i];
+//
+//            if ("".equals(elem.getAccount()) && "".equals(elem.getTaxRate()) && elem.getAmount() == null) {
+//                continue;
+//            }
+//
+//            Integer amount = elem.getAmount();
+//            String[] temp = {elem.getAccount(), elem.getTaxRate(), amount == null ? null : amount.toString()};
+//
+//
+//
+//        }
+//
+//        for (AccountTaxrateAmount elem : aTAArr) {
+//            Integer amount = elem.getAmount();
+//            String[] temp = {elem.getAccount(), elem.getTaxRate(), amount == null ? null : amount.toString()};
+//
+//
+//
+//
+//        }
+//
+//
+//
+//
+//
+//
+//
+//
+//        for (AccountTaxrateAmount elem : aTAArr) {
+//            String amount = String.valueOf(elem.getAmount());
+//
+//            if (amount == null || amount.length() == 0 ) {
+//                continue;
+//            }
+//
+//            Integer intAmount = Integer.valueOf(elem.getAmount());
+//
+//            amountSum += intAmount;
+//        }
+//
+//        prmModel.addAttribute("amountSum", String.valueOf(amountSum));
 
         return INDEX;
     }
 
     @SuppressWarnings("unchecked")
     private void initOption(Model prmModel) {
-        // 日付の設定
-        Map<String, String[]> dateArrMap = (Map<String, String[]>) httpSession.getAttribute("");
-
         //
         String[] yearArr = (String[]) httpSession.getAttribute("");
 
@@ -162,16 +190,9 @@ public class IndexController {
 
         }
 
-
-
-
-        if (dateArrMap == null) {
-            dateArrMap = indexService.getDateArrMap();
-        }
-
-        prmModel.addAttribute(YEAR_ARR, dateArrMap.get(YEAR_ARR));
-        prmModel.addAttribute(MONTH_ARR, dateArrMap.get(MONTH_ARR));
-        prmModel.addAttribute(DAY_ARR, dateArrMap.get(DAY_ARR));
+        prmModel.addAttribute(YEAR_ARR, indexService.getYearArr());
+        prmModel.addAttribute(MONTH_ARR, indexService.getMonthArr());
+        prmModel.addAttribute(DAY_ARR, indexService.getDayArr());
 
         // 科目の設定
         Map<String, String> accountMap = (Map<String, String>) httpSession.getAttribute(ACCOUNT_MAP);
@@ -193,4 +214,40 @@ public class IndexController {
 
         prmModel.addAttribute(TAX_RATE_MAP, taxRateMap);
     }
+
+
+    private Map<String, Object> getFrmSession() {
+        // 年の取得
+        Object currentYear = null;
+
+//        Map<String, Object>
+
+        return null;
+    }
+
+    private Object[] initOptionArr() {
+        Object[] optionArr = new Object[Opt.values().length];
+
+        optionArr[Opt.CURRENT_DATE.ordinal()] = indexService.getCurrentDate();
+        optionArr[Opt.YEAR_ARR.ordinal()] = indexService.getYearArr();
+        optionArr[Opt.MONTH_ARR.ordinal()] = indexService.getMonthArr();
+        optionArr[Opt.DAY_ARR.ordinal()] = indexService.getDayArr();
+        optionArr[Opt.ACCOUNT_MAP.ordinal()] = indexService.getAccountMap();
+        optionArr[Opt.TAX_RATE_MAP.ordinal()] = indexService.getTaxRateMap();
+
+        return optionArr;
+    }
+
+    private void addOptionArr(Object[] prmOptionArr, Model prmModel) {
+        prmModel.addAttribute(YEAR_ARR, prmOptionArr[Opt.YEAR_ARR.ordinal()]);
+        prmModel.addAttribute(MONTH_ARR, prmOptionArr[Opt.MONTH_ARR.ordinal()]);
+        prmModel.addAttribute(DAY_ARR, prmOptionArr[Opt.DAY_ARR.ordinal()]);
+        prmModel.addAttribute(ACCOUNT_MAP, prmOptionArr[Opt.ACCOUNT_MAP.ordinal()]);
+        prmModel.addAttribute(TAX_RATE_MAP, prmOptionArr[Opt.TAX_RATE_MAP.ordinal()]);
+    }
+
+
+
+
+
 }

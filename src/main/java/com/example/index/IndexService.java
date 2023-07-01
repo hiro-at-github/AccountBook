@@ -32,12 +32,8 @@ public class IndexService {
 
     /** 現在の年(整数) */
     private int thisYear;
-    /** 現在の年 */
-    private String currentYear;
-    /** 現在の月 */
-    private String currentMonth;
-    /** 現在の日 */
-    private String currentDay;
+    /** 現在の日付 */
+    private String[] currentDate;
 
     /** エラーメッセージのマップ */
     private Map<String, String> errMsgMap;
@@ -50,55 +46,21 @@ public class IndexService {
     public IndexService() {
         Calendar calendar = GregorianCalendar.getInstance();
         thisYear = calendar.get(Calendar.YEAR);
-        currentYear = String.valueOf(thisYear).substring(2);
-        currentMonth = String.format("%02d", calendar.get(Calendar.MONTH) + 1);
-        currentDay = String.format("%02d", calendar.get(Calendar.DATE));
+        currentDate = new String[] { String.valueOf(thisYear).substring(2),
+                String.format("%02d", calendar.get(Calendar.MONTH) + 1),
+                String.format("%02d", calendar.get(Calendar.DATE)) };
     }
 
     //--------------------------------------------------------------------------------
     /**
-     * 現在の年を返却する
+     * 現在の日付を返却する
      *
-     * @return 現在の年
+     * @return 現在の日付
      */
     //--------------------------------------------------------------------------------
-    public String getCurrentYear() {
-        return currentYear;
+    public String[] getCurrentDate() {
+        return currentDate;
     }
-
-    //--------------------------------------------------------------------------------
-    /**
-     * 現在の月を返却する
-     *
-     * @return 現在の月
-     */
-    //--------------------------------------------------------------------------------
-    public String getCurrentMonth() {
-        return currentMonth;
-    }
-
-    //--------------------------------------------------------------------------------
-    /**
-     * 現在の日を返却する
-     *
-     * @return 現在の日
-     */
-    //--------------------------------------------------------------------------------
-    public String getCurrentDay() {
-        return currentDay;
-    }
-
-    //--------------------------------------------------------------------------------
-    /**
-     * 日付の選択肢を返却する
-     *
-     * @return 日付の選択肢
-     */
-    //--------------------------------------------------------------------------------
-    public Map<String, String[]> getDateArrMap() {
-            return selOpts.getDateArrMap(thisYear);
-        }
-
 
     //--------------------------------------------------------------------------------
     /**

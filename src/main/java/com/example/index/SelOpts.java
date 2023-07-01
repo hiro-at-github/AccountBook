@@ -2,7 +2,6 @@ package com.example.index;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -40,55 +39,6 @@ public class SelOpts {
     public SelOpts() {
         accountKeyArr = new String[] {"shokuhi", "shomohinhi", "suidokonetsuhi"};
     }
-
-    //--------------------------------------------------------------------------------
-    /**
-     * 年月日の選択肢を返却する
-     *
-     * @param prmYear
-     * @return 年月日の選択肢
-     */
-    //--------------------------------------------------------------------------------
-    public Map<String, String[]> getDateArrMap(Integer prmYear) {
-        Integer thisYear = null;
-
-        //TODO:年の定数化
-        if (prmYear == null || (prmYear < 2000 || 2100 < prmYear)) {
-            thisYear = GregorianCalendar.getInstance().get(Calendar.YEAR);
-        } else {
-            thisYear = prmYear;
-        }
-
-        // 年の設定
-        String[] yearArr = new String[Cnst.LENGTH_OF_YEAR];
-
-        for (int i = 0; i < Cnst.LENGTH_OF_YEAR; i++) {
-            yearArr[i] = String.valueOf(thisYear - Cnst.LENGTH_OF_YEAR + 1 + i).substring(2);
-        }
-
-        // 月の設定
-        int lengthOfMonth = 12;
-        String[] monthArr = new String[lengthOfMonth];
-
-        for (int i = 0; i < lengthOfMonth; i++) {
-            monthArr[i] = String.format("%02d", i + 1);
-        }
-
-        // 日の設定
-        int lengthOfDay = 31;
-        String[] dayArr = new String[lengthOfDay];
-
-        for (int i = 0; i < lengthOfDay; i++) {
-            dayArr[i] = String.format("%02d", i + 1);
-        }
-
-        return new HashMap<String, String[]>() {
-                {put(YEAR_ARR, yearArr);
-                put(MONTH_ARR, monthArr);
-                put(DAY_ARR, dayArr);}
-            };
-    }
-
 
     //--------------------------------------------------------------------------------
     /**

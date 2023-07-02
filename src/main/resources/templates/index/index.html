@@ -1,6 +1,6 @@
 <!-- TODO:tabindexの位置移動 -->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:nl2br="https://github.com/bufferings/thymeleaf-extras-nl2br">
 <head>
 <meta charset="UTF-8"></meta>
 <!-- <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"> -->
@@ -27,7 +27,7 @@
 <form name="receiptFrm" method="post" action="/index/index" th:object="${receiptForm}">
 
 <!-- <p th:errors="*{aTAArr[0].amount}"></p> -->
-<p th:text="*{errorMessage}"></p>
+<p nl2br:text="*{errorMessage}"></p>
 
 <table rules="cols" class="table_for_input">
 

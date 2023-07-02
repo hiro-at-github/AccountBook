@@ -11,8 +11,8 @@ public class Cnst {
     public static final String EMPTY = "";
     /** ドット */
     public static final String DOT = ".";
-
-
+    /**  */
+    public static final String F_COMMA = "、";
 
 
 

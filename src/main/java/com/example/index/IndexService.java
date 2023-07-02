@@ -17,9 +17,32 @@ import org.springframework.validation.FieldError;
 
 @Service
 public class IndexService {
+    /**  */    
+    public static final int YEAR = 0;
+    /**  */    
+    public static final int MONTH = 1;
+    /**  */    
+    public static final int DAY = 2;
+    /**  */
+    public static final int CURRENT_DATE = 0;
+    /**  */    
+    public static final int YEAR_ARR = 1;
+    /**  */    
+    public static final int MONTH_ARR = 2;
+    /**  */    
+    public static final int DAY_ARR = 3;
+    /**  */    
+    public static final int ACCOUNT_MAP = 4;
+    /**  */    
+    public static final int TAX_RATE_MAP = 5;
+    
+    
+    
+    
     /** エラーメッセージのキー */
     private static final String ERR_MSG_KEY = "amount_message";
-
+    /**  */
+    private static final String ERR_MSG = "が入力されていない"; 
     //TODO:定数クラスに移動
 
     /** メッセージソース */
@@ -33,7 +56,7 @@ public class IndexService {
     /** 現在の年(整数) */
     private int thisYear;
     /** 現在の日付 */
-    private String[] currentDate;
+    private String[] currentDateArr;
 
     /** エラーメッセージのマップ */
     private Map<String, String> errMsgMap;
@@ -46,7 +69,7 @@ public class IndexService {
     public IndexService() {
         Calendar calendar = GregorianCalendar.getInstance();
         thisYear = calendar.get(Calendar.YEAR);
-        currentDate = new String[] { String.valueOf(thisYear).substring(2),
+        currentDateArr = new String[] { String.valueOf(thisYear).substring(2),
                 String.format("%02d", calendar.get(Calendar.MONTH) + 1),
                 String.format("%02d", calendar.get(Calendar.DATE)) };
     }
@@ -59,7 +82,7 @@ public class IndexService {
      */
     //--------------------------------------------------------------------------------
     public String[] getCurrentDate() {
-        return currentDate;
+        return currentDateArr;
     }
 
     //--------------------------------------------------------------------------------
@@ -158,7 +181,7 @@ public class IndexService {
 
         for (int i = 0; i < prmATAArr.length; i++) {
             AccountTaxrateAmount elem = prmATAArr[i];
-            String num = String.valueOf(i + 1);
+            String num = String.format("%02d", i + 1);
 
             //TODO:エラー項目リストに変更
             List<String> errMsgLst = new ArrayList<>();
@@ -186,10 +209,10 @@ public class IndexService {
             errMsgBuilder.append(errMsgLst.get(0));
 
             if (errMsgLst.size() == 2) {
-                errMsgBuilder.append("、").append(errMsgLst.get(1));
+                errMsgBuilder.append(Cnst.F_COMMA).append(errMsgLst.get(1));
             }
 
-            errMsgBuilder.append("が入力されていない").append(Cnst.SPRT);
+            errMsgBuilder.append(ERR_MSG).append(Cnst.SPRT);
         }
 
         if (errMsgBuilder.length() > 0) {

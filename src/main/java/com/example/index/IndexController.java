@@ -96,9 +96,9 @@ public class IndexController {
 
         addOptionArr(optionArr, prmModel);
 
-        String[] date = (String[]) optionArr[Opt.CURRENT_DATE.ordinal()];
+        String[] date = (String[]) optionArr[IndexService.CURRENT_DATE];
         ReceiptForm receiptForm
-            = new ReceiptForm(date[CrntDt.YEAR.ordinal()], date[CrntDt.MONTH.ordinal()], date[CrntDt.DAY.ordinal()], 32);
+            = new ReceiptForm(date[IndexService.YEAR], date[IndexService.MONTH], date[IndexService.DAY], 32);
         prmModel.addAttribute(RECEIPT_FORM, receiptForm);
 
         return INDEX;
@@ -106,8 +106,9 @@ public class IndexController {
 
     @PostMapping(value = "/index", params = "create")
     public String postIndex(Model prmModel, @ModelAttribute @Validated ReceiptForm prmReceiptForm, BindingResult prmBindingResult) {
-//        initOption(prmModel);
-
+        Object[] optionArr = (Object[]) httpSession.getAttribute(OPTION_ARR);
+        addOptionArr(optionArr, prmModel);
+        
         if (prmBindingResult.hasErrors()) {
             prmReceiptForm.setErrorMessage(indexService.buildErrMsg(prmBindingResult));
 
@@ -228,22 +229,22 @@ public class IndexController {
     private Object[] initOptionArr() {
         Object[] optionArr = new Object[Opt.values().length];
 
-        optionArr[Opt.CURRENT_DATE.ordinal()] = indexService.getCurrentDate();
-        optionArr[Opt.YEAR_ARR.ordinal()] = indexService.getYearArr();
-        optionArr[Opt.MONTH_ARR.ordinal()] = indexService.getMonthArr();
-        optionArr[Opt.DAY_ARR.ordinal()] = indexService.getDayArr();
-        optionArr[Opt.ACCOUNT_MAP.ordinal()] = indexService.getAccountMap();
-        optionArr[Opt.TAX_RATE_MAP.ordinal()] = indexService.getTaxRateMap();
+        optionArr[IndexService.CURRENT_DATE] = indexService.getCurrentDate();
+        optionArr[IndexService.YEAR_ARR] = indexService.getYearArr();
+        optionArr[IndexService.MONTH_ARR] = indexService.getMonthArr();
+        optionArr[IndexService.DAY_ARR] = indexService.getDayArr();
+        optionArr[IndexService.ACCOUNT_MAP] = indexService.getAccountMap();
+        optionArr[IndexService.TAX_RATE_MAP] = indexService.getTaxRateMap();
 
         return optionArr;
     }
 
     private void addOptionArr(Object[] prmOptionArr, Model prmModel) {
-        prmModel.addAttribute(YEAR_ARR, prmOptionArr[Opt.YEAR_ARR.ordinal()]);
-        prmModel.addAttribute(MONTH_ARR, prmOptionArr[Opt.MONTH_ARR.ordinal()]);
-        prmModel.addAttribute(DAY_ARR, prmOptionArr[Opt.DAY_ARR.ordinal()]);
-        prmModel.addAttribute(ACCOUNT_MAP, prmOptionArr[Opt.ACCOUNT_MAP.ordinal()]);
-        prmModel.addAttribute(TAX_RATE_MAP, prmOptionArr[Opt.TAX_RATE_MAP.ordinal()]);
+        prmModel.addAttribute(YEAR_ARR, prmOptionArr[IndexService.YEAR_ARR]);
+        prmModel.addAttribute(MONTH_ARR, prmOptionArr[IndexService.MONTH_ARR]);
+        prmModel.addAttribute(DAY_ARR, prmOptionArr[IndexService.DAY_ARR]);
+        prmModel.addAttribute(ACCOUNT_MAP, prmOptionArr[IndexService.ACCOUNT_MAP]);
+        prmModel.addAttribute(TAX_RATE_MAP, prmOptionArr[IndexService.TAX_RATE_MAP]);
     }
 
 

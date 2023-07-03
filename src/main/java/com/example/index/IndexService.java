@@ -174,7 +174,6 @@ public class IndexService {
         return errMsgBuilder.toString() + errMsgMap.get(snakeToCamel(ERR_MSG_KEY));
     }
 
-    //TODO:一通りなめてデータを返すこともできるが、一先ずチェック結果だけを返すこととする
     public String checkTmpMtd(AccountTaxrateAmount[] prmATAArr) {
 
         StringBuilder errMsgBuilder = new StringBuilder();
@@ -241,7 +240,7 @@ public class IndexService {
         errMsgMap = new HashMap<>();
 
         //TODO:イテレータの元になる配列のコンストラクタでの初期化を検討
-        String[] keyArr = {"amount", "tax_amount", ERR_MSG_KEY};
+        String[] keyArr = {"account", "amount", "tax_amount", ERR_MSG_KEY};
         for (String elem : keyArr) {
             errMsgMap.put(snakeToCamel(elem), messageSource.getMessage("error." + elem, null, Locale.JAPAN));
         }

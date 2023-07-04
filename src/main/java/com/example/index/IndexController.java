@@ -221,7 +221,6 @@ public class IndexController {
         // 年の取得
         Object currentYear = null;
 
-//        Map<String, Object>
 
         return null;
     }

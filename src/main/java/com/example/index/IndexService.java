@@ -17,32 +17,32 @@ import org.springframework.validation.FieldError;
 
 @Service
 public class IndexService {
-    /**  */    
+    /**  */
     public static final int YEAR = 0;
-    /**  */    
+    /**  */
     public static final int MONTH = 1;
-    /**  */    
+    /**  */
     public static final int DAY = 2;
     /**  */
     public static final int CURRENT_DATE = 0;
-    /**  */    
+    /**  */
     public static final int YEAR_ARR = 1;
-    /**  */    
+    /**  */
     public static final int MONTH_ARR = 2;
-    /**  */    
+    /**  */
     public static final int DAY_ARR = 3;
-    /**  */    
+    /**  */
     public static final int ACCOUNT_MAP = 4;
-    /**  */    
+    /**  */
     public static final int TAX_RATE_MAP = 5;
-    
-    
-    
-    
+
+
+
+
     /** エラーメッセージのキー */
     private static final String ERR_MSG_KEY = "amount_message";
     /**  */
-    private static final String ERR_MSG = "が入力されていない"; 
+    private static final String ERR_MSG = "が入力されていない";
     //TODO:定数クラスに移動
 
     /** メッセージソース */
@@ -156,16 +156,16 @@ public class IndexService {
         List<FieldError> errLst = prmResult.getFieldErrors();
         for (FieldError elem : errLst) {
             String field = elem.getField();
-            String[] keyArr = field.split(Pattern.quote("."));
+            String[] keyArr = field.split(Pattern.quote(Cnst.DOT));
 
             String msg = errMsgMap.get(keyArr[keyArr.length - 1]);
 
             if (errMsgBuilder.indexOf(msg) > -1) {
-                errMsgBuilder.append("、");
+                continue;
             }
 
             if (errMsgBuilder.length() > 0) {
-                errMsgBuilder.append("、");
+                errMsgBuilder.append(Cnst.F_COMMA);
             }
 
             errMsgBuilder.append(msg);
@@ -175,14 +175,13 @@ public class IndexService {
     }
 
     public String checkTmpMtd(AccountTaxrateAmount[] prmATAArr) {
-
         StringBuilder errMsgBuilder = new StringBuilder();
 
         for (int i = 0; i < prmATAArr.length; i++) {
             AccountTaxrateAmount elem = prmATAArr[i];
             String num = String.format("%02d", i + 1);
 
-            //TODO:エラー項目リストに変更
+            //TODO:エラー項目リストに変更。項目はitemでよいか
             List<String> errMsgLst = new ArrayList<>();
 
             //TODO:空文字他の定数化

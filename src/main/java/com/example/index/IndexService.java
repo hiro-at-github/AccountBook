@@ -59,8 +59,14 @@ public class IndexService {
     private String[] currentDateArr;
 
     /** エラーメッセージのマップ */
+    //TODO:バインディングリザルトのエラーであることが分かる変数名に変更し、
+    //バインディングリザルトのエラーメッセージだけを格納する
     private Map<String, String> errMsgMap;
 
+    /**  */
+    //TODO:関連チェック？のエラーであることが分かる変数名とし、そのエラーメッセージだけを格納する
+    
+    
     //--------------------------------------------------------------------------------
     /**
      * コンストラクタ
@@ -239,7 +245,7 @@ public class IndexService {
         errMsgMap = new HashMap<>();
 
         //TODO:イテレータの元になる配列のコンストラクタでの初期化を検討
-        String[] keyArr = {"account", "amount", "tax_amount", ERR_MSG_KEY};
+        String[] keyArr = {"account", "amount", "tax_amount", ERR_MSG_KEY, "input_message"};
         for (String elem : keyArr) {
             errMsgMap.put(snakeToCamel(elem), messageSource.getMessage("error." + elem, null, Locale.JAPAN));
         }

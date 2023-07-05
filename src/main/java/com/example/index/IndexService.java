@@ -61,7 +61,7 @@ public class IndexService {
     /** エラーメッセージのマップ */
     //TODO:バインディングリザルトのエラーであることが分かる変数名に変更し、
     //バインディングリザルトのエラーメッセージだけを格納する
-    private Map<String, String> errMsgMap;
+    private Map<String, String> fldErrMsgMap;
 
     /**  */
     //TODO:関連チェック？のエラーであることが分かる変数名とし、そのエラーメッセージだけを格納する
@@ -156,7 +156,7 @@ public class IndexService {
      */
     //--------------------------------------------------------------------------------
     public String buildErrMsg(BindingResult prmResult) {
-        initErrMsgMap();
+        initFldErrMsgMap();
         StringBuilder errMsgBuilder = new StringBuilder();
 
         List<FieldError> errLst = prmResult.getFieldErrors();
@@ -164,7 +164,7 @@ public class IndexService {
             String field = elem.getField();
             String[] keyArr = field.split(Pattern.quote(Cnst.DOT));
 
-            String msg = errMsgMap.get(keyArr[keyArr.length - 1]);
+            String msg = fldErrMsgMap.get(keyArr[keyArr.length - 1]);
 
             if (errMsgBuilder.indexOf(msg) > -1) {
                 continue;
@@ -177,7 +177,7 @@ public class IndexService {
             errMsgBuilder.append(msg);
         }
 
-        return errMsgBuilder.toString() + errMsgMap.get(snakeToCamel(ERR_MSG_KEY));
+        return errMsgBuilder.toString() + fldErrMsgMap.get(snakeToCamel(ERR_MSG_KEY));
     }
 
     public String checkTmpMtd(AccountTaxrateAmount[] prmATAArr) {
@@ -237,17 +237,17 @@ public class IndexService {
      * エラーメッセージを初期化する
      */
     //--------------------------------------------------------------------------------
-    private void initErrMsgMap() {
-        if (errMsgMap != null) {
+    private void initFldErrMsgMap() {
+        if (fldErrMsgMap != null) {
             return;
         }
 
-        errMsgMap = new HashMap<>();
+        fldErrMsgMap = new HashMap<>();
 
         //TODO:イテレータの元になる配列のコンストラクタでの初期化を検討
         String[] keyArr = {"account", "amount", "tax_amount", ERR_MSG_KEY, "input_message"};
         for (String elem : keyArr) {
-            errMsgMap.put(snakeToCamel(elem), messageSource.getMessage("error." + elem, null, Locale.JAPAN));
+            fldErrMsgMap.put(snakeToCamel(elem), messageSource.getMessage("error." + elem, null, Locale.JAPAN));
         }
     }
 

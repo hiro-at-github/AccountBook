@@ -110,7 +110,7 @@ public class IndexController {
         addOptionArr(optionArr, prmModel);
         
         if (prmBindingResult.hasErrors()) {
-            prmReceiptForm.setErrorMessage(indexService.buildErrMsg(prmBindingResult));
+            prmReceiptForm.setErrorMessage(indexService.buildFldErrMsg(prmBindingResult));
 
             return INDEX;
         }

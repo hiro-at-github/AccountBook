@@ -58,14 +58,12 @@ public class IndexService {
     /** 現在の日付 */
     private String[] currentDateArr;
 
-    /** エラーメッセージのマップ */
-    //TODO:バインディングリザルトのエラーであることが分かる変数名に変更し、
-    //バインディングリザルトのエラーメッセージだけを格納する
+    /** バインディングリザルトのフィールドエラーズ用のエラーメッセージのマップ */
     private Map<String, String> fldErrMsgMap;
 
     /**  */
     //TODO:関連チェック？のエラーであることが分かる変数名とし、そのエラーメッセージだけを格納する
-    
+    private Map<String, String> rltErrMsgMap;
     
     //--------------------------------------------------------------------------------
     /**
@@ -155,8 +153,9 @@ public class IndexService {
      * @return エラーメッセージ
      */
     //--------------------------------------------------------------------------------
-    public String buildErrMsg(BindingResult prmResult) {
-        initFldErrMsgMap();
+    public String buildFldErrMsg(BindingResult prmResult) {
+//        initFldErrMsgMap();
+        initErrMsgMap(new String[]{"account", "amount", "tax_amount", "amount_message"}, fldErrMsgMap);
         StringBuilder errMsgBuilder = new StringBuilder();
 
         List<FieldError> errLst = prmResult.getFieldErrors();
@@ -245,12 +244,33 @@ public class IndexService {
         fldErrMsgMap = new HashMap<>();
 
         //TODO:イテレータの元になる配列のコンストラクタでの初期化を検討
-        String[] keyArr = {"account", "amount", "tax_amount", ERR_MSG_KEY, "input_message"};
+        String[] keyArr = {"account", "amount", "tax_amount", "amount_message"};
         for (String elem : keyArr) {
-            fldErrMsgMap.put(snakeToCamel(elem), messageSource.getMessage("error." + elem, null, Locale.JAPAN));
+            fldErrMsgMap.put(snakeToCamel(elem), messageSource.getMessage("field.error." + elem, null, Locale.JAPAN));
         }
     }
 
+    //--------------------------------------------------------------------------------
+    /**
+     * ダミー
+     */
+    //--------------------------------------------------------------------------------
+    private void initErrMsgMap(String[] prmKeyArr, Map<String, String> prmErrMsgMap) {
+        if (prmErrMsgMap != null) {
+            return;
+        }
+        
+        prmErrMsgMap = new HashMap<>();
+        
+        for (String elem : prmKeyArr) {
+            prmErrMsgMap.put(snakeToCamel(elem), messageSource.getMessage("field.error." + elem, null, Locale.JAPAN));
+        }
+    }
+    
+    
+    
+    
+    
     //--------------------------------------------------------------------------------
     /**
      * スネークケースからキャメルケースに変換して返却する

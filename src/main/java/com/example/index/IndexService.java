@@ -41,10 +41,6 @@ public class IndexService {
 
     /** エラーメッセージのキー */
     private static final String ERR_MSG_KEY = "amount_message";
-    /**  */
-    private static final String ERR_MSG = "が入力されていない";
-    //TODO:定数クラスに移動
-
     /** メッセージソース */
     @Autowired
     private MessageSource messageSource;
@@ -64,7 +60,7 @@ public class IndexService {
     /**  */
     //TODO:関連チェック？のエラーであることが分かる変数名とし、そのエラーメッセージだけを格納する
     private Map<String, String> rltErrMsgMap;
-    
+
     //--------------------------------------------------------------------------------
     /**
      * コンストラクタ
@@ -153,9 +149,12 @@ public class IndexService {
      * @return エラーメッセージ
      */
     //--------------------------------------------------------------------------------
+    //TODO:リテラルの定数化
     public String buildFldErrMsg(BindingResult prmResult) {
-//        initFldErrMsgMap();
-        initErrMsgMap(new String[]{"account", "amount", "tax_amount", "amount_message"}, fldErrMsgMap);
+        if (fldErrMsgMap == null) {
+            fldErrMsgMap = getErrMsgMap("field.error.", "account", "amount", "tax_amount", "amount_message");
+        }
+
         StringBuilder errMsgBuilder = new StringBuilder();
 
         List<FieldError> errLst = prmResult.getFieldErrors();
@@ -179,7 +178,12 @@ public class IndexService {
         return errMsgBuilder.toString() + fldErrMsgMap.get(snakeToCamel(ERR_MSG_KEY));
     }
 
+    //TODO:リテラルの定数化
     public String checkTmpMtd(AccountTaxrateAmount[] prmATAArr) {
+        if (rltErrMsgMap == null) {
+            rltErrMsgMap = getErrMsgMap("serv.error.", "account", "tax_rate", "amount", "input_message");
+        }
+
         StringBuilder errMsgBuilder = new StringBuilder();
 
         for (int i = 0; i < prmATAArr.length; i++) {
@@ -192,15 +196,15 @@ public class IndexService {
             //TODO:空文字他の定数化
 
             if (Cnst.EMPTY.equals(elem.getAccount())) {
-                errMsgLst.add("科目" + num);
+                errMsgLst.add(rltErrMsgMap.get("account") + num);
             }
 
             if (Cnst.EMPTY.equals(elem.getTaxRate())) {
-                errMsgLst.add("税率" + num);
+                errMsgLst.add(rltErrMsgMap.get("taxRate") + num);
             }
 
             if (elem.getAmount() == null) {
-                errMsgLst.add("金額" + num);
+                errMsgLst.add(rltErrMsgMap.get("amount")+ num);
             }
 
             int size = errMsgLst.size();
@@ -215,7 +219,7 @@ public class IndexService {
                 errMsgBuilder.append(Cnst.F_COMMA).append(errMsgLst.get(1));
             }
 
-            errMsgBuilder.append(ERR_MSG).append(Cnst.SPRT);
+            errMsgBuilder.append(rltErrMsgMap.get("inputMessage")).append(Cnst.SPRT);
         }
 
         if (errMsgBuilder.length() > 0) {
@@ -233,44 +237,24 @@ public class IndexService {
 
     //--------------------------------------------------------------------------------
     /**
-     * エラーメッセージを初期化する
+     * エラーメッセージを返却する
      */
     //--------------------------------------------------------------------------------
-    private void initFldErrMsgMap() {
-        if (fldErrMsgMap != null) {
-            return;
-        }
+    //TODO:メソッド名変更
+    private Map<String, String> getErrMsgMap(String prmPre, String... prmKeyArr) {
+        Map<String, String> errMsgMap = new HashMap<>();
 
-        fldErrMsgMap = new HashMap<>();
-
-        //TODO:イテレータの元になる配列のコンストラクタでの初期化を検討
-        String[] keyArr = {"account", "amount", "tax_amount", "amount_message"};
-        for (String elem : keyArr) {
-            fldErrMsgMap.put(snakeToCamel(elem), messageSource.getMessage("field.error." + elem, null, Locale.JAPAN));
-        }
-    }
-
-    //--------------------------------------------------------------------------------
-    /**
-     * ダミー
-     */
-    //--------------------------------------------------------------------------------
-    private void initErrMsgMap(String[] prmKeyArr, Map<String, String> prmErrMsgMap) {
-        if (prmErrMsgMap != null) {
-            return;
-        }
-        
-        prmErrMsgMap = new HashMap<>();
-        
         for (String elem : prmKeyArr) {
-            prmErrMsgMap.put(snakeToCamel(elem), messageSource.getMessage("field.error." + elem, null, Locale.JAPAN));
+            errMsgMap.put(snakeToCamel(elem), messageSource.getMessage(prmPre + elem, null, Locale.JAPAN));
         }
+
+        return errMsgMap;
     }
-    
-    
-    
-    
-    
+
+
+
+
+
     //--------------------------------------------------------------------------------
     /**
      * スネークケースからキャメルケースに変換して返却する

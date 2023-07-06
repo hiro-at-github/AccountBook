@@ -1,3 +1,10 @@
+関連チェックの改行不要
+
+----------------------------------------
 "field.error.", "account", "amount", "tax_amount", "amount_message"
 
 "serv.error.", "account", "tax_rate", "amount", "input_message"
+
+"FIELD.ERROR.", "ACCOUNT", "AMOUNT", "TAX_AMOUNT", "AMOUNT_MESSAGE"
+
+"SERV.ERROR.", "ACCOUNT", "TAX_RATE", "AMOUNT", "INPUT_MESSAGE"

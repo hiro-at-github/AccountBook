@@ -12,6 +12,9 @@ public class Cnst {
     /** ドット */
     public static final String DOT = ".";
     /**  */
+    //TODO:名称変更
+    public static final String UD_S = "_";
+    /**  */
     public static final String F_COMMA = "、";
 
 

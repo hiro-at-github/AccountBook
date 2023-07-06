@@ -36,11 +36,24 @@ public class IndexService {
     /**  */
     public static final int TAX_RATE_MAP = 5;
 
-
-
-
-    /** エラーメッセージのキー */
-    private static final String ERR_MSG_KEY = "amount_message";
+    /**  */
+    private static final String FLD_ERR_P = "field.error.";
+    /**  */
+    private static final String RLT_ERR_P = "serv.error.";
+    /**  */
+    private static final String ACCOUNT = "account";
+    /**  */
+    private static final String AMOUNT = "amount";
+    /**  */
+    private static final String TAX = "tax";
+    /**  */
+    private static final String RATE = "rate";
+    /**  */
+    private static final String INPUT = "input";
+    /**  */
+    private static final String MESSAGE = "message";
+    
+    
     /** メッセージソース */
     @Autowired
     private MessageSource messageSource;
@@ -149,10 +162,10 @@ public class IndexService {
      * @return エラーメッセージ
      */
     //--------------------------------------------------------------------------------
-    //TODO:リテラルの定数化
     public String buildFldErrMsg(BindingResult prmResult) {
         if (fldErrMsgMap == null) {
-            fldErrMsgMap = getErrMsgMap("field.error.", "account", "amount", "tax_amount", "amount_message");
+            fldErrMsgMap
+                = getErrMsgMap(FLD_ERR_P, ACCOUNT, AMOUNT, TAX + Cnst.UD_S + AMOUNT, AMOUNT + Cnst.UD_S + MESSAGE);
         }
 
         StringBuilder errMsgBuilder = new StringBuilder();
@@ -175,13 +188,19 @@ public class IndexService {
             errMsgBuilder.append(msg);
         }
 
-        return errMsgBuilder.toString() + fldErrMsgMap.get(snakeToCamel(ERR_MSG_KEY));
+        return errMsgBuilder.toString() + fldErrMsgMap.get(snakeToCamel(AMOUNT + Cnst.UD_S + MESSAGE));
     }
 
-    //TODO:リテラルの定数化
+    //--------------------------------------------------------------------------------
+    /**
+     * ダミー
+     */
+    //--------------------------------------------------------------------------------
+    //TODO:名称変更
     public String checkTmpMtd(AccountTaxrateAmount[] prmATAArr) {
         if (rltErrMsgMap == null) {
-            rltErrMsgMap = getErrMsgMap("serv.error.", "account", "tax_rate", "amount", "input_message");
+            rltErrMsgMap
+                = getErrMsgMap(RLT_ERR_P, ACCOUNT, TAX + Cnst.UD_S + RATE, AMOUNT, INPUT + Cnst.UD_S + MESSAGE);
         }
 
         StringBuilder errMsgBuilder = new StringBuilder();

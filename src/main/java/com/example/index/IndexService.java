@@ -39,7 +39,7 @@ public class IndexService {
     /**  */
     private static final String FLD_ERR_P = "field.error.";
     /**  */
-    private static final String RLT_ERR_P = "serv.error.";
+    private static final String RLT_ERR_P = "relate.error.";
     /**  */
     private static final String ACCOUNT = "account";
     /**  */
@@ -52,8 +52,8 @@ public class IndexService {
     private static final String INPUT = "input";
     /**  */
     private static final String MESSAGE = "message";
-    
-    
+
+
     /** メッセージソース */
     @Autowired
     private MessageSource messageSource;
@@ -188,7 +188,7 @@ public class IndexService {
             errMsgBuilder.append(msg);
         }
 
-        return errMsgBuilder.toString() + fldErrMsgMap.get(snakeToCamel(AMOUNT + Cnst.UD_S + MESSAGE));
+        return errMsgBuilder.append(fldErrMsgMap.get(buildKey(AMOUNT, MESSAGE))).toString();
     }
 
     //--------------------------------------------------------------------------------
@@ -196,8 +196,7 @@ public class IndexService {
      * ダミー
      */
     //--------------------------------------------------------------------------------
-    //TODO:名称変更
-    public String checkTmpMtd(AccountTaxrateAmount[] prmATAArr) {
+    public String confirmAllItemsEntered(AccountTaxrateAmount[] prmATAArr) {
         if (rltErrMsgMap == null) {
             rltErrMsgMap
                 = getErrMsgMap(RLT_ERR_P, ACCOUNT, TAX + Cnst.UD_S + RATE, AMOUNT, INPUT + Cnst.UD_S + MESSAGE);
@@ -207,23 +206,18 @@ public class IndexService {
 
         for (int i = 0; i < prmATAArr.length; i++) {
             AccountTaxrateAmount elem = prmATAArr[i];
-            String num = String.format("%02d", i + 1);
-
-            //TODO:エラー項目リストに変更。項目はitemでよいか
             List<String> errItemLst = new ArrayList<>();
 
-            //TODO:空文字他の定数化
-
             if (Cnst.EMPTY.equals(elem.getAccount())) {
-                errItemLst.add(rltErrMsgMap.get("account") + num);
+                errItemLst.add(rltErrMsgMap.get(ACCOUNT));
             }
 
             if (Cnst.EMPTY.equals(elem.getTaxRate())) {
-                errItemLst.add(rltErrMsgMap.get("taxRate") + num);
+                errItemLst.add(rltErrMsgMap.get(buildKey(TAX, RATE)));
             }
 
             if (elem.getAmount() == null) {
-                errItemLst.add(rltErrMsgMap.get("amount")+ num);
+                errItemLst.add(rltErrMsgMap.get(AMOUNT));
             }
 
             int size = errItemLst.size();
@@ -232,21 +226,74 @@ public class IndexService {
                 continue;
             }
 
-            errMsgBuilder.append(errItemLst.get(0));
+            errMsgBuilder.append(String.format("%02d", i + 1)).append("の").append(errItemLst.get(0));
 
             if (errItemLst.size() == 2) {
-                errMsgBuilder.append(Cnst.F_COMMA).append(errItemLst.get(1));
+                errMsgBuilder.append("と").append(errItemLst.get(1));
             }
 
-            errMsgBuilder.append(rltErrMsgMap.get("inputMessage")).append(Cnst.SPRT);
+            errMsgBuilder.append(Cnst.F_COMMA);
         }
 
         if (errMsgBuilder.length() > 0) {
+            errMsgBuilder.insert(0, Cnst.SPRT).insert(0, rltErrMsgMap.get(buildKey(INPUT, MESSAGE)));
+
             return errMsgBuilder.deleteCharAt(errMsgBuilder.length() - 1).toString();
         }
 
         return null;
     }
+
+    //--------------------------------------------------------------------------------
+    /**
+     * ダミー
+     */
+    //--------------------------------------------------------------------------------
+    public List<String> checkItemMtd(ReceiptForm prmReceiptForm) {
+        List<String> tmpLst = new ArrayList<>();
+
+        AccountTaxrateAmount[] aTAArr = prmReceiptForm.getATAArr();
+        for (int i = 0; i < aTAArr.length; i++) {
+            AccountTaxrateAmount elem = aTAArr[i];
+            List<String> tempLst = new ArrayList<>();
+            String fmt = String.format("aTAArr[%d].", i);
+
+            if (Cnst.EMPTY.equals(elem.getAccount())) {
+                tempLst.add(apnd(fmt, ACCOUNT));
+            }
+
+            if (Cnst.EMPTY.equals(elem.getTaxRate())) {
+                tempLst.add(apnd(fmt, buildKey(TAX, RATE)));
+            }
+
+            if (elem.getAmount() == null) {
+                tempLst.add(apnd(fmt, AMOUNT));
+            }
+
+            if (tempLst.size() == 0 || tempLst.size() == 3) {
+                continue;
+            }
+
+            tmpLst.addAll(tempLst);
+        }
+
+        if (prmReceiptForm.getTaxAmount() == null) {
+            tmpLst.add(buildKey(TAX, AMOUNT));
+        }
+
+
+
+
+
+
+
+        return tmpLst;
+    }
+
+
+
+
+
 
 
 
@@ -260,11 +307,11 @@ public class IndexService {
      */
     //--------------------------------------------------------------------------------
     //TODO:メソッド名変更
-    private Map<String, String> getErrMsgMap(String prmPre, String... prmKeyArr) {
+    private Map<String, String> getErrMsgMap(String prmPrefix, String... prmKeyArr) {
         Map<String, String> errMsgMap = new HashMap<>();
 
         for (String elem : prmKeyArr) {
-            errMsgMap.put(snakeToCamel(elem), messageSource.getMessage(prmPre + elem, null, Locale.JAPAN));
+            errMsgMap.put(snakeToCamel(elem), messageSource.getMessage(prmPrefix + elem, null, Locale.JAPAN));
         }
 
         return errMsgMap;
@@ -292,10 +339,36 @@ public class IndexService {
         return builder.toString();
     }
 
-    //TODO:空文字はEmptyか否か
-    private boolean isNullOrEmpty(String prmTarget) {
-        return true;
+    //--------------------------------------------------------------------------------
+    /**
+     * ダミー
+     */
+    //--------------------------------------------------------------------------------
+    private String buildKey(String... prmKeyArr) {
+        StringBuilder builder = new StringBuilder();
+
+        for (String elem : prmKeyArr) {
+            builder.append(elem).append(Cnst.UD_S);
+        }
+
+        return snakeToCamel(builder.deleteCharAt(builder.length() - 1).toString());
     }
+
+    //--------------------------------------------------------------------------------
+    /**
+     * ダミー
+     */
+    //--------------------------------------------------------------------------------
+    private String apnd(String... prmStrArr) {
+        StringBuilder builder = new StringBuilder();
+
+        for (String elem : prmStrArr) {
+            builder.append(elem);
+        }
+
+        return builder.toString();
+    }
+
 
 
 

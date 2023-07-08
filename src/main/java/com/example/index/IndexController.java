@@ -108,26 +108,25 @@ public class IndexController {
     public String postIndex(Model prmModel, @ModelAttribute @Validated ReceiptForm prmReceiptForm, BindingResult prmBindingResult) {
         Object[] optionArr = (Object[]) httpSession.getAttribute(OPTION_ARR);
         addOptionArr(optionArr, prmModel);
-        
+
         if (prmBindingResult.hasErrors()) {
             prmReceiptForm.setErrorMessage(indexService.buildFldErrMsg(prmBindingResult));
 
             return INDEX;
         }
 
-        String errMsg = indexService.checkTmpMtd(prmReceiptForm.getATAArr());
+        String errMsg = indexService.confirmAllItemsEntered(prmReceiptForm.getATAArr());
 
         if (errMsg != null) {
             prmReceiptForm.setErrorMessage(errMsg);
 
             List<Errors> errLst = new ArrayList<>();
 //            Errors err = new Errors();
-
+            List<String> tmpLst = indexService.checkItemMtd(prmReceiptForm);
 
 
             return INDEX;
         }
-
 
 
 

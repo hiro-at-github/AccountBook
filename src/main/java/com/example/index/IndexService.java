@@ -210,32 +210,32 @@ public class IndexService {
             String num = String.format("%02d", i + 1);
 
             //TODO:エラー項目リストに変更。項目はitemでよいか
-            List<String> errMsgLst = new ArrayList<>();
+            List<String> errItemLst = new ArrayList<>();
 
             //TODO:空文字他の定数化
 
             if (Cnst.EMPTY.equals(elem.getAccount())) {
-                errMsgLst.add(rltErrMsgMap.get("account") + num);
+                errItemLst.add(rltErrMsgMap.get("account") + num);
             }
 
             if (Cnst.EMPTY.equals(elem.getTaxRate())) {
-                errMsgLst.add(rltErrMsgMap.get("taxRate") + num);
+                errItemLst.add(rltErrMsgMap.get("taxRate") + num);
             }
 
             if (elem.getAmount() == null) {
-                errMsgLst.add(rltErrMsgMap.get("amount")+ num);
+                errItemLst.add(rltErrMsgMap.get("amount")+ num);
             }
 
-            int size = errMsgLst.size();
+            int size = errItemLst.size();
 
             if (size == 0 || size == 3) {
                 continue;
             }
 
-            errMsgBuilder.append(errMsgLst.get(0));
+            errMsgBuilder.append(errItemLst.get(0));
 
-            if (errMsgLst.size() == 2) {
-                errMsgBuilder.append(Cnst.F_COMMA).append(errMsgLst.get(1));
+            if (errItemLst.size() == 2) {
+                errMsgBuilder.append(Cnst.F_COMMA).append(errItemLst.get(1));
             }
 
             errMsgBuilder.append(rltErrMsgMap.get("inputMessage")).append(Cnst.SPRT);

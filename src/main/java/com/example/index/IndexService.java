@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -35,6 +36,9 @@ public class IndexService {
     public static final int ACCOUNT_MAP = 4;
     /**  */
     public static final int TAX_RATE_MAP = 5;
+
+    /**  */
+    private static final String ERR = "error";
 
     /**  */
     private static final String FLD_ERR_P = "field.error.";
@@ -252,27 +256,42 @@ public class IndexService {
     public List<String> checkItemMtd(ReceiptForm prmReceiptForm) {
         List<String> tmpLst = new ArrayList<>();
 
+
+        List<FieldError> errLst = new ArrayList<>();
+
         AccountTaxrateAmount[] aTAArr = prmReceiptForm.getATAArr();
         for (int i = 0; i < aTAArr.length; i++) {
             AccountTaxrateAmount elem = aTAArr[i];
             List<String> tempLst = new ArrayList<>();
             String fmt = String.format("aTAArr[%d].", i);
 
+            AccountTaxrateAmount aTA = new AccountTaxrateAmount();
+
             if (Cnst.EMPTY.equals(elem.getAccount())) {
                 tempLst.add(apnd(fmt, ACCOUNT));
+                aTA.setAccount(ERR);
+                errLst.add(new FieldError("receiptForm", apnd(fmt, ACCOUNT), null));
             }
 
             if (Cnst.EMPTY.equals(elem.getTaxRate())) {
                 tempLst.add(apnd(fmt, buildKey(TAX, RATE)));
+                aTA.setTaxRate(ERR);
             }
 
             if (elem.getAmount() == null) {
                 tempLst.add(apnd(fmt, AMOUNT));
+                aTA.setAmntForCnfrm(ERR);
             }
 
             if (tempLst.size() == 0 || tempLst.size() == 3) {
                 continue;
             }
+
+
+
+
+
+
 
             tmpLst.addAll(tempLst);
         }
@@ -290,11 +309,61 @@ public class IndexService {
         return tmpLst;
     }
 
+    public Object[] tmpMtd2(ReceiptForm prmReceiptForm) {
+        Map<Integer, List<String>> errItemMap = tmpMtd(prmReceiptForm.getATAArr());
+
+        StringBuilder builder = new StringBuilder();
+
+        for (int elem : errItemMap.keySet()) {
+            String key = String.format("%02d", elem);
+            List<String> valLst = errItemMap.get(elem);
+
+            builder.append(buildMsg(key, valLst));
+        }
+
+
+
+
+        return null;
+    }
 
 
 
 
 
+    private Map<Integer, List<String>> tmpMtd(AccountTaxrateAmount[] prmATAArr) {
+        Map<Integer, List<String>> errItemMap = new LinkedHashMap<>();
+
+        for (int i = 0; i < prmATAArr.length; i++) {
+            AccountTaxrateAmount elem = prmATAArr[i];
+            List<String> errItemLst = new ArrayList<>();
+
+            if (Cnst.EMPTY.equals(elem.getAccount())) {
+                errItemLst.add(ACCOUNT);
+            }
+
+            if (Cnst.EMPTY.equals(elem.getTaxRate())) {
+                errItemLst.add(buildKey(TAX, RATE));
+            }
+
+            if (elem.getAmount() == null) {
+                errItemLst.add(AMOUNT);
+            }
+
+            int size = errItemLst.size();
+            if (size == 0 || size == 3) {
+                continue;
+            }
+
+            errItemMap.put(i, errItemLst);
+        }
+
+        return errItemMap;
+    }
+
+    private String buildMsg(String prmKey, List<String> prmLst) {
+        return null;
+    }
 
 
 

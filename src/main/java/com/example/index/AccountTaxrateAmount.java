@@ -12,9 +12,6 @@ import lombok.Data;
 //--------------------------------------------------------------------------------
 @Data
 public class AccountTaxrateAmount {
-    /** 番号 */
-    private String number;
-
     /** 勘定科目 */
     private String account;
 
@@ -22,8 +19,13 @@ public class AccountTaxrateAmount {
     private String taxRate;
 
     /** 金額 */
-//    private String amount;
     @Min(0)
     @Max(9999999)
     private Integer amount;
+
+    /** 番号(確認用) */
+    private String numForCnfrm;
+
+    /** 金額(確認用) */
+    private String amntForCnfrm;
 }

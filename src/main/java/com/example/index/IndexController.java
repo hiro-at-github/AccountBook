@@ -115,6 +115,13 @@ public class IndexController {
             return INDEX;
         }
 
+        if (!indexService.isXxxItemsEntered(prmReceiptForm)) {
+
+            return INDEX;
+        }
+
+
+
         String errMsg = indexService.confirmAllItemsEntered(prmReceiptForm.getATAArr());
 
         if (errMsg != null) {

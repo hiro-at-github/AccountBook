@@ -309,8 +309,12 @@ public class IndexService {
         return tmpLst;
     }
 
-    public Object[] tmpMtd2(ReceiptForm prmReceiptForm) {
+    public boolean isXxxItemsEntered(ReceiptForm prmReceiptForm) {
         Map<Integer, List<String>> errItemMap = tmpMtd(prmReceiptForm.getATAArr());
+
+        if (errItemMap.size() == 0) {
+            return true;
+        }
 
         StringBuilder builder = new StringBuilder();
 
@@ -324,7 +328,7 @@ public class IndexService {
 
 
 
-        return null;
+        return false;
     }
 
 

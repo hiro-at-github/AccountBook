@@ -115,7 +115,7 @@ public class IndexController {
             return INDEX;
         }
 
-        if (!indexService.isXxxItemsEntered(prmReceiptForm)) {
+        if (!indexService.isRelatedItemsEntered(prmReceiptForm)) {
 
             return INDEX;
         }

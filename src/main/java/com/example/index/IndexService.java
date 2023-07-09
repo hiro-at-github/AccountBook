@@ -78,6 +78,16 @@ public class IndexService {
     //TODO:関連チェック？のエラーであることが分かる変数名とし、そのエラーメッセージだけを格納する
     private Map<String, String> rltErrMsgMap;
 
+    /**  */
+    private String rltErrMsg;
+
+    /**  */
+    private List<FieldError> rltFldErrLst;
+
+
+
+
+
     //--------------------------------------------------------------------------------
     /**
      * コンストラクタ
@@ -309,25 +319,34 @@ public class IndexService {
         return tmpLst;
     }
 
-    public boolean isXxxItemsEntered(ReceiptForm prmReceiptForm) {
+    public boolean isRelatedItemsEntered(ReceiptForm prmReceiptForm) {
         Map<Integer, List<String>> errItemMap = tmpMtd(prmReceiptForm.getATAArr());
-
-        if (errItemMap.size() == 0) {
+        Integer taxAmount = prmReceiptForm.getTaxAmount();
+        
+        if (errItemMap.size() == 0 && taxAmount != null) {
             return true;
         }
 
+        // エラーメッセージとエラー項目
         StringBuilder builder = new StringBuilder();
 
         for (int elem : errItemMap.keySet()) {
             String key = String.format("%02d", elem);
             List<String> valLst = errItemMap.get(elem);
 
-            builder.append(buildMsg(key, valLst));
+            builder.append(buildMsg(elem, valLst));
         }
 
+        if (taxAmount == null) {
+            builder.append("");
+        }
 
+        rltErrMsg = builder.toString();
 
-
+        
+        
+        
+        
         return false;
     }
 
@@ -365,7 +384,7 @@ public class IndexService {
         return errItemMap;
     }
 
-    private String buildMsg(String prmKey, List<String> prmLst) {
+    private String buildMsg(int prmKey, List<String> prmLst) {
         return null;
     }
 

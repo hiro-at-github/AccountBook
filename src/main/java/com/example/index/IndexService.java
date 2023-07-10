@@ -322,19 +322,29 @@ public class IndexService {
     public boolean isRelatedItemsEntered(ReceiptForm prmReceiptForm) {
         Map<Integer, List<String>> errItemMap = tmpMtd(prmReceiptForm.getATAArr());
         Integer taxAmount = prmReceiptForm.getTaxAmount();
-        
+
         if (errItemMap.size() == 0 && taxAmount != null) {
             return true;
         }
 
-        // エラーメッセージとエラー項目
+        if (rltErrMsgMap == null) {
+            rltErrMsgMap
+                = getErrMsgMap(RLT_ERR_P, ACCOUNT, TAX + Cnst.UD_S + RATE, AMOUNT, INPUT + Cnst.UD_S + MESSAGE);
+        }
+
+        // エラーメッセージとエラー項目の組立
         StringBuilder builder = new StringBuilder();
+        rltFldErrLst = new ArrayList<>();
 
         for (int elem : errItemMap.keySet()) {
-            String key = String.format("%02d", elem);
             List<String> valLst = errItemMap.get(elem);
 
-            builder.append(buildMsg(elem, valLst));
+            builder.append(buildRltErrMsg(elem, valLst));
+
+            String fmt = String.format("aTAArr[%d].", elem);
+
+//            rltFldErrLst.add(new FieldError("receiptForm", apnd(fmt, null), null));
+            //TODO:メソッド作ってその戻り値をaddAll
         }
 
         if (taxAmount == null) {
@@ -343,10 +353,10 @@ public class IndexService {
 
         rltErrMsg = builder.toString();
 
-        
-        
-        
-        
+
+
+
+
         return false;
     }
 
@@ -384,7 +394,7 @@ public class IndexService {
         return errItemMap;
     }
 
-    private String buildMsg(int prmKey, List<String> prmLst) {
+    private String buildRltErrMsg(int prmKey, List<String> prmLst) {
         return null;
     }
 

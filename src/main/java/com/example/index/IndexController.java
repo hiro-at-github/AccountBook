@@ -116,6 +116,7 @@ public class IndexController {
         }
 
         if (!indexService.isRelatedItemsEntered(prmReceiptForm)) {
+            String errMsg = indexService.confirmAllItemsEntered(prmReceiptForm.getATAArr());
 
             return INDEX;
         }

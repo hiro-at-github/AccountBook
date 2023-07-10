@@ -320,7 +320,7 @@ public class IndexService {
     }
 
     public boolean isRelatedItemsEntered(ReceiptForm prmReceiptForm) {
-        Map<Integer, List<String>> errItemMap = tmpMtd(prmReceiptForm.getATAArr());
+        Map<Integer, List<String>> errItemMap = picupXxxItems(prmReceiptForm.getATAArr());
         Integer taxAmount = prmReceiptForm.getTaxAmount();
 
         if (errItemMap.size() == 0 && taxAmount != null) {
@@ -364,7 +364,36 @@ public class IndexService {
 
 
 
-    private Map<Integer, List<String>> tmpMtd(AccountTaxrateAmount[] prmATAArr) {
+
+
+
+
+
+    // privateメソッド ---------------------------------------------------------------
+
+    //--------------------------------------------------------------------------------
+    /**
+     * エラーメッセージを返却する
+     */
+    //--------------------------------------------------------------------------------
+    //TODO:メソッド名変更
+    private Map<String, String> getErrMsgMap(String prmPrefix, String... prmKeyArr) {
+        Map<String, String> errMsgMap = new HashMap<>();
+
+        for (String elem : prmKeyArr) {
+            errMsgMap.put(snakeToCamel(elem), messageSource.getMessage(prmPrefix + elem, null, Locale.JAPAN));
+        }
+
+        return errMsgMap;
+    }
+
+    //--------------------------------------------------------------------------------
+    /**
+     * ダミー
+     */
+    //--------------------------------------------------------------------------------
+    //TODO:未入力の項目をピックアップする旨の名称に変更
+    private Map<Integer, List<String>> picupXxxItems(AccountTaxrateAmount[] prmATAArr) {
         Map<Integer, List<String>> errItemMap = new LinkedHashMap<>();
 
         for (int i = 0; i < prmATAArr.length; i++) {
@@ -394,34 +423,34 @@ public class IndexService {
         return errItemMap;
     }
 
-    private String buildRltErrMsg(int prmKey, List<String> prmLst) {
-        return null;
+    //--------------------------------------------------------------------------------
+    /**
+     * ダミー
+     */
+    //--------------------------------------------------------------------------------
+    private String buildRltErrMsg(int prmKey, List<String> prmValLst) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(String.format("%02d", prmKey + 1)).append("の").append(prmValLst.get(0));
+        
+        if (prmValLst.size() == 2) {
+            builder.append("と").append(prmValLst.get(1));
+        }
+        
+        return builder.append(Cnst.F_COMMA).toString();
     }
-
-
-
-
-    // privateメソッド ---------------------------------------------------------------
 
     //--------------------------------------------------------------------------------
     /**
-     * エラーメッセージを返却する
+     * ダミー
      */
     //--------------------------------------------------------------------------------
-    //TODO:メソッド名変更
-    private Map<String, String> getErrMsgMap(String prmPrefix, String... prmKeyArr) {
-        Map<String, String> errMsgMap = new HashMap<>();
-
-        for (String elem : prmKeyArr) {
-            errMsgMap.put(snakeToCamel(elem), messageSource.getMessage(prmPrefix + elem, null, Locale.JAPAN));
-        }
-
-        return errMsgMap;
+    //TODO:メソッド名変更検討
+    private List<FieldError> buildRltFldErr(int prmKey, List<String> prmValLst) {
+        return null;
     }
-
-
-
-
+    
+    
+    
 
     //--------------------------------------------------------------------------------
     /**

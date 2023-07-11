@@ -345,6 +345,7 @@ public class IndexService {
 
 //            rltFldErrLst.add(new FieldError("receiptForm", apnd(fmt, null), null));
             //TODO:メソッド作ってその戻り値をaddAll
+            rltFldErrLst.addAll(buildRltFldErrLst(elem, valLst));
         }
 
         if (taxAmount == null) {
@@ -445,8 +446,15 @@ public class IndexService {
      */
     //--------------------------------------------------------------------------------
     //TODO:メソッド名変更検討
-    private List<FieldError> buildRltFldErr(int prmKey, List<String> prmValLst) {
-        return null;
+    private List<FieldError> buildRltFldErrLst(int prmKey, List<String> prmValLst) {
+        List<FieldError> errLst = new ArrayList<>();
+        
+        for (String elem : prmValLst) {
+            FieldError err = new FieldError("receiptForm", apnd(String.format("aTAArr[%01d].", prmKey), elem), null);
+            errLst.add(err);
+        }
+        
+        return errLst;
     }
     
     

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -116,8 +117,12 @@ public class IndexController {
         }
 
         if (!indexService.isRelatedItemsEntered(prmReceiptForm)) {
-            String errMsg = indexService.confirmAllItemsEntered(prmReceiptForm.getATAArr());
-
+            prmReceiptForm.setErrorMessage(indexService.getRltErrMsg());
+            List<FieldError> errLst = indexService.getRltFldErrLst();
+            for (FieldError elem : errLst) {
+                prmBindingResult.addError(elem);
+            }
+            
             return INDEX;
         }
 

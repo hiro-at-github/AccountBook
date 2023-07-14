@@ -29,7 +29,7 @@ input[type="submit"] {display: block; padding: 0 10px; margin-top: 10px; margin-
 
 .table_for_input td.date_etc {vertical-align: top; background-color: #FFF;}
 
-.table_for_input input[type="select"] {width: 200px; margin-top: 10px!important;}
+.table_for_input input[type="select"] {width: 250px!important; margin-top: 10px!important;}
 
 .table_for_input input[type="text"] {text-align: right; width: 70px; height: 17px;}
 
@@ -37,6 +37,17 @@ input[type="submit"] {display: block; padding: 0 10px; margin-top: 10px; margin-
 .table_for_input input[type="number"]::-webkit-inner-spin-button,
 .table_for_input input[type="number"]::-webkit-outer-spin-button {margin: 0; -webkit-appearance: none;}
 
-.error_for_text {background-color: #ffb3da;}
+.table_for_input .test {width: 120px;}
+
+.s4dt, .s4ac, .s4tr, .s4am, .s4tam {border-width:1px; border-style: solid;}
+
+
+.s4dt, .s4tr {width: 38px;}
+.s4ac {width: 100px;}
+.s4am {padding-top: 1px; padding-bottom: 1px; width: 90px;}
+.s4am:focus {border-width: 1px; border-style: solid;}
+
+
+.error_for_text {background-color: #ffb3da; border-width: 1px; /*border-style: solid;*/}
 
 

@@ -333,13 +333,13 @@ public class IndexService {
         }
 
         // エラーメッセージとエラー項目の組立
-        StringBuilder builder = new StringBuilder();
+        StringBuilder msgBuilder = new StringBuilder();
         rltFldErrLst = new ArrayList<>();
 
         for (int elem : errItemMap.keySet()) {
             List<String> valLst = errItemMap.get(elem);
 
-            builder.append(buildRltErrMsg(elem, valLst));
+            msgBuilder.append(buildRltErrMsg(elem, valLst));
 
             String fmt = String.format("aTAArr[%d].", elem);
 
@@ -349,21 +349,21 @@ public class IndexService {
         }
 
         if (taxAmount == null) {
-            builder.append("");
+            msgBuilder.append("");
         }
 
-        rltErrMsg = builder.toString();
-
-
-
-
+        rltErrMsg = msgBuilder.toString();
 
         return false;
     }
 
+    public String getRltErrMsg() {
+        return rltErrMsg;
+    }
 
-
-
+    public List<FieldError> getRltFldErrLst() {
+        return rltFldErrLst;
+    }
 
 
 
@@ -434,7 +434,7 @@ public class IndexService {
         builder.append(String.format("%02d", prmKey + 1)).append("の").append(rltErrMsgMap.get(prmValLst.get(0)));
         
         if (prmValLst.size() == 2) {
-            builder.append("と").append(prmValLst.get(1));
+            builder.append("と").append(rltErrMsgMap.get(prmValLst.get(1)));
         }
         
         return builder.append(Cnst.F_COMMA).toString();

@@ -3,6 +3,8 @@
 - From:20230502
 ----------------------------------------*/
 
+:focus {outline-style: solid;}
+
 * { font-weight: normal; font-size: medium; line-height: 1.8em; padding: 0; margin: 0;}
 
 body {background-color: /*#f1f1f1*/#EEE;}
@@ -44,10 +46,9 @@ input[type="submit"] {display: block; padding: 0 10px; margin-top: 10px; margin-
 
 .s4dt, .s4tr {width: 38px;}
 .s4ac {width: 100px;}
-.s4am {padding-top: 1px; padding-bottom: 1px; width: 90px;}
-.s4am:focus {border-width: 1px; border-style: solid;}
+.s4am, .s4tam {padding: 1px; width: 90px;}
 
 
-.error_for_text {background-color: #ffb3da; border-width: 1px; /*border-style: solid;*/}
+.s4err {background-color: #ffb3da; /*border-width: 1px;*/}
 
 

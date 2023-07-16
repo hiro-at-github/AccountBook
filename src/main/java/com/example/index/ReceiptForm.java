@@ -26,10 +26,15 @@ public class ReceiptForm {
     @Valid
     private AccountTaxrateAmount[] aTAArr;
 
-    /** 税額 */
+    /** 税額(8%) */
     @Min(0)
     @Max(9999999)
-    private Integer taxAmount;
+    private Integer taxAmountFor08;
+
+    /** 税額(10%) */
+    @Min(0)
+    @Max(9999999)
+    private Integer taxAmountFor10;
 
     /** エラーメッセージ */
     private String errorMessage;
@@ -47,9 +52,9 @@ public class ReceiptForm {
         if (prmLength != null) {
             aTAArr = new AccountTaxrateAmount[prmLength];
 
-//            for (int i = 0; i < prmLength; i++) {
-//                aTAArr[i].setNumber(String.format("%02d", i));
-//            }
+            //            for (int i = 0; i < prmLength; i++) {
+            //                aTAArr[i].setNumber(String.format("%02d", i));
+            //            }
         }
     }
 }

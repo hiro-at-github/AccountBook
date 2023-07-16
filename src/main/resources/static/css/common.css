@@ -1,0 +1,109 @@
+/*----------------------------------------
+- レシート登録システム
+- From:20230502
+----------------------------------------*/
+
+.t_a_r {
+    text-align: right;
+}
+
+/*
+.v_a_t {
+    vertical-align: top;
+}
+*/
+
+:focus {
+    outline-style: solid;
+}
+
+* {
+    font-weight: normal;
+    font-size: medium;
+    line-height: 1.8em;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background-color: /*#f1f1f1*/#EEE;
+}
+
+body > div {
+    margin-left: 10px;
+}
+
+form {
+    width:fit-content;
+}
+
+table {
+    border-width: 0;
+    border-collapse: collapse;
+}
+
+th {
+    font-weight: normal;
+}
+
+input[type="submit"] {
+    display: block;
+    padding: 0 10px;
+    margin-top: 10px;
+    margin-left: auto;
+}
+
+.table_for_input {
+    border-color: #7CC0EF;
+}
+
+.table_for_input th {
+    color: #FFF;
+    background-color: #42A2E6;
+    padding-top: 2px;
+}
+
+.table_for_input td {
+    white-space: nowrap;
+    background-color: #EEE;
+    padding: 2px 4px;
+}
+
+.table_for_input tr:nth-child(odd) td {
+    background-color: #FFF;
+}
+
+.table_for_input td.date_tax_rate {
+    vertical-align: top;
+    background-color: #FFF;
+}
+
+.table_for_input input[type="text"] {
+    text-align: right;
+    width: 70px;
+    height: 17px;
+    padding: 1px;
+}
+
+.table_for_input .date,
+.table_for_input .account,
+.table_for_input .tax_rate,
+.table_for_input .amount,
+.table_for_input .tax_amount {
+    border-width:1px;
+    border-style: solid;
+}
+
+.table_for_input .date,
+.table_for_input .tax_rate {
+    width: 38px;
+}
+
+.table_for_input .account {
+    width: 100px;
+}
+
+.table_for_input .error {
+    background-color: #ffb3da;
+    /*border-width: 1px;*/
+}

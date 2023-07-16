@@ -57,7 +57,6 @@ public class IndexService {
     /**  */
     private static final String MESSAGE = "message";
 
-
     /** メッセージソース */
     @Autowired
     private MessageSource messageSource;
@@ -83,10 +82,6 @@ public class IndexService {
 
     /**  */
     private List<FieldError> rltFldErrLst;
-
-
-
-
 
     //--------------------------------------------------------------------------------
     /**
@@ -178,8 +173,8 @@ public class IndexService {
     //--------------------------------------------------------------------------------
     public String buildFldErrMsg(BindingResult prmResult) {
         if (fldErrMsgMap == null) {
-            fldErrMsgMap
-                = getErrMsgMap(FLD_ERR_P, ACCOUNT, AMOUNT, TAX + Cnst.UD_S + AMOUNT, AMOUNT + Cnst.UD_S + MESSAGE);
+            fldErrMsgMap = getErrMsgMap(FLD_ERR_P, ACCOUNT, AMOUNT, TAX + Cnst.UD_S + AMOUNT,
+                    AMOUNT + Cnst.UD_S + MESSAGE);
         }
 
         StringBuilder errMsgBuilder = new StringBuilder();
@@ -212,11 +207,12 @@ public class IndexService {
     //--------------------------------------------------------------------------------
     public String confirmAllItemsEntered(AccountTaxrateAmount[] prmATAArr) {
         if (rltErrMsgMap == null) {
-            rltErrMsgMap
-                = getErrMsgMap(RLT_ERR_P, ACCOUNT, TAX + Cnst.UD_S + RATE, AMOUNT, INPUT + Cnst.UD_S + MESSAGE);
+            rltErrMsgMap = getErrMsgMap(RLT_ERR_P, ACCOUNT, TAX + Cnst.UD_S + RATE, AMOUNT,
+                    INPUT + Cnst.UD_S + MESSAGE);
         }
 
         StringBuilder errMsgBuilder = new StringBuilder();
+        int apndCnt = 0;
 
         for (int i = 0; i < prmATAArr.length; i++) {
             AccountTaxrateAmount elem = prmATAArr[i];
@@ -242,8 +238,18 @@ public class IndexService {
 
             errMsgBuilder.append(String.format("%02d", i + 1)).append("の").append(errItemLst.get(0));
 
+            apndCnt++;
+            if (apndCnt % 8 == 0) {
+                errMsgBuilder.append(Cnst.SPRT);
+            }
+
             if (errItemLst.size() == 2) {
                 errMsgBuilder.append("と").append(errItemLst.get(1));
+
+                apndCnt++;
+                if (apndCnt % 8 == 0) {
+                    errMsgBuilder.append(Cnst.SPRT);
+                }
             }
 
             errMsgBuilder.append(Cnst.F_COMMA);
@@ -265,7 +271,6 @@ public class IndexService {
     //--------------------------------------------------------------------------------
     public List<String> checkItemMtd(ReceiptForm prmReceiptForm) {
         List<String> tmpLst = new ArrayList<>();
-
 
         List<FieldError> errLst = new ArrayList<>();
 
@@ -297,39 +302,27 @@ public class IndexService {
                 continue;
             }
 
-
-
-
-
-
-
             tmpLst.addAll(tempLst);
         }
 
-        if (prmReceiptForm.getTaxAmount() == null) {
+        if (prmReceiptForm.getTaxAmountFor08() == null) {
             tmpLst.add(buildKey(TAX, AMOUNT));
         }
-
-
-
-
-
-
 
         return tmpLst;
     }
 
     public boolean isRelatedItemsEntered(ReceiptForm prmReceiptForm) {
         Map<Integer, List<String>> errItemMap = picupXxxItems(prmReceiptForm.getATAArr());
-        Integer taxAmount = prmReceiptForm.getTaxAmount();
+        Integer taxAmount = prmReceiptForm.getTaxAmountFor08();
 
         if (errItemMap.size() == 0 && taxAmount != null) {
             return true;
         }
 
         if (rltErrMsgMap == null) {
-            rltErrMsgMap
-                = getErrMsgMap(RLT_ERR_P, ACCOUNT, TAX + Cnst.UD_S + RATE, AMOUNT, INPUT + Cnst.UD_S + MESSAGE);
+            rltErrMsgMap = getErrMsgMap(RLT_ERR_P, ACCOUNT, TAX + Cnst.UD_S + RATE, AMOUNT,
+                    INPUT + Cnst.UD_S + MESSAGE);
         }
 
         // エラーメッセージとエラー項目の組立
@@ -343,7 +336,7 @@ public class IndexService {
 
             String fmt = String.format("aTAArr[%d].", elem);
 
-//            rltFldErrLst.add(new FieldError("receiptForm", apnd(fmt, null), null));
+            //            rltFldErrLst.add(new FieldError("receiptForm", apnd(fmt, null), null));
             //TODO:メソッド作ってその戻り値をaddAll
             rltFldErrLst.addAll(buildRltFldErrLst(elem, valLst));
         }
@@ -364,11 +357,6 @@ public class IndexService {
     public List<FieldError> getRltFldErrLst() {
         return rltFldErrLst;
     }
-
-
-
-
-
 
     // privateメソッド ---------------------------------------------------------------
 
@@ -432,11 +420,11 @@ public class IndexService {
     private String buildRltErrMsg(int prmKey, List<String> prmValLst) {
         StringBuilder builder = new StringBuilder();
         builder.append(String.format("%02d", prmKey + 1)).append("の").append(rltErrMsgMap.get(prmValLst.get(0)));
-        
+
         if (prmValLst.size() == 2) {
             builder.append("と").append(rltErrMsgMap.get(prmValLst.get(1)));
         }
-        
+
         return builder.append(Cnst.F_COMMA).toString();
     }
 
@@ -448,17 +436,14 @@ public class IndexService {
     //TODO:メソッド名変更検討
     private List<FieldError> buildRltFldErrLst(int prmKey, List<String> prmValLst) {
         List<FieldError> errLst = new ArrayList<>();
-        
+
         for (String elem : prmValLst) {
             FieldError err = new FieldError("receiptForm", apnd(String.format("aTAArr[%01d].", prmKey), elem), null);
             errLst.add(err);
         }
-        
+
         return errLst;
     }
-    
-    
-    
 
     //--------------------------------------------------------------------------------
     /**
@@ -507,8 +492,5 @@ public class IndexService {
 
         return builder.toString();
     }
-
-
-
 
 }

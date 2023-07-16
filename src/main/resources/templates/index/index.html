@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8"></meta>
 <!-- <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"> -->
-<link rel="stylesheet" th:href="@{/css/style.css}">
+<link rel="stylesheet" th:href="@{/css/common.css}">
 <script th:src="@{/webjars/jquery/jquery.min.js}" defer></script>
 <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" defer></script>
 <script th:src="@{/js/common.js}" defer></script>
@@ -42,326 +42,327 @@
 
 <!-- 1行目 -->
 <tr>
-<td rowspan="8" class="date_etc"><div><select th:field="*{year}" tabindex="10" th:class="s4dt">
+<td class="date_tax_rate"><select th:field="*{year}" tabindex="10" th:class="date">
   <option th:each="item:${yearArr}" th:value="${item}" th:text="${item}"></option>
-</select><span th:text="#{index.receipt.table.year}"></span></div>
-<div><select th:field="*{month}" tabindex="20" th:class="s4dt">
-  <option th:each="item:${monthArr}" th:value="${item}" th:text="${item}"></option>
-</select><span th:text="#{index.receipt.table.month}"></span></div>
-<div><select th:field="*{day}" tabindex="30" th:class="s4dt">
-  <option th:each="item:${dayArr}" th:value="${item}" th:text="${item}"></option>
-</select><span th:text="#{index.receipt.table.day}"></span></div></td>
+</select><span th:text="#{index.receipt.table.year}"></span></td>
 
 <td>01</td>
-<td><select th:field="*{aTAArr[0].account}" tabindex="110" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[0].account}" tabindex="110" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[0].taxRate}" tabindex="120" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[0].taxRate}" tabindex="120" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" tabindex="130" maxlength="7" th:field="*{aTAArr[0].amount}" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" tabindex="130" maxlength="7" th:field="*{aTAArr[0].amount}" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
 <td>02</td>
-<td><select th:field="*{aTAArr[1].account}" tabindex="210" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[1].account}" tabindex="210" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[1].taxRate}" tabindex="220" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[1].taxRate}" tabindex="220" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" tabindex="230" maxlength="7" th:field="*{aTAArr[1].amount}" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" tabindex="230" maxlength="7" th:field="*{aTAArr[1].amount}" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
 <td>03</td>
-<td><select th:field="*{aTAArr[2].account}" tabindex="310" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[2].account}" tabindex="310" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[2].taxRate}" tabindex="320" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[2].taxRate}" tabindex="320" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" tabindex="330" maxlength="7" th:field="*{aTAArr[2].amount}" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" tabindex="330" maxlength="7" th:field="*{aTAArr[2].amount}" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
 <td>04</td>
-<td><select th:field="*{aTAArr[3].account}" tabindex="410" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[3].account}" tabindex="410" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[3].taxRate}" tabindex="420" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[3].taxRate}" tabindex="420" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" tabindex="430" maxlength="7" th:field="*{aTAArr[3].amount}" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" tabindex="430" maxlength="7" th:field="*{aTAArr[3].amount}" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
-<td rowspan="8" class="date_etc"><input type="text" tabindex="6010" th:field="*{taxAmount}" th:class="s4tam" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<td class="date_tax_rate t_a_r"><span th:text="#{index.receipt.table.tax_rate_1}"></span><input type="text" tabindex="6010" th:field="*{taxAmountFor08}" th:class="tax_amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 </tr>
 
 <!-- 2行目 -->
 <tr>
+<td class="date_tax_rate"><select th:field="*{month}" tabindex="20" th:class="date">
+  <option th:each="item:${monthArr}" th:value="${item}" th:text="${item}"></option>
+</select><span th:text="#{index.receipt.table.month}"></span></td>
 <td>05</td>
-<td><select th:field="*{aTAArr[4].account}" tabindex="510" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[4].account}" tabindex="510" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[4].taxRate}" tabindex="520" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[4].taxRate}" tabindex="520" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" th:field="*{aTAArr[4].amount}" tabindex="530" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" th:field="*{aTAArr[4].amount}" tabindex="530" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
 <td>06</td>
-<td><select th:field="*{aTAArr[5].account}" tabindex="610" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[5].account}" tabindex="610" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[5].taxRate}" tabindex="620" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[5].taxRate}" tabindex="620" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" th:field="*{aTAArr[5].amount}" tabindex="630" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" th:field="*{aTAArr[5].amount}" tabindex="630" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
 <td>07</td>
-<td><select th:field="*{aTAArr[6].account}" tabindex="710" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[6].account}" tabindex="710" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[6].taxRate}" tabindex="720" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[6].taxRate}" tabindex="720" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" th:field="*{aTAArr[6].amount}" tabindex="730" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" th:field="*{aTAArr[6].amount}" tabindex="730" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
 <td>08</td>
-<td><select th:field="*{aTAArr[7].account}" tabindex="810" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[7].account}" tabindex="810" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[7].taxRate}" tabindex="820" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[7].taxRate}" tabindex="820" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" th:field="*{aTAArr[7].amount}" tabindex="830" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" th:field="*{aTAArr[7].amount}" tabindex="830" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
+<td rowspan="7" class="date_tax_rate"><span th:text="#{index.receipt.table.tax_rate_2}"></span><input type="text" tabindex="6020" th:field="*{taxAmountFor10}" th:class="tax_amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 </tr>
 
 <!-- 3行目 -->
 <tr>
+<td rowspan="6" class="date_tax_rate"><select th:field="*{day}" tabindex="30" th:class="date">
+  <option th:each="item:${dayArr}" th:value="${item}" th:text="${item}"></option>
+</select><span th:text="#{index.receipt.table.day}"></span></td>
 <td>09</td>
-<td><select th:field="*{aTAArr[8].account}" tabindex="910" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[8].account}" tabindex="910" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[8].taxRate}" tabindex="920" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[8].taxRate}" tabindex="920" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" th:field="*{aTAArr[8].amount}" tabindex="930" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" th:field="*{aTAArr[8].amount}" tabindex="930" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
 <td>10</td>
-<td><select th:field="*{aTAArr[9].account}" tabindex="1010" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[9].account}" tabindex="1010" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[9].taxRate}" tabindex="1020" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[9].taxRate}" tabindex="1020" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" th:field="*{aTAArr[9].amount}" tabindex="1030" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" th:field="*{aTAArr[9].amount}" tabindex="1030" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
 <td>11</td>
-<td><select th:field="*{aTAArr[10].account}" tabindex="1110" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[10].account}" tabindex="1110" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[10].taxRate}" tabindex="1120" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[10].taxRate}" tabindex="1120" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" th:field="*{aTAArr[10].amount}" tabindex="1130" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" th:field="*{aTAArr[10].amount}" tabindex="1130" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
 <td>12</td>
-<td><select th:field="*{aTAArr[11].account}" tabindex="1210" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[11].account}" tabindex="1210" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[11].taxRate}" tabindex="1220" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[11].taxRate}" tabindex="1220" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" th:field="*{aTAArr[11].amount}" tabindex="1230" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" th:field="*{aTAArr[11].amount}" tabindex="1230" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 </tr>
 
 <!-- 4行目 -->
 <tr>
 <td>13</td>
-<td><select th:field="*{aTAArr[12].account}" tabindex="1310" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[12].account}" tabindex="1310" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[12].taxRate}" tabindex="1320" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[12].taxRate}" tabindex="1320" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" th:field="*{aTAArr[12].amount}" tabindex="1330" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" th:field="*{aTAArr[12].amount}" tabindex="1330" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
 <td>14</td>
-<td><select th:field="*{aTAArr[13].account}" tabindex="1410" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[13].account}" tabindex="1410" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[13].taxRate}" tabindex="1420" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[13].taxRate}" tabindex="1420" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" th:field="*{aTAArr[13].amount}" tabindex="1430" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" th:field="*{aTAArr[13].amount}" tabindex="1430" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
 <td>15</td>
-<td><select th:field="*{aTAArr[14].account}" tabindex="1510" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[14].account}" tabindex="1510" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[14].taxRate}" tabindex="1520" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[14].taxRate}" tabindex="1520" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" th:field="*{aTAArr[14].amount}" tabindex="1530" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" th:field="*{aTAArr[14].amount}" tabindex="1530" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
 <td>16</td>
-<td><select th:field="*{aTAArr[15].account}" tabindex="1610" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[15].account}" tabindex="1610" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[15].taxRate}" tabindex="1620" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[15].taxRate}" tabindex="1620" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" th:field="*{aTAArr[15].amount}" tabindex="1630" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" th:field="*{aTAArr[15].amount}" tabindex="1630" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 </tr>
 
 <!-- 5行目 -->
 <tr>
 <td>17</td>
-<td><select th:field="*{aTAArr[16].account}" tabindex="1710" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[16].account}" tabindex="1710" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[16].taxRate}" tabindex="1720" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[16].taxRate}" tabindex="1720" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" th:field="*{aTAArr[16].amount}" tabindex="1730" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" th:field="*{aTAArr[16].amount}" tabindex="1730" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
 <td>18</td>
-<td><select th:field="*{aTAArr[17].account}" tabindex="1810" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[17].account}" tabindex="1810" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[17].taxRate}" tabindex="1820" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[17].taxRate}" tabindex="1820" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" th:field="*{aTAArr[17].amount}" tabindex="1830" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" th:field="*{aTAArr[17].amount}" tabindex="1830" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
 <td>19</td>
-<td><select th:field="*{aTAArr[18].account}" tabindex="1910" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[18].account}" tabindex="1910" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[18].taxRate}" tabindex="1920" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[18].taxRate}" tabindex="1920" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" th:field="*{aTAArr[18].amount}" tabindex="1930" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" th:field="*{aTAArr[18].amount}" tabindex="1930" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
 <td>20</td>
-<td><select th:field="*{aTAArr[19].account}" tabindex="2010" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[19].account}" tabindex="2010" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[19].taxRate}" tabindex="2020" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[19].taxRate}" tabindex="2020" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" th:field="*{aTAArr[19].amount}" tabindex="2030" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" th:field="*{aTAArr[19].amount}" tabindex="2030" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 </tr>
 
 <!-- 6行目 -->
 <tr>
 <td>21</td>
-<td><select th:field="*{aTAArr[20].account}" tabindex="2110" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[20].account}" tabindex="2110" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[20].taxRate}" tabindex="2120" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[20].taxRate}" tabindex="2120" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" th:field="*{aTAArr[20].amount}" tabindex="2130" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" th:field="*{aTAArr[20].amount}" tabindex="2130" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
 <td>22</td>
-<td><select th:field="*{aTAArr[21].account}" tabindex="2210" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[21].account}" tabindex="2210" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[21].taxRate}" tabindex="2220" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[21].taxRate}" tabindex="2220" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" th:field="*{aTAArr[21].amount}" tabindex="2230" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" th:field="*{aTAArr[21].amount}" tabindex="2230" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
 <td>23</td>
-<td><select th:field="*{aTAArr[22].account}" tabindex="2310" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[22].account}" tabindex="2310" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[22].taxRate}" tabindex="2320" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[22].taxRate}" tabindex="2320" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" th:field="*{aTAArr[22].amount}" tabindex="2330" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" th:field="*{aTAArr[22].amount}" tabindex="2330" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
 <td>24</td>
-<td><select th:field="*{aTAArr[23].account}" tabindex="2410" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[23].account}" tabindex="2410" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[23].taxRate}" tabindex="2420" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[23].taxRate}" tabindex="2420" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" th:field="*{aTAArr[23].amount}" tabindex="2430" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" th:field="*{aTAArr[23].amount}" tabindex="2430" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 </tr>
 
 <!-- 7行目 -->
 <tr>
 <td>25</td>
-<td><select th:field="*{aTAArr[24].account}" tabindex="2510" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[24].account}" tabindex="2510" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[24].taxRate}" tabindex="2520" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[24].taxRate}" tabindex="2520" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" th:field="*{aTAArr[24].amount}" tabindex="2530" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" th:field="*{aTAArr[24].amount}" tabindex="2530" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
 <td>26</td>
-<td><select th:field="*{aTAArr[25].account}" tabindex="2610" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[25].account}" tabindex="2610" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[25].taxRate}" tabindex="2620" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[25].taxRate}" tabindex="2620" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" th:field="*{aTAArr[25].amount}" tabindex="2630" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" th:field="*{aTAArr[25].amount}" tabindex="2630" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
 <td>27</td>
-<td><select th:field="*{aTAArr[26].account}" tabindex="2710" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[26].account}" tabindex="2710" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[26].taxRate}" tabindex="2720" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[26].taxRate}" tabindex="2720" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" th:field="*{aTAArr[26].amount}" tabindex="2730" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" th:field="*{aTAArr[26].amount}" tabindex="2730" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
 <td>28</td>
-<td><select th:field="*{aTAArr[27].account}" tabindex="2810" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[27].account}" tabindex="2810" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[27].taxRate}" tabindex="2820" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[27].taxRate}" tabindex="2820" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" th:field="*{aTAArr[27].amount}" tabindex="2830" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" th:field="*{aTAArr[27].amount}" tabindex="2830" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 </tr>
 
 <!-- 8行目 -->
 <tr>
 <td>29</td>
-<td><select th:field="*{aTAArr[28].account}" tabindex="2910" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[28].account}" tabindex="2910" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[28].taxRate}" tabindex="2920" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[28].taxRate}" tabindex="2920" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" th:field="*{aTAArr[28].amount}" tabindex="2930" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" th:field="*{aTAArr[28].amount}" tabindex="2930" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
 <td>30</td>
-<td><select th:field="*{aTAArr[29].account}" tabindex="3010" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[29].account}" tabindex="3010" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[29].taxRate}" tabindex="3020" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[29].taxRate}" tabindex="3020" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" th:field="*{aTAArr[29].amount}" tabindex="3030" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" th:field="*{aTAArr[29].amount}" tabindex="3030" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
 <td>31</td>
-<td><select th:field="*{aTAArr[30].account}" tabindex="3110" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[30].account}" tabindex="3110" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[30].taxRate}" tabindex="3120" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[30].taxRate}" tabindex="3120" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" th:field="*{aTAArr[30].amount}" tabindex="3130" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" th:field="*{aTAArr[30].amount}" tabindex="3130" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
 <td>32</td>
-<td><select th:field="*{aTAArr[31].account}" tabindex="3210" th:class="s4ac" th:errorclass="s4err">
+<td><select th:field="*{aTAArr[31].account}" tabindex="3210" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<select th:field="*{aTAArr[31].taxRate}" tabindex="3220" th:class="s4tr" th:errorclass="s4err">
+<select th:field="*{aTAArr[31].taxRate}" tabindex="3220" th:class="tax_rate" th:errorclass="error">
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
-<input type="text" th:field="*{aTAArr[31].amount}" tabindex="3230" th:class="s4am" th:errorclass="s4err" oninput="this.value = disableNonNumeric(this.value)"></td>
+<input type="text" th:field="*{aTAArr[31].amount}" tabindex="3230" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 </tr>
 
 </table>

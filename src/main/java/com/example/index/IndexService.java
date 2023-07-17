@@ -314,12 +314,15 @@ public class IndexService {
 
     public boolean isRelatedItemsEntered(ReceiptForm prmReceiptForm) {
         Map<Integer, List<String>> errItemMap = picupXxxItems(prmReceiptForm.getATAArr());
-        Integer taxAmount = prmReceiptForm.getTaxAmountFor08();
+        //TODO:消費税額のコレクション化検討
+        Integer taxAmountFor08 = prmReceiptForm.getTaxAmountFor08();
+        Integer taxAmountFor10 = prmReceiptForm.getTaxAmountFor10();
 
-        if (errItemMap.size() == 0 && taxAmount != null) {
+        if (errItemMap.size() == 0 && taxAmountFor08 != null && taxAmountFor10 != null) {
             return true;
         }
 
+        //
         if (rltErrMsgMap == null) {
             rltErrMsgMap = getErrMsgMap(RLT_ERR_P, ACCOUNT, TAX + Cnst.UD_S + RATE, AMOUNT,
                     INPUT + Cnst.UD_S + MESSAGE);
@@ -341,7 +344,7 @@ public class IndexService {
             rltFldErrLst.addAll(buildRltFldErrLst(elem, valLst));
         }
 
-        if (taxAmount == null) {
+        if (taxAmountFor08 == null) {
             msgBuilder.append("");
         }
 
@@ -411,6 +414,28 @@ public class IndexService {
 
         return errItemMap;
     }
+
+    //--------------------------------------------------------------------------------
+    /**
+     * ダミー
+     */
+    //--------------------------------------------------------------------------------
+    private List<String> tmpMtd(Map<Integer, List<String>> prmErrItemMap) {
+        for (int elem : prmErrItemMap.keySet()) {
+            List<String> valLst = prmErrItemMap.get(elem);
+
+        }
+
+
+
+        return null;
+    }
+
+
+
+
+
+
 
     //--------------------------------------------------------------------------------
     /**

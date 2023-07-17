@@ -421,6 +421,9 @@ public class IndexService {
         StringBuilder builder = new StringBuilder();
         builder.append(String.format("%02d", prmKey + 1)).append("の").append(rltErrMsgMap.get(prmValLst.get(0)));
 
+        List<String> tempLst = new ArrayList<>();
+        //        tempLst.add(apnd(String.format("%02d", prmKey + 1)), "の", rltErrMsgMap.get(prmValLst.get(0)));
+
         if (prmValLst.size() == 2) {
             builder.append("と").append(rltErrMsgMap.get(prmValLst.get(1)));
         }

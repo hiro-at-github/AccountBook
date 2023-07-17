@@ -344,8 +344,16 @@ public class IndexService {
             rltFldErrLst.addAll(buildRltFldErrLst(elem, valLst));
         }
 
-        if (taxAmountFor08 == null) {
-            msgBuilder.append("");
+        List<String> tmpLst = null;
+
+        if (errItemMap.size() == 0) {
+            tmpLst = tmpMtd(errItemMap);
+        }
+
+        //TODO:直書きして必要であればメソッド化
+        if (taxAmountFor08 == null && taxAmountFor10 == null) {
+            //            tmpLst.add("税額の8%");
+            tmpLst.addAll(tmpMtd2("", ""));
         }
 
         rltErrMsg = msgBuilder.toString();
@@ -421,21 +429,15 @@ public class IndexService {
      */
     //--------------------------------------------------------------------------------
     private List<String> tmpMtd(Map<Integer, List<String>> prmErrItemMap) {
+        List<String> tmpLst = new ArrayList<>();
+
         for (int elem : prmErrItemMap.keySet()) {
             List<String> valLst = prmErrItemMap.get(elem);
-
+            tmpLst.add(buildRltErrMsg(elem, valLst));
         }
 
-
-
-        return null;
+        return tmpLst;
     }
-
-
-
-
-
-
 
     //--------------------------------------------------------------------------------
     /**
@@ -446,14 +448,20 @@ public class IndexService {
         StringBuilder builder = new StringBuilder();
         builder.append(String.format("%02d", prmKey + 1)).append("の").append(rltErrMsgMap.get(prmValLst.get(0)));
 
-        List<String> tempLst = new ArrayList<>();
-        //        tempLst.add(apnd(String.format("%02d", prmKey + 1)), "の", rltErrMsgMap.get(prmValLst.get(0)));
-
         if (prmValLst.size() == 2) {
             builder.append("と").append(rltErrMsgMap.get(prmValLst.get(1)));
         }
 
         return builder.append(Cnst.F_COMMA).toString();
+    }
+
+    //--------------------------------------------------------------------------------
+    /**
+     * ダミー
+     */
+    //--------------------------------------------------------------------------------
+    private List<String> tmpMtd2(String prmStr1, String prmStr2) {
+        return null;
     }
 
     //--------------------------------------------------------------------------------

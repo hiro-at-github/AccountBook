@@ -313,15 +313,22 @@ public class IndexService {
     }
 
     public boolean isRelatedItemsEntered(ReceiptForm prmReceiptForm) {
-        //TODO:ここから作業再開
-        //TODO:日付の整合性確認
+        //TODO:生成は宣言と同時か、加える直前か、検討
+        List<String> tempList = null;
+
+        String dateErrMsg = checkDate();
+        if (dateErrMsg != null) {
+            tempList = new ArrayList<>();
+            tempList.add(dateErrMsg);
+        }
+
         //TODO:未入力の場合の確認をpicupXxxItemsに含めるか
         Map<Integer, List<String>> errItemMap = picupXxxItems(prmReceiptForm.getATAArr());
         //TODO:消費税額のコレクション化検討
         Integer taxAmountFor08 = prmReceiptForm.getTaxAmountFor08();
         Integer taxAmountFor10 = prmReceiptForm.getTaxAmountFor10();
 
-        if (errItemMap.size() == 0 && taxAmountFor08 != null && taxAmountFor10 != null) {
+        if (tempList == null && errItemMap.size() == 0 && taxAmountFor08 != null && taxAmountFor10 != null) {
             return true;
         }
 
@@ -393,11 +400,25 @@ public class IndexService {
 
     //--------------------------------------------------------------------------------
     /**
+     * 日付の整合性を確認する旨
+     */
+    //--------------------------------------------------------------------------------
+    //TODO:メソッド名変更
+    private String checkDate() {
+        return null;
+    }
+
+    //--------------------------------------------------------------------------------
+    /**
      * ダミー
      */
     //--------------------------------------------------------------------------------
     //TODO:未入力の項目をピックアップする旨の名称に変更
+    //TODO:問題ない場合：sizeが0のMapが返る。
+    //問題ある場合：1以上、引数の長さ以下のMapが返る。
+    //未入力の場合：nullを返す
     private Map<Integer, List<String>> picupXxxItems(AccountTaxrateAmount[] prmATAArr) {
+        int emptyCounter = 0;
         Map<Integer, List<String>> errItemMap = new LinkedHashMap<>();
 
         for (int i = 0; i < prmATAArr.length; i++) {
@@ -420,6 +441,8 @@ public class IndexService {
             if (size == 0 || size == 3) {
                 continue;
             }
+
+            //TODO:ここから作業再開。switchを記載する
 
             errItemMap.put(i, errItemLst);
         }

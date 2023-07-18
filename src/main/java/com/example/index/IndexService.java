@@ -313,6 +313,9 @@ public class IndexService {
     }
 
     public boolean isRelatedItemsEntered(ReceiptForm prmReceiptForm) {
+        //TODO:ここから作業再開
+        //TODO:日付の整合性確認
+        //TODO:未入力の場合の確認をpicupXxxItemsに含めるか
         Map<Integer, List<String>> errItemMap = picupXxxItems(prmReceiptForm.getATAArr());
         //TODO:消費税額のコレクション化検討
         Integer taxAmountFor08 = prmReceiptForm.getTaxAmountFor08();
@@ -346,12 +349,13 @@ public class IndexService {
 
         List<String> tmpLst = null;
 
-        if (errItemMap.size() == 0) {
+        //TODO:判定のメソッド内への移動を検討
+        if (errItemMap.size() > 0) {
             tmpLst = tmpMtd(errItemMap);
         }
 
-        //TODO:直書きして必要であればメソッド化
-        if (taxAmountFor08 == null && taxAmountFor10 == null) {
+        //TODO:判定のメソッド内への移動を検討
+        if (taxAmountFor08 == null || taxAmountFor10 == null) {
             //            tmpLst.add("税額の8%");
             tmpLst.addAll(tmpMtd2("", ""));
         }
@@ -461,7 +465,7 @@ public class IndexService {
      */
     //--------------------------------------------------------------------------------
     private List<String> tmpMtd2(String prmStr1, String prmStr2) {
-        return null;
+        return new ArrayList<String>();
     }
 
     //--------------------------------------------------------------------------------

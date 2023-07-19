@@ -413,6 +413,21 @@ public class IndexService {
      * ダミー
      */
     //--------------------------------------------------------------------------------
+    //TODO:メソッド名変更
+    private String tmpMtd0720_1() {
+      //TODO:ここから作業再開。
+
+        return null;
+    }
+
+
+
+
+    //--------------------------------------------------------------------------------
+    /**
+     * ダミー
+     */
+    //--------------------------------------------------------------------------------
     //TODO:未入力の項目をピックアップする旨の名称に変更
     //TODO:問題ない場合：sizeが0のMapが返る。
     //問題ある場合：1以上、引数の長さ以下のMapが返る。
@@ -421,7 +436,8 @@ public class IndexService {
         int emptyCounter = 0;
         Map<Integer, List<String>> errItemMap = new LinkedHashMap<>();
 
-        for (int i = 0; i < prmATAArr.length; i++) {
+        int length = prmATAArr.length;
+        for (int i = 0; i < length; i++) {
             AccountTaxrateAmount elem = prmATAArr[i];
             List<String> errItemLst = new ArrayList<>();
 
@@ -437,14 +453,31 @@ public class IndexService {
                 errItemLst.add(AMOUNT);
             }
 
-            int size = errItemLst.size();
-            if (size == 0 || size == 3) {
+//            int size = errItemLst.size();
+//            if (size == 0 || size == 3) {
+//                continue;
+//            }
+
+            switch (errItemLst.size()) {
+            case 0:
+                continue;
+
+            case 1:
+            case 2:
+                errItemMap.put(i, errItemLst);
+                continue;
+
+            case 3:
+                emptyCounter++;
+                continue;
+
+            default:
                 continue;
             }
+        }
 
-            //TODO:ここから作業再開。switchを記載する
-
-            errItemMap.put(i, errItemLst);
+        if (emptyCounter == length) {
+            return null;
         }
 
         return errItemMap;

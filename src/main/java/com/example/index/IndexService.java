@@ -314,25 +314,27 @@ public class IndexService {
 
     public boolean isRelatedItemsEntered(ReceiptForm prmReceiptForm) {
         //TODO:生成は宣言と同時か、加える直前か、検討
-        List<String> tempList = null;
+        //        List<String> tempList = null;
 
-        String dateErrMsg = checkDate();
-        if (dateErrMsg != null) {
-            tempList = new ArrayList<>();
-            tempList.add(dateErrMsg);
-        }
+        // 日付の年月日が正しいか確認(月末、閏年)
+        boolean isDateXxx = isDateXxx();
+        //        if (dateErrMsg != null) {
+        //            tempList = new ArrayList<>();
+        //            tempList.add(dateErrMsg);
+        //        }
 
         //TODO:未入力の場合の確認をpicupXxxItemsに含めるか
+        //TODO:ここから作業再開。errItemMapがnullの場合の処理から
         Map<Integer, List<String>> errItemMap = picupXxxItems(prmReceiptForm.getATAArr());
         //TODO:消費税額のコレクション化検討
         Integer taxAmountFor08 = prmReceiptForm.getTaxAmountFor08();
         Integer taxAmountFor10 = prmReceiptForm.getTaxAmountFor10();
 
-        if (tempList == null && errItemMap.size() == 0 && taxAmountFor08 != null && taxAmountFor10 != null) {
+        if (isDateXxx && errItemMap.size() == 0 && taxAmountFor08 != null && taxAmountFor10 != null) {
             return true;
         }
 
-        //
+        //TODO:エラーメッセージ用のプロパティを取得(展開)する旨のコメント
         if (rltErrMsgMap == null) {
             rltErrMsgMap = getErrMsgMap(RLT_ERR_P, ACCOUNT, TAX + Cnst.UD_S + RATE, AMOUNT,
                     INPUT + Cnst.UD_S + MESSAGE);
@@ -403,9 +405,9 @@ public class IndexService {
      * 日付の整合性を確認する旨
      */
     //--------------------------------------------------------------------------------
-    //TODO:メソッド名変更
-    private String checkDate() {
-        return null;
+    //TODO:メソッド名変更。日付が不正の場合は「日付が不正」だけをメッセージとするため、戻り値はbooleanで可
+    private boolean isDateXxx() {
+        return true;
     }
 
     //--------------------------------------------------------------------------------
@@ -414,14 +416,12 @@ public class IndexService {
      */
     //--------------------------------------------------------------------------------
     //TODO:メソッド名変更
-    private String tmpMtd0720_1() {
-      //TODO:ここから作業再開。
+    private String tmpMtd0720_1(AccountTaxrateAmount[] prmATAArr) {
+        //TODO:ここから作業再開。
+        Map<Integer, List<String>> errItemMap = picupXxxItems(prmATAArr);
 
         return null;
     }
-
-
-
 
     //--------------------------------------------------------------------------------
     /**
@@ -453,10 +453,10 @@ public class IndexService {
                 errItemLst.add(AMOUNT);
             }
 
-//            int size = errItemLst.size();
-//            if (size == 0 || size == 3) {
-//                continue;
-//            }
+            //            int size = errItemLst.size();
+            //            if (size == 0 || size == 3) {
+            //                continue;
+            //            }
 
             switch (errItemLst.size()) {
             case 0:

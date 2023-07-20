@@ -312,12 +312,18 @@ public class IndexService {
         return tmpLst;
     }
 
+    //--------------------------------------------------------------------------------
+    /**
+     * ダミー
+     */
+    //--------------------------------------------------------------------------------
+    //TODO:ここから作業再開。このメソッドの処理の整理をmemoにまとめる続きから
     public boolean isRelatedItemsEntered(ReceiptForm prmReceiptForm) {
         //TODO:生成は宣言と同時か、加える直前か、検討
         //        List<String> tempList = null;
 
         // 日付の年月日が正しいか確認(月末、閏年)
-        boolean isDateXxx = isDateXxx();
+        boolean isDateXxx = isDateXxx(prmReceiptForm.getYear(), prmReceiptForm.getMonth(), prmReceiptForm.getDay());
         //        if (dateErrMsg != null) {
         //            tempList = new ArrayList<>();
         //            tempList.add(dateErrMsg);
@@ -329,10 +335,10 @@ public class IndexService {
         Integer taxAmountFor08 = prmReceiptForm.getTaxAmountFor08();
         Integer taxAmountFor10 = prmReceiptForm.getTaxAmountFor10();
 
-//        if (isDateXxx && errItemMap != null && errItemMap.size() == 0
-//                && taxAmountFor08 != null && taxAmountFor10 != null) {
-//            return true;
-//        }
+        //        if (isDateXxx && errItemMap != null && errItemMap.size() == 0
+        //                && taxAmountFor08 != null && taxAmountFor10 != null) {
+        //            return true;
+        //        }
 
         //TODO:名前検討
         List<String> errItemLst = from0721_1(isDateXxx, errItemMap, taxAmountFor08, taxAmountFor10);
@@ -341,11 +347,11 @@ public class IndexService {
             return true;
         }
 
-//        //TODO:エラーメッセージ用のプロパティを取得(展開)する旨のコメント
-//        if (rltErrMsgMap == null) {
-//            rltErrMsgMap = getErrMsgMap(RLT_ERR_P, ACCOUNT, TAX + Cnst.UD_S + RATE, AMOUNT,
-//                    INPUT + Cnst.UD_S + MESSAGE);
-//        }
+        //        //TODO:エラーメッセージ用のプロパティを取得(展開)する旨のコメント
+        //        if (rltErrMsgMap == null) {
+        //            rltErrMsgMap = getErrMsgMap(RLT_ERR_P, ACCOUNT, TAX + Cnst.UD_S + RATE, AMOUNT,
+        //                    INPUT + Cnst.UD_S + MESSAGE);
+        //        }
 
         // エラーメッセージとエラー項目の組立
         StringBuilder msgBuilder = new StringBuilder();
@@ -413,7 +419,7 @@ public class IndexService {
      */
     //--------------------------------------------------------------------------------
     //TODO:メソッド名変更。日付が不正の場合は「日付が不正」だけをメッセージとするため、戻り値はbooleanで可
-    private boolean isDateXxx() {
+    private boolean isDateXxx(String... prmDate) {
         return true;
     }
 
@@ -424,10 +430,10 @@ public class IndexService {
     //--------------------------------------------------------------------------------
     //TODO:メソッド名、引数名変更
     private List<String> from0721_1(boolean prmIsDateXxx, Map<Integer, List<String>> prmErrItemMap,
-            Integer...prmTaxAmountArr) {
+            Integer... prmTaxAmountArr) {
 
         if (prmIsDateXxx && prmErrItemMap != null && prmErrItemMap.size() == 0
-                && prmTaxAmountArr[0] != null && prmTaxAmountArr[1] != null) {
+                && (prmTaxAmountArr[0] != null || prmTaxAmountArr[1] != null)) {
             return null;
         }
 
@@ -440,22 +446,31 @@ public class IndexService {
         //TODO:名称変更
         List<String> rtnLst = new ArrayList<String>();
 
-        if (! prmIsDateXxx) {
-            //TODO:プロパティから取得。改行
-            rtnLst.add("日付が不正");
-        }
+        //        if (!prmIsDateXxx) {
+        //            //TODO:プロパティから取得。改行
+        //            rtnLst.add("日付が不正");
+        //        }
 
         if (prmErrItemMap == null) {
             //TODO:プロパティから取得。改行
-            rtnLst.add("科目・税率・金額が未入力");
+            //            rtnLst.add("科目・税率・金額が未入力");
+            rtnLst.add("科目・税率・金額");
+        } else if (prmErrItemMap.size() > 0) {
+            //TODO:メソッド化もしくは直書き
         }
 
-        //TODO:ここから作業再開。
+        if (prmTaxAmountArr[0] == null && prmTaxAmountArr[1] == null) {
+            //TODO:プロパティから取得。改行
+            //            rtnLst.add("税額が未入力");
+            rtnLst.add("税額");
+        }
 
+        if (!prmIsDateXxx) {
+            //TODO:プロパティから取得。改行。rtnLstの先頭に挿入
+            //      rtnLst.add("日付が不正");
+        }
 
-
-
-        return null;
+        return rtnLst;
     }
 
     //--------------------------------------------------------------------------------

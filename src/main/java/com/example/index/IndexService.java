@@ -324,21 +324,28 @@ public class IndexService {
         //        }
 
         //TODO:未入力の場合の確認をpicupXxxItemsに含めるか
-        //TODO:ここから作業再開。errItemMapがnullの場合の処理から
         Map<Integer, List<String>> errItemMap = picupXxxItems(prmReceiptForm.getATAArr());
         //TODO:消費税額のコレクション化検討
         Integer taxAmountFor08 = prmReceiptForm.getTaxAmountFor08();
         Integer taxAmountFor10 = prmReceiptForm.getTaxAmountFor10();
 
-        if (isDateXxx && errItemMap.size() == 0 && taxAmountFor08 != null && taxAmountFor10 != null) {
+//        if (isDateXxx && errItemMap != null && errItemMap.size() == 0
+//                && taxAmountFor08 != null && taxAmountFor10 != null) {
+//            return true;
+//        }
+
+        //TODO:名前検討
+        List<String> errItemLst = from0721_1(isDateXxx, errItemMap, taxAmountFor08, taxAmountFor10);
+
+        if (errItemLst == null) {
             return true;
         }
 
-        //TODO:エラーメッセージ用のプロパティを取得(展開)する旨のコメント
-        if (rltErrMsgMap == null) {
-            rltErrMsgMap = getErrMsgMap(RLT_ERR_P, ACCOUNT, TAX + Cnst.UD_S + RATE, AMOUNT,
-                    INPUT + Cnst.UD_S + MESSAGE);
-        }
+//        //TODO:エラーメッセージ用のプロパティを取得(展開)する旨のコメント
+//        if (rltErrMsgMap == null) {
+//            rltErrMsgMap = getErrMsgMap(RLT_ERR_P, ACCOUNT, TAX + Cnst.UD_S + RATE, AMOUNT,
+//                    INPUT + Cnst.UD_S + MESSAGE);
+//        }
 
         // エラーメッセージとエラー項目の組立
         StringBuilder msgBuilder = new StringBuilder();
@@ -415,10 +422,38 @@ public class IndexService {
      * ダミー
      */
     //--------------------------------------------------------------------------------
-    //TODO:メソッド名変更
-    private String tmpMtd0720_1(AccountTaxrateAmount[] prmATAArr) {
+    //TODO:メソッド名、引数名変更
+    private List<String> from0721_1(boolean prmIsDateXxx, Map<Integer, List<String>> prmErrItemMap,
+            Integer...prmTaxAmountArr) {
+
+        if (prmIsDateXxx && prmErrItemMap != null && prmErrItemMap.size() == 0
+                && prmTaxAmountArr[0] != null && prmTaxAmountArr[1] != null) {
+            return null;
+        }
+
+        //TODO:エラーメッセージ用のプロパティを取得(展開)する旨のコメント
+        if (rltErrMsgMap == null) {
+            rltErrMsgMap = getErrMsgMap(RLT_ERR_P, ACCOUNT, TAX + Cnst.UD_S + RATE, AMOUNT,
+                    INPUT + Cnst.UD_S + MESSAGE);
+        }
+
+        //TODO:名称変更
+        List<String> rtnLst = new ArrayList<String>();
+
+        if (! prmIsDateXxx) {
+            //TODO:プロパティから取得。改行
+            rtnLst.add("日付が不正");
+        }
+
+        if (prmErrItemMap == null) {
+            //TODO:プロパティから取得。改行
+            rtnLst.add("科目・税率・金額が未入力");
+        }
+
         //TODO:ここから作業再開。
-        Map<Integer, List<String>> errItemMap = picupXxxItems(prmATAArr);
+
+
+
 
         return null;
     }

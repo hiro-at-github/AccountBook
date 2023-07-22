@@ -352,7 +352,7 @@ public class IndexService {
         List<String> rltErrMsgLst = new ArrayList<>();
         rltFldErrLst = new ArrayList<>();
 
-        if (! isDateXxx) {
+        if (!isDateXxx) {
             rltErrMsgLst.add(apnd("日付が不正", Cnst.SPRT));
             rltFldErrLst.add(null);
         }
@@ -373,10 +373,11 @@ public class IndexService {
 
         //TODO:判定のメソッド内への移動を検討
         if (taxAmountFor08 == null && taxAmountFor10 == null) {
-
+            rltErrMsgLst.add(apnd("税額", "が未入力", Cnst.SPRT));
+            rltFldErrLst.add(null);
         }
 
-//        rltErrMsg = msgBuilder.toString();
+        //        rltErrMsg = msgBuilder.toString();
 
         return false;
     }

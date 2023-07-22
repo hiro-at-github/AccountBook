@@ -335,54 +335,48 @@ public class IndexService {
         Integer taxAmountFor08 = prmReceiptForm.getTaxAmountFor08();
         Integer taxAmountFor10 = prmReceiptForm.getTaxAmountFor10();
 
-        //        if (isDateXxx && errItemMap != null && errItemMap.size() == 0
-        //                && taxAmountFor08 != null && taxAmountFor10 != null) {
-        //            return true;
-        //        }
-
-        //TODO:名前検討
-        List<String> errItemLst = from0721_1(isDateXxx, errItemMap, taxAmountFor08, taxAmountFor10);
-
-        if (errItemLst == null) {
+        if (isDateXxx && errItemMap != null && errItemMap.size() == 0
+                && (taxAmountFor08 != null || taxAmountFor10 != null)) {
             return true;
         }
 
-        //        //TODO:エラーメッセージ用のプロパティを取得(展開)する旨のコメント
-        //        if (rltErrMsgMap == null) {
-        //            rltErrMsgMap = getErrMsgMap(RLT_ERR_P, ACCOUNT, TAX + Cnst.UD_S + RATE, AMOUNT,
-        //                    INPUT + Cnst.UD_S + MESSAGE);
-        //        }
+        //TODO:エラーメッセージ用のプロパティを取得(展開)する旨のコメント
+        if (rltErrMsgMap == null) {
+            rltErrMsgMap = getErrMsgMap(RLT_ERR_P, ACCOUNT, TAX + Cnst.UD_S + RATE, AMOUNT,
+                    INPUT + Cnst.UD_S + MESSAGE);
+        }
+
+        //TODO:直書きしてその後必要に応じてメソッド化
 
         // エラーメッセージとエラー項目の組立
-        StringBuilder msgBuilder = new StringBuilder();
+        List<String> rltErrMsgLst = new ArrayList<>();
         rltFldErrLst = new ArrayList<>();
 
-        for (int elem : errItemMap.keySet()) {
-            List<String> valLst = errItemMap.get(elem);
-
-            msgBuilder.append(buildRltErrMsg(elem, valLst));
-
-            String fmt = String.format("aTAArr[%d].", elem);
-
-            //            rltFldErrLst.add(new FieldError("receiptForm", apnd(fmt, null), null));
-            //TODO:メソッド作ってその戻り値をaddAll
-            rltFldErrLst.addAll(buildRltFldErrLst(elem, valLst));
+        if (! isDateXxx) {
+            rltErrMsgLst.add(apnd("日付が不正", Cnst.SPRT));
+            rltFldErrLst.add(null);
         }
 
-        List<String> tmpLst = null;
+        if (errItemMap == null) {
+            rltErrMsgLst.add(apnd("科目・税率・金額", "が未入力", Cnst.SPRT));
+            rltFldErrLst.add(null);
+        } else {
+            for (int elem : errItemMap.keySet()) {
+                List<String> valLst = errItemMap.get(elem);
+
+                rltErrMsgLst.add(buildRltErrMsg(elem, valLst));
+
+                //TODO:メソッド作ってその戻り値をaddAll
+                rltFldErrLst.addAll(buildRltFldErrLst(elem, valLst));
+            }
+        }
 
         //TODO:判定のメソッド内への移動を検討
-        if (errItemMap.size() > 0) {
-            tmpLst = tmpMtd(errItemMap);
+        if (taxAmountFor08 == null && taxAmountFor10 == null) {
+
         }
 
-        //TODO:判定のメソッド内への移動を検討
-        if (taxAmountFor08 == null || taxAmountFor10 == null) {
-            //            tmpLst.add("税額の8%");
-            tmpLst.addAll(tmpMtd2("", ""));
-        }
-
-        rltErrMsg = msgBuilder.toString();
+//        rltErrMsg = msgBuilder.toString();
 
         return false;
     }

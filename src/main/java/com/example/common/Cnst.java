@@ -1,4 +1,4 @@
-package com.example.index;
+package com.example.common;
 
 public class Cnst {
     /** 年の選択肢の個数 */

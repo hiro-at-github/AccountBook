@@ -225,9 +225,9 @@ public class IndexController {
         return null;
     }
 
-    //TODO:Opt.values()整理
+    //TODO:配列の長さの定数化
     private Object[] initOptionArr() {
-        Object[] optionArr = new Object[Opt.values().length];
+        Object[] optionArr = new Object[6];
 
         optionArr[IndexService.CURRENT_DATE] = indexService.getCurrentDate();
         optionArr[IndexService.YEAR_ARR] = indexService.getYearArr();

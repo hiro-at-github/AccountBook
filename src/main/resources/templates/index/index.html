@@ -18,12 +18,12 @@
     }
   }
 </script>
-<title th:text="#{index.title}"></title>
+<title th:text="#{idx.title}"></title>
 </head>
 <body>
 <div>
-<h1 th:text="#{index.title}"></h1>
-<h2 th:text="#{index.h2.receipt}"></h2>
+<h1 th:text="#{idx.title}"></h1>
+<h2 th:text="#{idx.h2.receipt}"></h2>
 <form name="receiptFrm" method="post" action="/index/index" th:object="${receiptForm}">
 
 <!-- <p th:errors="*{aTAArr[0].amount}"></p> -->
@@ -32,19 +32,19 @@
 <table rules="cols" class="table_for_input">
 
 <tr>
-<th th:text="#{index.receipt.table.date}"></th>
-<th colspan="2" th:text="#{index.receipt.table.accounts_etc}"></th>
-<th colspan="2" th:text="#{index.receipt.table.accounts_etc}"></th>
-<th colspan="2" th:text="#{index.receipt.table.accounts_etc}"></th>
-<th colspan="2" th:text="#{index.receipt.table.accounts_etc}"></th>
-<th th:text="#{index.receipt.table.tax_amount}"></th>
+<th th:text="#{idx.date}"></th>
+<th colspan="2" th:text="#{idx.accounts_etc}"></th>
+<th colspan="2" th:text="#{idx.accounts_etc}"></th>
+<th colspan="2" th:text="#{idx.accounts_etc}"></th>
+<th colspan="2" th:text="#{idx.accounts_etc}"></th>
+<th th:text="#{idx.tax_amount}"></th>
 </tr>
 
 <!-- 1行目 -->
 <tr>
 <td class="date_tax_rate"><select th:field="*{year}" tabindex="10" th:class="date">
   <option th:each="item:${yearArr}" th:value="${item}" th:text="${item}"></option>
-</select><span th:text="#{index.receipt.table.year}"></span></td>
+</select><span th:text="#{idx.year}"></span></td>
 
 <td>01</td>
 <td><select th:field="*{aTAArr[0].account}" tabindex="110" th:class="account" th:errorclass="error">
@@ -82,14 +82,14 @@
 </select>
 <input type="text" tabindex="430" maxlength="7" th:field="*{aTAArr[3].amount}" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
-<td class="date_tax_rate t_a_r"><span th:text="#{index.receipt.table.tax_rate_1}"></span><input type="text" tabindex="6010" th:field="*{taxAmountFor08}" th:class="tax_amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
+<td class="date_tax_rate t_a_r"><span th:text="#{idx.tax_rate_1}"></span><input type="text" tabindex="6010" th:field="*{taxAmountFor08}" th:class="tax_amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 </tr>
 
 <!-- 2行目 -->
 <tr>
 <td class="date_tax_rate"><select th:field="*{month}" tabindex="20" th:class="date">
   <option th:each="item:${monthArr}" th:value="${item}" th:text="${item}"></option>
-</select><span th:text="#{index.receipt.table.month}"></span></td>
+</select><span th:text="#{idx.month}"></span></td>
 <td>05</td>
 <td><select th:field="*{aTAArr[4].account}" tabindex="510" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
@@ -125,14 +125,14 @@
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
 <input type="text" th:field="*{aTAArr[7].amount}" tabindex="830" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
-<td rowspan="7" class="date_tax_rate"><span th:text="#{index.receipt.table.tax_rate_2}"></span><input type="text" tabindex="6020" th:field="*{taxAmountFor10}" th:class="tax_amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
+<td rowspan="7" class="date_tax_rate"><span th:text="#{idx.tax_rate_2}"></span><input type="text" tabindex="6020" th:field="*{taxAmountFor10}" th:class="tax_amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 </tr>
 
 <!-- 3行目 -->
 <tr>
-<td rowspan="6" class="date_tax_rate"><select th:field="*{day}" tabindex="30" th:class="date">
+<td rowspan="6" class="date_tax_rate"><select th:field="*{day}" tabindex="30" th:class="date" th:errorclass="error">
   <option th:each="item:${dayArr}" th:value="${item}" th:text="${item}"></option>
-</select><span th:text="#{index.receipt.table.day}"></span></td>
+</select><span th:text="#{idx.day}"></span></td>
 <td>09</td>
 <td><select th:field="*{aTAArr[8].account}" tabindex="910" th:class="account" th:errorclass="error">
   <option th:each="item:${accountMap}" th:value="${item.value}" th:text="${item.key}"></option>
@@ -367,7 +367,7 @@
 
 </table>
 
-<input type="submit" name="create" th:value="#{index.receipt.submit.create}" tabindex="7010">
+<input type="submit" name="create" th:value="#{idx.submit.create}" tabindex="7010">
 
 </form>
 </div>

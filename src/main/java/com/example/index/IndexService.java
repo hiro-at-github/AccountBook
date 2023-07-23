@@ -45,7 +45,7 @@ public class IndexService {
     private static final String ERR = "error";
 
     /**  */
-    private static final String FLD_ERR_P = "field.error.";
+    private static final String FLD_ERR_P = "idx.";
     /**  */
     private static final String RLT_ERR_P = "relate.error.";
     /**  */
@@ -340,7 +340,7 @@ public class IndexService {
 
         // 以下、入力に不備がある場合の処理
         // エラーメッセージ、フィールドエラーの作成、偽の返却
-        
+
         //TODO:エラーメッセージ用のプロパティを取得(展開)する旨のコメント
         if (rltErrMsgMap == null) {
             rltErrMsgMap = getErrMsgMap(RLT_ERR_P, ACCOUNT, TAX + Cnst.UD_S + RATE, AMOUNT,
@@ -367,12 +367,12 @@ public class IndexService {
             rltFldErrLst.add(createFieldError("aTAArr[0].amount"));
         } else {
             // 科目・税率・金額の組み合わせで未入力項目がある場合
-//            for (int elem : errItemMap.keySet()) {
-//                List<String> valLst = errItemMap.get(elem);
-//
-//                rltErrMsgLst.add(buildRltErrMsg(elem, valLst));
-//                rltFldErrLst.addAll(buildRltFldErrLst(elem, valLst));
-//            }
+            //            for (int elem : errItemMap.keySet()) {
+            //                List<String> valLst = errItemMap.get(elem);
+            //
+            //                rltErrMsgLst.add(buildRltErrMsg(elem, valLst));
+            //                rltFldErrLst.addAll(buildRltFldErrLst(elem, valLst));
+            //            }
             Pair<List<String>, List<FieldError>> pair = Y230723_1(errItemMap);
             rltErrMsgLst.addAll(pair.getFirst());
             rltFldErrLst.addAll(pair.getSecond());
@@ -425,10 +425,10 @@ public class IndexService {
     private boolean isDateXxx(String... prmDate) {
         DateFormat format = DateFormat.getDateInstance();
         format.setLenient(false);
-        
+
         try {
             format.parse(apnd(prmDate[0], "/", prmDate[1], "/", prmDate[2]));
-            
+
             return true;
         } catch (Exception e) {
             return false;
@@ -444,9 +444,7 @@ public class IndexService {
     private FieldError createFieldError(String prmField) {
         return new FieldError("receiptForm", prmField, null);
     }
-    
-    
-    
+
     //--------------------------------------------------------------------------------
     /**
      * ダミー
@@ -598,24 +596,17 @@ public class IndexService {
     private Pair<List<String>, List<FieldError>> Y230723_1(Map<Integer, List<String>> prmErrItemMap) {
         List<String> lRltErrMsgLst = new ArrayList<>();
         List<FieldError> lRltFldErrLst = new ArrayList<>();
-        
+
         for (int elem : prmErrItemMap.keySet()) {
             List<String> valLst = prmErrItemMap.get(elem);
 
             lRltErrMsgLst.add(buildRltErrMsg(elem, valLst));
             lRltFldErrLst.addAll(buildRltFldErrLst(elem, valLst));
         }
-        
+
         return Pair.of(lRltErrMsgLst, lRltFldErrLst);
     }
-    
-    
-    
-    
-    
-    
-    
-    
+
     //--------------------------------------------------------------------------------
     /**
      * スネークケースからキャメルケースに変換して返却する

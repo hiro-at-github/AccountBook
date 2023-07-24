@@ -1,6 +1,5 @@
 package com.example.index;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -121,17 +119,17 @@ public class IndexController {
             return INDEX;
         }
 
-        String errMsg = indexService.confirmAllItemsEntered(prmReceiptForm.getATAArr());
-
-        if (errMsg != null) {
-            prmReceiptForm.setErrorMessage(errMsg);
-
-            List<Errors> errLst = new ArrayList<>();
-            //            Errors err = new Errors();
-            List<String> tmpLst = indexService.checkItemMtd(prmReceiptForm);
-
-            return INDEX;
-        }
+//        String errMsg = indexService.confirmAllItemsEntered(prmReceiptForm.getATAArr());
+//
+//        if (errMsg != null) {
+//            prmReceiptForm.setErrorMessage(errMsg);
+//
+//            List<Errors> errLst = new ArrayList<>();
+//            //            Errors err = new Errors();
+//            List<String> tmpLst = indexService.checkItemMtd(prmReceiptForm);
+//
+//            return INDEX;
+//        }
 
         //        int amountSum = 0;
         //        AccountTaxrateAmount[] aTAArr = prmReceiptForm.getATAArr();

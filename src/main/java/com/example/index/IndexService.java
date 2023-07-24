@@ -45,9 +45,9 @@ public class IndexService {
     private static final String ERR = "error";
 
     /**  */
-    private static final String FLD_ERR_P = "idx.";
+    private static final String PREFIX = "idx.";
     /**  */
-    private static final String RLT_ERR_P = "relate.error.";
+//    private static final String RLT_ERR_P = "relate.error.";
     /**  */
     private static final String ACCOUNT = "account";
     /**  */
@@ -56,6 +56,15 @@ public class IndexService {
     private static final String TAX = "tax";
     /**  */
     private static final String RATE = "rate";
+    /**  */
+    private static final String TAX_RATE = "tax_rate";
+    /**  */
+    private static final String INCORRECT = "incorrect";
+    /**  */
+    private static final String NOT_ENTERED = "not_entered";
+    
+    
+    
     /**  */
     private static final String INPUT = "input";
     /**  */
@@ -177,7 +186,7 @@ public class IndexService {
     //--------------------------------------------------------------------------------
     public String buildFldErrMsg(BindingResult prmResult) {
         if (fldErrMsgMap == null) {
-            fldErrMsgMap = getErrMsgMap(FLD_ERR_P, ACCOUNT, AMOUNT, TAX + Cnst.UD_S + AMOUNT,
+            fldErrMsgMap = getErrMsgMap(PREFIX, ACCOUNT, AMOUNT, TAX + Cnst.UD_S + AMOUNT,
                     AMOUNT + Cnst.UD_S + MESSAGE);
         }
 
@@ -204,69 +213,69 @@ public class IndexService {
         return errMsgBuilder.append(fldErrMsgMap.get(buildKey(AMOUNT, MESSAGE))).toString();
     }
 
-    //--------------------------------------------------------------------------------
-    /**
-     * ダミー
-     */
-    //--------------------------------------------------------------------------------
-    public String confirmAllItemsEntered(AccountTaxrateAmount[] prmATAArr) {
-        if (rltErrMsgMap == null) {
-            rltErrMsgMap = getErrMsgMap(RLT_ERR_P, ACCOUNT, TAX + Cnst.UD_S + RATE, AMOUNT,
-                    INPUT + Cnst.UD_S + MESSAGE);
-        }
-
-        StringBuilder errMsgBuilder = new StringBuilder();
-        int apndCnt = 0;
-
-        for (int i = 0; i < prmATAArr.length; i++) {
-            AccountTaxrateAmount elem = prmATAArr[i];
-            List<String> errItemLst = new ArrayList<>();
-
-            if (Cnst.EMPTY.equals(elem.getAccount())) {
-                errItemLst.add(rltErrMsgMap.get(ACCOUNT));
-            }
-
-            if (Cnst.EMPTY.equals(elem.getTaxRate())) {
-                errItemLst.add(rltErrMsgMap.get(buildKey(TAX, RATE)));
-            }
-
-            if (elem.getAmount() == null) {
-                errItemLst.add(rltErrMsgMap.get(AMOUNT));
-            }
-
-            int size = errItemLst.size();
-
-            if (size == 0 || size == 3) {
-                continue;
-            }
-
-            errMsgBuilder.append(String.format("%02d", i + 1)).append("の").append(errItemLst.get(0));
-
-            apndCnt++;
-            if (apndCnt % 8 == 0) {
-                errMsgBuilder.append(Cnst.SPRT);
-            }
-
-            if (errItemLst.size() == 2) {
-                errMsgBuilder.append("と").append(errItemLst.get(1));
-
-                apndCnt++;
-                if (apndCnt % 8 == 0) {
-                    errMsgBuilder.append(Cnst.SPRT);
-                }
-            }
-
-            errMsgBuilder.append(Cnst.F_COMMA);
-        }
-
-        if (errMsgBuilder.length() > 0) {
-            errMsgBuilder.insert(0, Cnst.SPRT).insert(0, rltErrMsgMap.get(buildKey(INPUT, MESSAGE)));
-
-            return errMsgBuilder.deleteCharAt(errMsgBuilder.length() - 1).toString();
-        }
-
-        return null;
-    }
+//    //--------------------------------------------------------------------------------
+//    /**
+//     * ダミー
+//     */
+//    //--------------------------------------------------------------------------------
+//    public String confirmAllItemsEntered(AccountTaxrateAmount[] prmATAArr) {
+//        if (rltErrMsgMap == null) {
+//            rltErrMsgMap = getErrMsgMap(RLT_ERR_P, ACCOUNT, TAX + Cnst.UD_S + RATE, AMOUNT,
+//                    INPUT + Cnst.UD_S + MESSAGE);
+//        }
+//
+//        StringBuilder errMsgBuilder = new StringBuilder();
+//        int apndCnt = 0;
+//
+//        for (int i = 0; i < prmATAArr.length; i++) {
+//            AccountTaxrateAmount elem = prmATAArr[i];
+//            List<String> errItemLst = new ArrayList<>();
+//
+//            if (Cnst.EMPTY.equals(elem.getAccount())) {
+//                errItemLst.add(rltErrMsgMap.get(ACCOUNT));
+//            }
+//
+//            if (Cnst.EMPTY.equals(elem.getTaxRate())) {
+//                errItemLst.add(rltErrMsgMap.get(buildKey(TAX, RATE)));
+//            }
+//
+//            if (elem.getAmount() == null) {
+//                errItemLst.add(rltErrMsgMap.get(AMOUNT));
+//            }
+//
+//            int size = errItemLst.size();
+//
+//            if (size == 0 || size == 3) {
+//                continue;
+//            }
+//
+//            errMsgBuilder.append(String.format("%02d", i + 1)).append("の").append(errItemLst.get(0));
+//
+//            apndCnt++;
+//            if (apndCnt % 8 == 0) {
+//                errMsgBuilder.append(Cnst.SPRT);
+//            }
+//
+//            if (errItemLst.size() == 2) {
+//                errMsgBuilder.append("と").append(errItemLst.get(1));
+//
+//                apndCnt++;
+//                if (apndCnt % 8 == 0) {
+//                    errMsgBuilder.append(Cnst.SPRT);
+//                }
+//            }
+//
+//            errMsgBuilder.append(Cnst.F_COMMA);
+//        }
+//
+//        if (errMsgBuilder.length() > 0) {
+//            errMsgBuilder.insert(0, Cnst.SPRT).insert(0, rltErrMsgMap.get(buildKey(INPUT, MESSAGE)));
+//
+//            return errMsgBuilder.deleteCharAt(errMsgBuilder.length() - 1).toString();
+//        }
+//
+//        return null;
+//    }
 
     //--------------------------------------------------------------------------------
     /**
@@ -342,9 +351,10 @@ public class IndexService {
         // エラーメッセージ、フィールドエラーの作成、偽の返却
 
         //TODO:エラーメッセージ用のプロパティを取得(展開)する旨のコメント
+        //TODO:ここから。2つのエラーメッセージマップの中身を確認して統合
         if (rltErrMsgMap == null) {
-            rltErrMsgMap = getErrMsgMap(RLT_ERR_P, ACCOUNT, TAX + Cnst.UD_S + RATE, AMOUNT,
-                    INPUT + Cnst.UD_S + MESSAGE);
+            rltErrMsgMap = getErrMsgMap(PREFIX, ACCOUNT, TAX_RATE, AMOUNT,
+                    INCORRECT, NOT_ENTERED);
         }
 
         //TODO:直書きしてその後必要に応じてメソッド化
@@ -445,55 +455,55 @@ public class IndexService {
         return new FieldError("receiptForm", prmField, null);
     }
 
-    //--------------------------------------------------------------------------------
-    /**
-     * ダミー
-     */
-    //--------------------------------------------------------------------------------
-    //TODO:メソッド名、引数名変更
-    private List<String> from0721_1(boolean prmIsDateXxx, Map<Integer, List<String>> prmErrItemMap,
-            Integer... prmTaxAmountArr) {
-
-        if (prmIsDateXxx && prmErrItemMap != null && prmErrItemMap.size() == 0
-                && (prmTaxAmountArr[0] != null || prmTaxAmountArr[1] != null)) {
-            return null;
-        }
-
-        //TODO:エラーメッセージ用のプロパティを取得(展開)する旨のコメント
-        if (rltErrMsgMap == null) {
-            rltErrMsgMap = getErrMsgMap(RLT_ERR_P, ACCOUNT, TAX + Cnst.UD_S + RATE, AMOUNT,
-                    INPUT + Cnst.UD_S + MESSAGE);
-        }
-
-        //TODO:名称変更
-        List<String> rtnLst = new ArrayList<String>();
-
-        //        if (!prmIsDateXxx) {
-        //            //TODO:プロパティから取得。改行
-        //            rtnLst.add("日付が不正");
-        //        }
-
-        if (prmErrItemMap == null) {
-            //TODO:プロパティから取得。改行
-            //            rtnLst.add("科目・税率・金額が未入力");
-            rtnLst.add("科目・税率・金額");
-        } else if (prmErrItemMap.size() > 0) {
-            //TODO:メソッド化もしくは直書き
-        }
-
-        if (prmTaxAmountArr[0] == null && prmTaxAmountArr[1] == null) {
-            //TODO:プロパティから取得。改行
-            //            rtnLst.add("税額が未入力");
-            rtnLst.add("税額");
-        }
-
-        if (!prmIsDateXxx) {
-            //TODO:プロパティから取得。改行。rtnLstの先頭に挿入
-            //      rtnLst.add("日付が不正");
-        }
-
-        return rtnLst;
-    }
+//    //--------------------------------------------------------------------------------
+//    /**
+//     * ダミー
+//     */
+//    //--------------------------------------------------------------------------------
+//    //TODO:メソッド名、引数名変更
+//    private List<String> from0721_1(boolean prmIsDateXxx, Map<Integer, List<String>> prmErrItemMap,
+//            Integer... prmTaxAmountArr) {
+//
+//        if (prmIsDateXxx && prmErrItemMap != null && prmErrItemMap.size() == 0
+//                && (prmTaxAmountArr[0] != null || prmTaxAmountArr[1] != null)) {
+//            return null;
+//        }
+//
+//        //TODO:エラーメッセージ用のプロパティを取得(展開)する旨のコメント
+//        if (rltErrMsgMap == null) {
+//            rltErrMsgMap = getErrMsgMap(RLT_ERR_P, ACCOUNT, TAX + Cnst.UD_S + RATE, AMOUNT,
+//                    INPUT + Cnst.UD_S + MESSAGE);
+//        }
+//
+//        //TODO:名称変更
+//        List<String> rtnLst = new ArrayList<String>();
+//
+//        //        if (!prmIsDateXxx) {
+//        //            //TODO:プロパティから取得。改行
+//        //            rtnLst.add("日付が不正");
+//        //        }
+//
+//        if (prmErrItemMap == null) {
+//            //TODO:プロパティから取得。改行
+//            //            rtnLst.add("科目・税率・金額が未入力");
+//            rtnLst.add("科目・税率・金額");
+//        } else if (prmErrItemMap.size() > 0) {
+//            //TODO:メソッド化もしくは直書き
+//        }
+//
+//        if (prmTaxAmountArr[0] == null && prmTaxAmountArr[1] == null) {
+//            //TODO:プロパティから取得。改行
+//            //            rtnLst.add("税額が未入力");
+//            rtnLst.add("税額");
+//        }
+//
+//        if (!prmIsDateXxx) {
+//            //TODO:プロパティから取得。改行。rtnLstの先頭に挿入
+//            //      rtnLst.add("日付が不正");
+//        }
+//
+//        return rtnLst;
+//    }
 
     //--------------------------------------------------------------------------------
     /**

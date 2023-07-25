@@ -59,6 +59,10 @@ public class IndexService {
     /**  */
     private static final String TAX_RATE = "tax_rate";
     /**  */
+    private static final String TAX_AMOUNT = "tax_amount";
+    /**  */
+    private static final String AMOUNT_RANGE = "amount_range";
+    /**  */
     private static final String INCORRECT = "incorrect";
     /**  */
     private static final String NOT_ENTERED = "not_entered";
@@ -186,14 +190,15 @@ public class IndexService {
     //--------------------------------------------------------------------------------
     public String buildFldErrMsg(BindingResult prmResult) {
         if (fldErrMsgMap == null) {
-            fldErrMsgMap = getErrMsgMap(PREFIX, ACCOUNT, AMOUNT, TAX + Cnst.UD_S + AMOUNT,
-                    AMOUNT + Cnst.UD_S + MESSAGE);
+            fldErrMsgMap = getErrMsgMap(PREFIX, AMOUNT, TAX_AMOUNT, AMOUNT_RANGE);
         }
 
         StringBuilder errMsgBuilder = new StringBuilder();
 
         List<FieldError> errLst = prmResult.getFieldErrors();
         for (FieldError elem : errLst) {
+            //TODO:ここから。下記のキーを取得する部分をメソッド化。
+            //その後、2つのエラーメッセージマップの中身を確認して統合
             String field = elem.getField();
             String[] keyArr = field.split(Pattern.quote(Cnst.DOT));
 
@@ -210,7 +215,7 @@ public class IndexService {
             errMsgBuilder.append(msg);
         }
 
-        return errMsgBuilder.append(fldErrMsgMap.get(buildKey(AMOUNT, MESSAGE))).toString();
+        return errMsgBuilder.append(fldErrMsgMap.get(snakeToCamel(AMOUNT_RANGE))).toString();
     }
 
 //    //--------------------------------------------------------------------------------
@@ -282,48 +287,48 @@ public class IndexService {
      * ダミー
      */
     //--------------------------------------------------------------------------------
-    public List<String> checkItemMtd(ReceiptForm prmReceiptForm) {
-        List<String> tmpLst = new ArrayList<>();
-
-        List<FieldError> errLst = new ArrayList<>();
-
-        AccountTaxrateAmount[] aTAArr = prmReceiptForm.getATAArr();
-        for (int i = 0; i < aTAArr.length; i++) {
-            AccountTaxrateAmount elem = aTAArr[i];
-            List<String> tempLst = new ArrayList<>();
-            String fmt = String.format("aTAArr[%d].", i);
-
-            AccountTaxrateAmount aTA = new AccountTaxrateAmount();
-
-            if (Cnst.EMPTY.equals(elem.getAccount())) {
-                tempLst.add(apnd(fmt, ACCOUNT));
-                aTA.setAccount(ERR);
-                errLst.add(new FieldError("receiptForm", apnd(fmt, ACCOUNT), null));
-            }
-
-            if (Cnst.EMPTY.equals(elem.getTaxRate())) {
-                tempLst.add(apnd(fmt, buildKey(TAX, RATE)));
-                aTA.setTaxRate(ERR);
-            }
-
-            if (elem.getAmount() == null) {
-                tempLst.add(apnd(fmt, AMOUNT));
-                aTA.setAmntForCnfrm(ERR);
-            }
-
-            if (tempLst.size() == 0 || tempLst.size() == 3) {
-                continue;
-            }
-
-            tmpLst.addAll(tempLst);
-        }
-
-        if (prmReceiptForm.getTaxAmountFor08() == null) {
-            tmpLst.add(buildKey(TAX, AMOUNT));
-        }
-
-        return tmpLst;
-    }
+//    public List<String> checkItemMtd(ReceiptForm prmReceiptForm) {
+//        List<String> tmpLst = new ArrayList<>();
+//
+//        List<FieldError> errLst = new ArrayList<>();
+//
+//        AccountTaxrateAmount[] aTAArr = prmReceiptForm.getATAArr();
+//        for (int i = 0; i < aTAArr.length; i++) {
+//            AccountTaxrateAmount elem = aTAArr[i];
+//            List<String> tempLst = new ArrayList<>();
+//            String fmt = String.format("aTAArr[%d].", i);
+//
+//            AccountTaxrateAmount aTA = new AccountTaxrateAmount();
+//
+//            if (Cnst.EMPTY.equals(elem.getAccount())) {
+//                tempLst.add(apnd(fmt, ACCOUNT));
+//                aTA.setAccount(ERR);
+//                errLst.add(new FieldError("receiptForm", apnd(fmt, ACCOUNT), null));
+//            }
+//
+//            if (Cnst.EMPTY.equals(elem.getTaxRate())) {
+//                tempLst.add(apnd(fmt, buildKey(TAX, RATE)));
+//                aTA.setTaxRate(ERR);
+//            }
+//
+//            if (elem.getAmount() == null) {
+//                tempLst.add(apnd(fmt, AMOUNT));
+//                aTA.setAmntForCnfrm(ERR);
+//            }
+//
+//            if (tempLst.size() == 0 || tempLst.size() == 3) {
+//                continue;
+//            }
+//
+//            tmpLst.addAll(tempLst);
+//        }
+//
+//        if (prmReceiptForm.getTaxAmountFor08() == null) {
+//            tmpLst.add(buildKey(TAX, AMOUNT));
+//        }
+//
+//        return tmpLst;
+//    }
 
     //--------------------------------------------------------------------------------
     /**
@@ -351,7 +356,6 @@ public class IndexService {
         // エラーメッセージ、フィールドエラーの作成、偽の返却
 
         //TODO:エラーメッセージ用のプロパティを取得(展開)する旨のコメント
-        //TODO:ここから。2つのエラーメッセージマップの中身を確認して統合
         if (rltErrMsgMap == null) {
             rltErrMsgMap = getErrMsgMap(PREFIX, ACCOUNT, TAX_RATE, AMOUNT,
                     INCORRECT, NOT_ENTERED);

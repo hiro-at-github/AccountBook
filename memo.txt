@@ -1,3 +1,7 @@
+2023/07/26 5:33
+○
+・taxAmountFor08
+
 2023/07/24 8:06
 ○
 ・field.error.amount_message=には0以上9999999以下の半角数字を入力する

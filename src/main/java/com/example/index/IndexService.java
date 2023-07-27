@@ -47,6 +47,12 @@ public class IndexService {
     private static final String PREFIX = "idx.";
     /**  */
     //    private static final String RLT_ERR_P = "relate.error.";
+    
+    /**  */
+    private static final String DATE = "date";
+    
+    
+    
     /**  */
     private static final String ACCOUNT = "account";
     /**  */
@@ -85,7 +91,7 @@ public class IndexService {
     private String[] currentDateArr;
 
     /** バインディングリザルトのフィールドエラーズ用のエラーメッセージのマップ */
-    private Map<String, String> fldErrMsgMap;
+    private Map<String, String> errMsgPropMap;
 
     /**  */
     //TODO:関連チェック？のエラーであることが分かる変数名とし、そのエラーメッセージだけを格納する
@@ -186,21 +192,16 @@ public class IndexService {
      */
     //--------------------------------------------------------------------------------
     public String buildFldErrMsg(BindingResult prmResult) {
-        if (fldErrMsgMap == null) {
-            fldErrMsgMap = getErrMsgMap(PREFIX, AMOUNT, TAX_AMOUNT, AMOUNT_RANGE);
+        // エラーメッセージ用プロパティが取得済みか確認
+        if (errMsgPropMap == null) {
+         // エラーメッセージ用プロパティの取得
+            errMsgPropMap = getErrMsgPrpMap();
         }
 
         StringBuilder errMsgBuilder = new StringBuilder();
 
         List<FieldError> errLst = prmResult.getFieldErrors();
         for (FieldError elem : errLst) {
-            //TODO:ここから。下記のキーを取得する部分をメソッド化。
-            //その後、2つのエラーメッセージマップの中身を確認して統合
-            //            String field = elem.getField();
-            //            String[] keyArr = field.split(Pattern.quote(Cnst.DOT));
-            //
-            //            String msg = fldErrMsgMap.get(keyArr[keyArr.length - 1]);
-
             String key = null;
             if (elem.getField().contains(TAX)) {
                 key = TAX_AMOUNT;
@@ -208,7 +209,7 @@ public class IndexService {
                 key = AMOUNT;
             }
 
-            String msg = fldErrMsgMap.get(snakeToCamel(key));
+            String msg = errMsgPropMap.get(snakeToCamel(key));
 
             if (errMsgBuilder.indexOf(msg) > -1) {
                 continue;
@@ -221,7 +222,7 @@ public class IndexService {
             errMsgBuilder.append(msg);
         }
 
-        return errMsgBuilder.append(fldErrMsgMap.get(snakeToCamel(AMOUNT_RANGE))).toString();
+        return errMsgBuilder.append(errMsgPropMap.get(snakeToCamel(AMOUNT_RANGE))).toString();
     }
 
     //    //--------------------------------------------------------------------------------
@@ -336,6 +337,7 @@ public class IndexService {
     //        return tmpLst;
     //    }
 
+    //TODO:ここから。
     //--------------------------------------------------------------------------------
     /**
      * ダミー
@@ -361,12 +363,12 @@ public class IndexService {
         // 以下、入力に不備がある場合の処理
         // エラーメッセージ、フィールドエラーの作成、偽の返却
 
-        //TODO:エラーメッセージ用のプロパティを取得(展開)する旨のコメント
-        if (rltErrMsgMap == null) {
-            rltErrMsgMap = getErrMsgMap(PREFIX, ACCOUNT, TAX_RATE, AMOUNT,
-                    INCORRECT, NOT_ENTERED);
+        // エラーメッセージ用プロパティが取得済みか確認
+        if (errMsgPropMap == null) {
+         // エラーメッセージ用プロパティの取得
+            errMsgPropMap = getErrMsgPrpMap();
         }
-
+        
         //TODO:直書きしてその後必要に応じてメソッド化
 
         // エラーメッセージとフィールドエラーの作成
@@ -435,7 +437,7 @@ public class IndexService {
      */
     //--------------------------------------------------------------------------------
     //TODO:メソッド名変更
-    private Map<String, String> getErrMsgMap(String prmPrefix, String... prmKeyArr) {
+    private Map<String, String> getErrMsgPropMap(String prmPrefix, String... prmKeyArr) {
         Map<String, String> errMsgMap = new HashMap<>();
 
         for (String elem : prmKeyArr) {
@@ -445,6 +447,20 @@ public class IndexService {
         return errMsgMap;
     }
 
+    private Map<String, String> getErrMsgPrpMap() {
+        Map<String, String> prpMap = new HashMap<>();
+        
+        String[] codeArr = {AMOUNT, TAX_AMOUNT, AMOUNT_RANGE,
+                DATE, ACCOUNT, TAX_RATE, INCORRECT, NOT_ENTERED};
+        for (String elem : codeArr) {
+            prpMap.put(snakeToCamel(elem), messageSource.getMessage(PREFIX + elem, null, Locale.JAPAN));
+        }
+        
+        return prpMap;
+    }
+    
+    
+    
     //--------------------------------------------------------------------------------
     /**
      * 日付の整合性を確認する旨

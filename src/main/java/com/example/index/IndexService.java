@@ -49,6 +49,8 @@ public class IndexService {
     //    private static final String RLT_ERR_P = "relate.error.";
     
     /**  */
+    private static final String F_DOT = "f_dot";
+    /**  */
     private static final String DATE = "date";
     
     
@@ -72,6 +74,17 @@ public class IndexService {
     /**  */
     private static final String NOT_ENTERED = "not_entered";
 
+    //TODO:名称変更検討
+    /**  */
+    private static final String A_T_A_0 = "aTAArr[0].";
+    /**  */
+    private static final String FOR = "For";
+    /**  */
+    private static final String P08 = "08";
+    /**  */
+    private static final String P10 = "10";
+    
+    
     /**  */
     private static final String INPUT = "input";
     /**  */
@@ -92,10 +105,6 @@ public class IndexService {
 
     /** バインディングリザルトのフィールドエラーズ用のエラーメッセージのマップ */
     private Map<String, String> errMsgPropMap;
-
-    /**  */
-    //TODO:関連チェック？のエラーであることが分かる変数名とし、そのエラーメッセージだけを格納する
-    private Map<String, String> rltErrMsgMap;
 
     /**  */
     private String rltErrMsg;
@@ -377,24 +386,20 @@ public class IndexService {
 
         if (!isDateXxx) {
             // 日付の入力に不備がある場合
-            rltErrMsgLst.add(apnd("日付が不正", Cnst.SPRT));
+            rltErrMsgLst.add(apnd(errMsgPropMap.get(DATE), errMsgPropMap.get(INCORRECT), Cnst.SPRT));
             rltFldErrLst.add(createFieldError("day"));
         }
 
         if (errItemMap == null) {
             // 全ての科目・税率・金額が未入力の場合
-            rltErrMsgLst.add(apnd("科目・税率・金額", "が未入力", Cnst.SPRT));
-            rltFldErrLst.add(createFieldError("aTAArr[0].account"));
-            rltFldErrLst.add(createFieldError("aTAArr[0].taxRate"));
-            rltFldErrLst.add(createFieldError("aTAArr[0].amount"));
+            rltErrMsgLst.add(apnd(errMsgPropMap.get(ACCOUNT), errMsgPropMap.get(snakeToCamel(F_DOT)),
+                    errMsgPropMap.get(snakeToCamel(TAX_RATE)), errMsgPropMap.get(snakeToCamel(F_DOT)),
+                    errMsgPropMap.get(AMOUNT), errMsgPropMap.get(snakeToCamel(NOT_ENTERED)), Cnst.SPRT));
+            rltFldErrLst.add(createFieldError(apnd(A_T_A_0, ACCOUNT)));
+            rltFldErrLst.add(createFieldError(apnd(A_T_A_0, snakeToCamel(TAX_RATE))));
+            rltFldErrLst.add(createFieldError(apnd(A_T_A_0, AMOUNT)));
         } else {
             // 科目・税率・金額の組み合わせで未入力項目がある場合
-            //            for (int elem : errItemMap.keySet()) {
-            //                List<String> valLst = errItemMap.get(elem);
-            //
-            //                rltErrMsgLst.add(buildRltErrMsg(elem, valLst));
-            //                rltFldErrLst.addAll(buildRltFldErrLst(elem, valLst));
-            //            }
             Pair<List<String>, List<FieldError>> pair = Y230723_1(errItemMap);
             rltErrMsgLst.addAll(pair.getFirst());
             rltFldErrLst.addAll(pair.getSecond());
@@ -403,8 +408,8 @@ public class IndexService {
         if (taxAmountFor08 == null && taxAmountFor10 == null) {
             // 税額のいずれもが未入力の場合
             rltErrMsgLst.add(apnd("税額", "が未入力", Cnst.SPRT));
-            rltFldErrLst.add(createFieldError("taxAmountFor08"));
-            rltFldErrLst.add(createFieldError("taxAmountFor10"));
+            rltFldErrLst.add(createFieldError(apnd(snakeToCamel(TAX_AMOUNT), FOR, P08)));
+            rltFldErrLst.add(createFieldError(apnd(snakeToCamel(TAX_AMOUNT), FOR, P10)));
         }
 
         rltErrMsg = String.join(Cnst.EMPTY, rltErrMsgLst);
@@ -424,42 +429,22 @@ public class IndexService {
 
     //--------------------------------------------------------------------------------
     /**
-     * ダミー
-     */
-    //--------------------------------------------------------------------------------
-    private String y230726(String prmStr) {
-        return null;
-    }
-
-    //--------------------------------------------------------------------------------
-    /**
      * エラーメッセージを返却する
      */
     //--------------------------------------------------------------------------------
     //TODO:メソッド名変更
-    private Map<String, String> getErrMsgPropMap(String prmPrefix, String... prmKeyArr) {
-        Map<String, String> errMsgMap = new HashMap<>();
-
-        for (String elem : prmKeyArr) {
-            errMsgMap.put(snakeToCamel(elem), messageSource.getMessage(prmPrefix + elem, null, Locale.JAPAN));
-        }
-
-        return errMsgMap;
-    }
-
     private Map<String, String> getErrMsgPrpMap() {
         Map<String, String> prpMap = new HashMap<>();
         
         String[] codeArr = {AMOUNT, TAX_AMOUNT, AMOUNT_RANGE,
-                DATE, ACCOUNT, TAX_RATE, INCORRECT, NOT_ENTERED};
+                F_DOT, DATE, ACCOUNT, TAX_RATE, INCORRECT, NOT_ENTERED};
         for (String elem : codeArr) {
             prpMap.put(snakeToCamel(elem), messageSource.getMessage(PREFIX + elem, null, Locale.JAPAN));
+//            prpMap.put(elem, messageSource.getMessage(PREFIX + elem, null, Locale.JAPAN));
         }
         
         return prpMap;
     }
-    
-    
     
     //--------------------------------------------------------------------------------
     /**
@@ -570,11 +555,6 @@ public class IndexService {
                 errItemLst.add(AMOUNT);
             }
 
-            //            int size = errItemLst.size();
-            //            if (size == 0 || size == 3) {
-            //                continue;
-            //            }
-
             switch (errItemLst.size()) {
             case 0:
                 continue;
@@ -607,10 +587,10 @@ public class IndexService {
     //--------------------------------------------------------------------------------
     private String buildRltErrMsg(int prmKey, List<String> prmValLst) {
         StringBuilder builder = new StringBuilder();
-        builder.append(String.format("%02d", prmKey + 1)).append("の").append(rltErrMsgMap.get(prmValLst.get(0)));
+        builder.append(String.format("%02d", prmKey + 1)).append("の").append(errMsgPropMap.get(prmValLst.get(0)));
 
         if (prmValLst.size() == 2) {
-            builder.append("と").append(rltErrMsgMap.get(prmValLst.get(1)));
+            builder.append("と").append(errMsgPropMap.get(prmValLst.get(1)));
         }
 
         return builder.append(Cnst.F_COMMA).toString();
@@ -642,13 +622,32 @@ public class IndexService {
         List<String> lRltErrMsgLst = new ArrayList<>();
         List<FieldError> lRltFldErrLst = new ArrayList<>();
 
+        int i = 0;
         for (int elem : prmErrItemMap.keySet()) {
             List<String> valLst = prmErrItemMap.get(elem);
 
             lRltErrMsgLst.add(buildRltErrMsg(elem, valLst));
+            i++;
+            if (i == 8) {
+                i = 0;
+                lRltErrMsgLst.add(Cnst.SPRT);
+            }
+            
             lRltFldErrLst.addAll(buildRltFldErrLst(elem, valLst));
         }
 
+        int lastIndex = lRltErrMsgLst.size() - 1;
+        String lastElem = lRltErrMsgLst.get(lastIndex);
+        if (lastElem.equals(Cnst.SPRT)) {
+            lRltErrMsgLst.remove(lastIndex);
+        }
+        
+        int lstIndex = lRltErrMsgLst.size() - 1;
+        String lstElem = lRltErrMsgLst.get(lstIndex);
+        lRltErrMsgLst.set(lstIndex, lstElem.substring(0, lstElem.length() - 1));
+        
+        lRltErrMsgLst.add(apnd(errMsgPropMap.get(snakeToCamel(NOT_ENTERED)), Cnst.SPRT));
+        
         return Pair.of(lRltErrMsgLst, lRltFldErrLst);
     }
 

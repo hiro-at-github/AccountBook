@@ -234,117 +234,6 @@ public class IndexService {
         return errMsgBuilder.append(errMsgPropMap.get(snakeToCamel(AMOUNT_RANGE))).toString();
     }
 
-    //    //--------------------------------------------------------------------------------
-    //    /**
-    //     * ダミー
-    //     */
-    //    //--------------------------------------------------------------------------------
-    //    public String confirmAllItemsEntered(AccountTaxrateAmount[] prmATAArr) {
-    //        if (rltErrMsgMap == null) {
-    //            rltErrMsgMap = getErrMsgMap(RLT_ERR_P, ACCOUNT, TAX + Cnst.UD_S + RATE, AMOUNT,
-    //                    INPUT + Cnst.UD_S + MESSAGE);
-    //        }
-    //
-    //        StringBuilder errMsgBuilder = new StringBuilder();
-    //        int apndCnt = 0;
-    //
-    //        for (int i = 0; i < prmATAArr.length; i++) {
-    //            AccountTaxrateAmount elem = prmATAArr[i];
-    //            List<String> errItemLst = new ArrayList<>();
-    //
-    //            if (Cnst.EMPTY.equals(elem.getAccount())) {
-    //                errItemLst.add(rltErrMsgMap.get(ACCOUNT));
-    //            }
-    //
-    //            if (Cnst.EMPTY.equals(elem.getTaxRate())) {
-    //                errItemLst.add(rltErrMsgMap.get(buildKey(TAX, RATE)));
-    //            }
-    //
-    //            if (elem.getAmount() == null) {
-    //                errItemLst.add(rltErrMsgMap.get(AMOUNT));
-    //            }
-    //
-    //            int size = errItemLst.size();
-    //
-    //            if (size == 0 || size == 3) {
-    //                continue;
-    //            }
-    //
-    //            errMsgBuilder.append(String.format("%02d", i + 1)).append("の").append(errItemLst.get(0));
-    //
-    //            apndCnt++;
-    //            if (apndCnt % 8 == 0) {
-    //                errMsgBuilder.append(Cnst.SPRT);
-    //            }
-    //
-    //            if (errItemLst.size() == 2) {
-    //                errMsgBuilder.append("と").append(errItemLst.get(1));
-    //
-    //                apndCnt++;
-    //                if (apndCnt % 8 == 0) {
-    //                    errMsgBuilder.append(Cnst.SPRT);
-    //                }
-    //            }
-    //
-    //            errMsgBuilder.append(Cnst.F_COMMA);
-    //        }
-    //
-    //        if (errMsgBuilder.length() > 0) {
-    //            errMsgBuilder.insert(0, Cnst.SPRT).insert(0, rltErrMsgMap.get(buildKey(INPUT, MESSAGE)));
-    //
-    //            return errMsgBuilder.deleteCharAt(errMsgBuilder.length() - 1).toString();
-    //        }
-    //
-    //        return null;
-    //    }
-
-    //--------------------------------------------------------------------------------
-    /**
-     * ダミー
-     */
-    //--------------------------------------------------------------------------------
-    //    public List<String> checkItemMtd(ReceiptForm prmReceiptForm) {
-    //        List<String> tmpLst = new ArrayList<>();
-    //
-    //        List<FieldError> errLst = new ArrayList<>();
-    //
-    //        AccountTaxrateAmount[] aTAArr = prmReceiptForm.getATAArr();
-    //        for (int i = 0; i < aTAArr.length; i++) {
-    //            AccountTaxrateAmount elem = aTAArr[i];
-    //            List<String> tempLst = new ArrayList<>();
-    //            String fmt = String.format("aTAArr[%d].", i);
-    //
-    //            AccountTaxrateAmount aTA = new AccountTaxrateAmount();
-    //
-    //            if (Cnst.EMPTY.equals(elem.getAccount())) {
-    //                tempLst.add(apnd(fmt, ACCOUNT));
-    //                aTA.setAccount(ERR);
-    //                errLst.add(new FieldError("receiptForm", apnd(fmt, ACCOUNT), null));
-    //            }
-    //
-    //            if (Cnst.EMPTY.equals(elem.getTaxRate())) {
-    //                tempLst.add(apnd(fmt, buildKey(TAX, RATE)));
-    //                aTA.setTaxRate(ERR);
-    //            }
-    //
-    //            if (elem.getAmount() == null) {
-    //                tempLst.add(apnd(fmt, AMOUNT));
-    //                aTA.setAmntForCnfrm(ERR);
-    //            }
-    //
-    //            if (tempLst.size() == 0 || tempLst.size() == 3) {
-    //                continue;
-    //            }
-    //
-    //            tmpLst.addAll(tempLst);
-    //        }
-    //
-    //        if (prmReceiptForm.getTaxAmountFor08() == null) {
-    //            tmpLst.add(buildKey(TAX, AMOUNT));
-    //        }
-    //
-    //        return tmpLst;
-    //    }
 
     //TODO:ここから。
     //--------------------------------------------------------------------------------
@@ -374,11 +263,9 @@ public class IndexService {
 
         // エラーメッセージ用プロパティが取得済みか確認
         if (errMsgPropMap == null) {
-         // エラーメッセージ用プロパティの取得
+            // エラーメッセージ用プロパティの取得
             errMsgPropMap = getErrMsgPrpMap();
         }
-        
-        //TODO:直書きしてその後必要に応じてメソッド化
 
         // エラーメッセージとフィールドエラーの作成
         List<String> rltErrMsgLst = new ArrayList<>();
@@ -407,7 +294,7 @@ public class IndexService {
 
         if (taxAmountFor08 == null && taxAmountFor10 == null) {
             // 税額のいずれもが未入力の場合
-            rltErrMsgLst.add(apnd("税額", "が未入力", Cnst.SPRT));
+            rltErrMsgLst.add(apnd(errMsgPropMap.get(snakeToCamel(TAX_AMOUNT)), errMsgPropMap.get(snakeToCamel(NOT_ENTERED)), Cnst.SPRT));
             rltFldErrLst.add(createFieldError(apnd(snakeToCamel(TAX_AMOUNT), FOR, P08)));
             rltFldErrLst.add(createFieldError(apnd(snakeToCamel(TAX_AMOUNT), FOR, P10)));
         }

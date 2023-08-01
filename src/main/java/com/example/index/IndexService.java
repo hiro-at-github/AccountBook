@@ -83,9 +83,15 @@ public class IndexService {
     private static final String P10 = "10";
 
     /**  */
+    private static final String DAY_S = "day";
+
+    /**  */
     private static final String INPUT = "input";
     /**  */
     private static final String MESSAGE = "message";
+
+    /**  */
+    private static final String RECEIPT_FORM = "receiptForm";
 
     /** メッセージソース */
     @Autowired
@@ -243,7 +249,7 @@ public class IndexService {
     //--------------------------------------------------------------------------------
     public boolean isRelatedItemsEntered(ReceiptForm prmReceiptForm) {
         // 年月日が日付として適当か確認
-        boolean isDateXxx = isDateXxx(prmReceiptForm.getYear(), prmReceiptForm.getMonth(), prmReceiptForm.getDay());
+        boolean isDateXxx = isCorrectDate(prmReceiptForm.getYear(), prmReceiptForm.getMonth(), prmReceiptForm.getDay());
 
         // 科目・税率・金額の入力の有無の確認
         Map<Integer, List<String>> errItemMap = picupXxxItems(prmReceiptForm.getATAArr());
@@ -274,7 +280,7 @@ public class IndexService {
         if (!isDateXxx) {
             // 日付の入力に不備がある場合
             rltErrMsgLst.add(apnd(errMsgPropMap.get(DATE), errMsgPropMap.get(INCORRECT), Cnst.SPRT));
-            rltFldErrLst.add(createFieldError("day"));
+            rltFldErrLst.add(createFieldError(DAY_S));
         }
 
         if (errItemMap == null) {
@@ -308,6 +314,8 @@ public class IndexService {
     //--------------------------------------------------------------------------------
     /**
      * 関連チェックのエラーメッセージを返却する
+     * 
+     * @return 関連チェックのエラーメッセージ
      */
     //--------------------------------------------------------------------------------
     public String getRltErrMsg() {
@@ -317,6 +325,8 @@ public class IndexService {
     //--------------------------------------------------------------------------------
     /**
      * 関連チェックのフィールドエラーのリストを返却する
+     * 
+     * @return 関連チェックのフィールドエラーのリスト
      */
     //--------------------------------------------------------------------------------
     public List<FieldError> getRltFldErrLst() {
@@ -328,6 +338,8 @@ public class IndexService {
     //--------------------------------------------------------------------------------
     /**
      * メッセージプロパティを取得する
+     * 
+     * @return 取得したメッセージプロパティ
      */
     //--------------------------------------------------------------------------------
     private Map<String, String> getErrMsgPrpMap() {
@@ -343,19 +355,20 @@ public class IndexService {
         return prpMap;
     }
 
-    //TODO:ここから作業再開。
     //--------------------------------------------------------------------------------
     /**
-     * 日付の整合性を確認する旨
+     * 日付として適当か判定する
+     * 
+     * @param prmDate 年月日の文字列配列
+     * @return 日付として適当な場合、真。不適当な場合、偽
      */
     //--------------------------------------------------------------------------------
-    //TODO:メソッド名変更。日付が不正の場合は「日付が不正」だけをメッセージとするため、戻り値はbooleanで可
-    private boolean isDateXxx(String... prmDate) {
+    private boolean isCorrectDate(String... prmDate) {
         DateFormat format = DateFormat.getDateInstance();
         format.setLenient(false);
 
         try {
-            format.parse(apnd(prmDate[0], "/", prmDate[1], "/", prmDate[2]));
+            format.parse(apnd(prmDate[0], Cnst.SL, prmDate[1], Cnst.SL, prmDate[2]));
 
             return true;
         } catch (Exception e) {
@@ -370,58 +383,8 @@ public class IndexService {
     //--------------------------------------------------------------------------------
     //TODO:メソッド名検討
     private FieldError createFieldError(String prmField) {
-        return new FieldError("receiptForm", prmField, null);
+        return new FieldError(RECEIPT_FORM, prmField, null);
     }
-
-    //    //--------------------------------------------------------------------------------
-    //    /**
-    //     * ダミー
-    //     */
-    //    //--------------------------------------------------------------------------------
-    //    //TODO:メソッド名、引数名変更
-    //    private List<String> from0721_1(boolean prmIsDateXxx, Map<Integer, List<String>> prmErrItemMap,
-    //            Integer... prmTaxAmountArr) {
-    //
-    //        if (prmIsDateXxx && prmErrItemMap != null && prmErrItemMap.size() == 0
-    //                && (prmTaxAmountArr[0] != null || prmTaxAmountArr[1] != null)) {
-    //            return null;
-    //        }
-    //
-    //        //TODO:エラーメッセージ用のプロパティを取得(展開)する旨のコメント
-    //        if (rltErrMsgMap == null) {
-    //            rltErrMsgMap = getErrMsgMap(RLT_ERR_P, ACCOUNT, TAX + Cnst.UD_S + RATE, AMOUNT,
-    //                    INPUT + Cnst.UD_S + MESSAGE);
-    //        }
-    //
-    //        //TODO:名称変更
-    //        List<String> rtnLst = new ArrayList<String>();
-    //
-    //        //        if (!prmIsDateXxx) {
-    //        //            //TODO:プロパティから取得。改行
-    //        //            rtnLst.add("日付が不正");
-    //        //        }
-    //
-    //        if (prmErrItemMap == null) {
-    //            //TODO:プロパティから取得。改行
-    //            //            rtnLst.add("科目・税率・金額が未入力");
-    //            rtnLst.add("科目・税率・金額");
-    //        } else if (prmErrItemMap.size() > 0) {
-    //            //TODO:メソッド化もしくは直書き
-    //        }
-    //
-    //        if (prmTaxAmountArr[0] == null && prmTaxAmountArr[1] == null) {
-    //            //TODO:プロパティから取得。改行
-    //            //            rtnLst.add("税額が未入力");
-    //            rtnLst.add("税額");
-    //        }
-    //
-    //        if (!prmIsDateXxx) {
-    //            //TODO:プロパティから取得。改行。rtnLstの先頭に挿入
-    //            //      rtnLst.add("日付が不正");
-    //        }
-    //
-    //        return rtnLst;
-    //    }
 
     //--------------------------------------------------------------------------------
     /**
@@ -516,6 +479,7 @@ public class IndexService {
      * ダミー
      */
     //--------------------------------------------------------------------------------
+    //科目・税率・金額の組み合わせで未入力項目がある場合
     private Pair<List<String>, List<FieldError>> Y230723_1(Map<Integer, List<String>> prmErrItemMap) {
         List<String> lRltErrMsgLst = new ArrayList<>();
         List<FieldError> lRltFldErrLst = new ArrayList<>();
@@ -553,11 +517,12 @@ public class IndexService {
     /**
      * スネークケースからキャメルケースに変換して返却する
      *
-     * @param 処理対象文字列
+     * @param prmTarget 処理対象文字列
+     * @return キャメルケースに変換した文字列
      */
     //--------------------------------------------------------------------------------
     private String snakeToCamel(String prmTarget) {
-        String[] split = prmTarget.split("_");
+        String[] split = prmTarget.split(Cnst.UD_S);
         StringBuilder builder = new StringBuilder(split[0]);
 
         for (int i = 1; i < split.length; i++) {

@@ -1,3 +1,15 @@
+2023/08/02 5:22
+●名称変更
+createFieldError
+picupXxxItems
+
+○buildでよいか
+buildRltErrMsg
+buildRltFldErrLst
+Y230723_1
+
+●定数とキーの整理
+
 2023/07/26 5:33
 ○
 ・taxAmountFor08

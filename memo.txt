@@ -1,12 +1,28 @@
+2023/08/04 5:47
+●TODO
+○エラーメッセージ
+・色：ピンク寄りに
+・末尾のbr削除
+
+2023/08/03 7:40
+●値が全て正常の場合
+○ファイルに書き込み
+230803,shokuhi,8,100,shokuhi,8,200,…,shokuhi,8,300,72,0
+
+○HTMLを先に作る
+・日付、税抜金額、税額8、税額10、税込金額
+
 2023/08/02 5:22
 ●名称変更
 createFieldError
 picupXxxItems
+Y230723_1
 
 ○buildでよいか
 buildRltErrMsg
 buildRltFldErrLst
-Y230723_1
+
+○apndはconcatか？
 
 ●定数とキーの整理
 

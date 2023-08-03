@@ -27,7 +27,7 @@
 <form name="receiptFrm" method="post" action="/index/index" th:object="${receiptForm}">
 
 <!-- <p th:errors="*{aTAArr[0].amount}"></p> -->
-<p nl2br:text="*{errorMessage}"></p>
+<p nl2br:text="*{errorMessage}" th:class="err"></p>
 
 <table rules="cols" class="table_for_input">
 

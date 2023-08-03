@@ -111,72 +111,16 @@ public class IndexController {
 
         if (!indexService.isRelatedItemsEntered(prmReceiptForm)) {
             prmReceiptForm.setErrorMessage(indexService.getRltErrMsg());
-            List<FieldError> errLst = indexService.getRltFldErrLst();
-            for (FieldError elem : errLst) {
-                prmBindingResult.addError(elem);
-            }
+            //            List<FieldError> errLst = indexService.getRltFldErrLst();
+            //            for (FieldError elem : errLst) {
+            //                prmBindingResult.addError(elem);
+            //            }
+            addErr(indexService.getRltFldErrLst(), prmBindingResult);
 
             return INDEX;
         }
 
-//        String errMsg = indexService.confirmAllItemsEntered(prmReceiptForm.getATAArr());
-//
-//        if (errMsg != null) {
-//            prmReceiptForm.setErrorMessage(errMsg);
-//
-//            List<Errors> errLst = new ArrayList<>();
-//            //            Errors err = new Errors();
-//            List<String> tmpLst = indexService.checkItemMtd(prmReceiptForm);
-//
-//            return INDEX;
-//        }
-
-        //        int amountSum = 0;
-        //        AccountTaxrateAmount[] aTAArr = prmReceiptForm.getATAArr();
-        //
-        //        for (int i = 0; i < aTAArr.length; i++) {
-        //            AccountTaxrateAmount elem = aTAArr[i];
-        //
-        //            if ("".equals(elem.getAccount()) && "".equals(elem.getTaxRate()) && elem.getAmount() == null) {
-        //                continue;
-        //            }
-        //
-        //            Integer amount = elem.getAmount();
-        //            String[] temp = {elem.getAccount(), elem.getTaxRate(), amount == null ? null : amount.toString()};
-        //
-        //
-        //
-        //        }
-        //
-        //        for (AccountTaxrateAmount elem : aTAArr) {
-        //            Integer amount = elem.getAmount();
-        //            String[] temp = {elem.getAccount(), elem.getTaxRate(), amount == null ? null : amount.toString()};
-        //
-        //
-        //
-        //
-        //        }
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //        for (AccountTaxrateAmount elem : aTAArr) {
-        //            String amount = String.valueOf(elem.getAmount());
-        //
-        //            if (amount == null || amount.length() == 0 ) {
-        //                continue;
-        //            }
-        //
-        //            Integer intAmount = Integer.valueOf(elem.getAmount());
-        //
-        //            amountSum += intAmount;
-        //        }
-        //
-        //        prmModel.addAttribute("amountSum", String.valueOf(amountSum));
+        Object obj = indexService.y230803_1(prmReceiptForm);
 
         return INDEX;
     }
@@ -245,4 +189,9 @@ public class IndexController {
         prmModel.addAttribute(TAX_RATE_MAP, prmOptionArr[IndexService.TAX_RATE_MAP]);
     }
 
+    private void addErr(List<FieldError> prmErrLst, BindingResult prmBindingResult) {
+        for (FieldError elem : prmErrLst) {
+            prmBindingResult.addError(elem);
+        }
+    }
 }

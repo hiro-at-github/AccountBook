@@ -62,9 +62,9 @@ public class IndexService {
     /**  */
     private static final String RATE = "rate";
     /**  */
-    private static final String TAX_RATE = "tax_rate";
+    //    private static final String TAX_RATE = "tax_rate";
     /**  */
-    private static final String TAX_AMOUNT = "tax_amount";
+    //    private static final String TAX_AMOUNT = "tax_amount";
     /**  */
     private static final String AMOUNT_RANGE = "amount_range";
     /**  */
@@ -210,31 +210,34 @@ public class IndexService {
             errMsgPropMap = getErrMsgPrpMap();
         }
 
-        StringBuilder errMsgBuilder = new StringBuilder();
+        //        StringBuilder errMsgBuilder = new StringBuilder();
+        //
+        //        List<FieldError> errLst = prmResult.getFieldErrors();
+        //        for (FieldError elem : errLst) {
+        //            String key = null;
+        //            if (elem.getField().contains(TAX)) {
+        //                //                key = TAX_AMOUNT;
+        //                key = apnd(TAX, Cnst.UD_S, AMOUNT);
+        //            } else {
+        //                key = AMOUNT;
+        //            }
+        //
+        //            String msg = errMsgPropMap.get(snakeToCamel(key));
+        //
+        //            if (errMsgBuilder.indexOf(msg) > -1) {
+        //                continue;
+        //            }
+        //
+        //            if (errMsgBuilder.length() > 0) {
+        //                errMsgBuilder.append(Cnst.F_COMMA);
+        //            }
+        //
+        //            errMsgBuilder.append(msg);
+        //        }
+        //
+        //        return errMsgBuilder.append(errMsgPropMap.get(snakeToCamel(AMOUNT_RANGE))).toString();
 
-        List<FieldError> errLst = prmResult.getFieldErrors();
-        for (FieldError elem : errLst) {
-            String key = null;
-            if (elem.getField().contains(TAX)) {
-                key = TAX_AMOUNT;
-            } else {
-                key = AMOUNT;
-            }
-
-            String msg = errMsgPropMap.get(snakeToCamel(key));
-
-            if (errMsgBuilder.indexOf(msg) > -1) {
-                continue;
-            }
-
-            if (errMsgBuilder.length() > 0) {
-                errMsgBuilder.append(Cnst.F_COMMA);
-            }
-
-            errMsgBuilder.append(msg);
-        }
-
-        return errMsgBuilder.append(errMsgPropMap.get(snakeToCamel(AMOUNT_RANGE))).toString();
+        return buildErrMsg(prmResult.getFieldErrors());
     }
 
     //--------------------------------------------------------------------------------
@@ -286,10 +289,10 @@ public class IndexService {
         if (errItemMap == null) {
             // 全ての科目・税率・金額が未入力の場合
             rltErrMsgLst.add(apnd(errMsgPropMap.get(ACCOUNT), errMsgPropMap.get(snakeToCamel(F_DOT)),
-                    errMsgPropMap.get(snakeToCamel(TAX_RATE)), errMsgPropMap.get(snakeToCamel(F_DOT)),
+                    errMsgPropMap.get(buildCamelCase(TAX, RATE)), errMsgPropMap.get(snakeToCamel(F_DOT)),
                     errMsgPropMap.get(AMOUNT), errMsgPropMap.get(snakeToCamel(NOT_ENTERED)), Cnst.SPRT));
             rltFldErrLst.add(createFieldError(apnd(A_T_A_0, ACCOUNT)));
-            rltFldErrLst.add(createFieldError(apnd(A_T_A_0, snakeToCamel(TAX_RATE))));
+            rltFldErrLst.add(createFieldError(apnd(A_T_A_0, buildCamelCase(TAX, RATE))));
             rltFldErrLst.add(createFieldError(apnd(A_T_A_0, AMOUNT)));
         } else {
             // 科目・税率・金額の組み合わせで未入力項目がある場合
@@ -300,10 +303,10 @@ public class IndexService {
 
         if (taxAmountFor08 == null && taxAmountFor10 == null) {
             // 税額のいずれもが未入力の場合
-            rltErrMsgLst.add(apnd(errMsgPropMap.get(snakeToCamel(TAX_AMOUNT)),
+            rltErrMsgLst.add(apnd(errMsgPropMap.get(buildCamelCase(TAX, AMOUNT)),
                     errMsgPropMap.get(snakeToCamel(NOT_ENTERED)), Cnst.SPRT));
-            rltFldErrLst.add(createFieldError(apnd(snakeToCamel(TAX_AMOUNT), FOR, P08)));
-            rltFldErrLst.add(createFieldError(apnd(snakeToCamel(TAX_AMOUNT), FOR, P10)));
+            rltFldErrLst.add(createFieldError(apnd(buildCamelCase(TAX, AMOUNT), FOR, P08)));
+            rltFldErrLst.add(createFieldError(apnd(buildCamelCase(TAX, AMOUNT), FOR, P10)));
         }
 
         rltErrMsg = String.join(Cnst.EMPTY, rltErrMsgLst);
@@ -333,6 +336,18 @@ public class IndexService {
         return rltFldErrLst;
     }
 
+    //TODO:以上値確認用publicメソッド。以下値加工用publicメソッド
+
+    //--------------------------------------------------------------------------------
+    /**
+     * ダミー
+     */
+    //--------------------------------------------------------------------------------
+    public Object y230803_1(ReceiptForm prmReceiptForm) {
+
+        return null;
+    }
+
     // privateメソッド ---------------------------------------------------------------
 
     //--------------------------------------------------------------------------------
@@ -345,8 +360,10 @@ public class IndexService {
     private Map<String, String> getErrMsgPrpMap() {
         Map<String, String> prpMap = new HashMap<>();
 
-        String[] codeArr = { AMOUNT, TAX_AMOUNT, AMOUNT_RANGE,
-                F_DOT, DATE, ACCOUNT, TAX_RATE, INCORRECT, NOT_ENTERED };
+        //        String[] codeArr = { AMOUNT, TAX_AMOUNT, AMOUNT_RANGE,
+        //                F_DOT, DATE, ACCOUNT, TAX_RATE, INCORRECT, NOT_ENTERED };
+        String[] codeArr = { AMOUNT, apnd(TAX, Cnst.UD_S, AMOUNT), AMOUNT_RANGE,
+                F_DOT, DATE, ACCOUNT, apnd(TAX, Cnst.UD_S, RATE), INCORRECT, NOT_ENTERED };
         for (String elem : codeArr) {
             prpMap.put(snakeToCamel(elem), messageSource.getMessage(PREFIX + elem, null, Locale.JAPAN));
             //            prpMap.put(elem, messageSource.getMessage(PREFIX + elem, null, Locale.JAPAN));
@@ -409,7 +426,7 @@ public class IndexService {
             }
 
             if (Cnst.EMPTY.equals(elem.getTaxRate())) {
-                errItemLst.add(buildKey(TAX, RATE));
+                errItemLst.add(buildCamelCase(TAX, RATE));
             }
 
             if (elem.getAmount() == null) {
@@ -439,6 +456,39 @@ public class IndexService {
         }
 
         return errItemMap;
+    }
+
+    //--------------------------------------------------------------------------------
+    /**
+     * ダミー
+     */
+    //--------------------------------------------------------------------------------
+    private String buildErrMsg(List<FieldError> prmErrLst) {
+        StringBuilder errMsgBuilder = new StringBuilder();
+
+        for (FieldError elem : prmErrLst) {
+            String key = null;
+            if (elem.getField().contains(TAX)) {
+                //                key = TAX_AMOUNT;
+                key = apnd(TAX, Cnst.UD_S, AMOUNT);
+            } else {
+                key = AMOUNT;
+            }
+
+            String msg = errMsgPropMap.get(snakeToCamel(key));
+
+            if (errMsgBuilder.indexOf(msg) > -1) {
+                continue;
+            }
+
+            if (errMsgBuilder.length() > 0) {
+                errMsgBuilder.append(Cnst.F_COMMA);
+            }
+
+            errMsgBuilder.append(msg);
+        }
+
+        return errMsgBuilder.append(errMsgPropMap.get(snakeToCamel(AMOUNT_RANGE))).toString();
     }
 
     //--------------------------------------------------------------------------------
@@ -517,12 +567,12 @@ public class IndexService {
     /**
      * スネークケースからキャメルケースに変換して返却する
      *
-     * @param prmTarget 処理対象文字列
+     * @param prmSnakeCase スネークケースの文字列
      * @return キャメルケースに変換した文字列
      */
     //--------------------------------------------------------------------------------
-    private String snakeToCamel(String prmTarget) {
-        String[] split = prmTarget.split(Cnst.UD_S);
+    private String snakeToCamel(String prmSnakeCase) {
+        String[] split = prmSnakeCase.split(Cnst.UD_S);
         StringBuilder builder = new StringBuilder(split[0]);
 
         for (int i = 1; i < split.length; i++) {
@@ -534,13 +584,16 @@ public class IndexService {
 
     //--------------------------------------------------------------------------------
     /**
-     * ダミー
+     * 引数の文字列配列を連結してキャメルケースの文字列を作成し返却する
+     * 
+     * @param prmStrArr 処理対象の文字列配列
+     * @return 作成したキャメルケースの文字列
      */
     //--------------------------------------------------------------------------------
-    private String buildKey(String... prmKeyArr) {
+    private String buildCamelCase(String... prmStrArr) {
         StringBuilder builder = new StringBuilder();
 
-        for (String elem : prmKeyArr) {
+        for (String elem : prmStrArr) {
             builder.append(elem).append(Cnst.UD_S);
         }
 
@@ -561,5 +614,7 @@ public class IndexService {
 
         return builder.toString();
     }
+
+    //TODO:以上値確認用privateメソッド。以下値加工用privateメソッド
 
 }

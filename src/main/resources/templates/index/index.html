@@ -27,7 +27,7 @@
 <form name="receiptFrm" method="post" action="/index/index" th:object="${receiptForm}">
 
 <!-- <p th:errors="*{aTAArr[0].amount}"></p> -->
-<p nl2br:text="*{errorMessage}"></p>
+<p nl2br:text="*{errorMessage}" th:class="err"></p>
 
 <table rules="cols" class="table_for_input">
 
@@ -82,7 +82,7 @@
 </select>
 <input type="text" tabindex="430" maxlength="7" th:field="*{aTAArr[3].amount}" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
-<td class="date_tax_rate t_a_r"><span th:text="#{idx.tax_rate_1}"></span><input type="text" tabindex="6010" th:field="*{taxAmountFor08}" th:class="tax_amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
+<td class="date_tax_rate t_a_r"><span th:text="|#{idx.tax_rate_1}#{idx.h_colon}|"></span><input type="text" tabindex="6010" th:field="*{taxAmountFor08}" th:class="tax_amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 </tr>
 
 <!-- 2行目 -->
@@ -125,7 +125,7 @@
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
 <input type="text" th:field="*{aTAArr[7].amount}" tabindex="830" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
-<td rowspan="7" class="date_tax_rate"><span th:text="#{idx.tax_rate_2}"></span><input type="text" tabindex="6020" th:field="*{taxAmountFor10}" th:class="tax_amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
+<td rowspan="7" class="date_tax_rate"><span th:text="|#{idx.tax_rate_2}#{idx.h_colon}|"></span><input type="text" tabindex="6020" th:field="*{taxAmountFor10}" th:class="tax_amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 </tr>
 
 <!-- 3行目 -->
@@ -368,6 +368,26 @@
 </table>
 
 <input type="submit" name="create" th:value="#{idx.submit.create}" tabindex="7010">
+
+<table class="table_for_input">
+
+<tr>
+<th th:text="#{idx.date}"></th>
+<th th:text="|税抜#{idx.amount}|"></th>
+<th th:text="|#{idx.tax_amount}#{idx.tax_rate_1}|"></th>
+<th th:text="|#{idx.tax_amount}#{idx.tax_rate_2}|"></th>
+<th th:text="|税込#{idx.amount}|"></th>
+</tr>
+
+<tr>
+<td>230804</td>
+<td>8888</td>
+<td>80</td>
+<td>100</td>
+<td>8888</td>
+</tr>
+
+</table>
 
 </form>
 </div>

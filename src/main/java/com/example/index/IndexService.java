@@ -47,14 +47,22 @@ public class IndexService {
     private static final String PREFIX = "idx.";
     /**  */
     //    private static final String RLT_ERR_P = "relate.error.";
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 98528cb6064eec4ced1d9eb0b7719fe8e1dd1ade
     /**  */
     private static final String F_DOT = "f_dot";
     /**  */
     private static final String DATE = "date";
+<<<<<<< HEAD
     
     
     
+=======
+
+>>>>>>> 98528cb6064eec4ced1d9eb0b7719fe8e1dd1ade
     /**  */
     private static final String ACCOUNT = "account";
     /**  */
@@ -64,9 +72,9 @@ public class IndexService {
     /**  */
     private static final String RATE = "rate";
     /**  */
-    private static final String TAX_RATE = "tax_rate";
+    //    private static final String TAX_RATE = "tax_rate";
     /**  */
-    private static final String TAX_AMOUNT = "tax_amount";
+    //    private static final String TAX_AMOUNT = "tax_amount";
     /**  */
     private static final String AMOUNT_RANGE = "amount_range";
     /**  */
@@ -83,12 +91,22 @@ public class IndexService {
     private static final String P08 = "08";
     /**  */
     private static final String P10 = "10";
+<<<<<<< HEAD
     
     
+=======
+
+    /**  */
+    private static final String DAY_S = "day";
+
+>>>>>>> 98528cb6064eec4ced1d9eb0b7719fe8e1dd1ade
     /**  */
     private static final String INPUT = "input";
     /**  */
     private static final String MESSAGE = "message";
+
+    /**  */
+    private static final String RECEIPT_FORM = "receiptForm";
 
     /** メッセージソース */
     @Autowired
@@ -203,12 +221,42 @@ public class IndexService {
     public String buildFldErrMsg(BindingResult prmResult) {
         // エラーメッセージ用プロパティが取得済みか確認
         if (errMsgPropMap == null) {
+<<<<<<< HEAD
          // エラーメッセージ用プロパティの取得
+=======
+            // エラーメッセージ用プロパティの取得
+>>>>>>> 98528cb6064eec4ced1d9eb0b7719fe8e1dd1ade
             errMsgPropMap = getErrMsgPrpMap();
         }
 
-        StringBuilder errMsgBuilder = new StringBuilder();
+        //        StringBuilder errMsgBuilder = new StringBuilder();
+        //
+        //        List<FieldError> errLst = prmResult.getFieldErrors();
+        //        for (FieldError elem : errLst) {
+        //            String key = null;
+        //            if (elem.getField().contains(TAX)) {
+        //                //                key = TAX_AMOUNT;
+        //                key = apnd(TAX, Cnst.UD_S, AMOUNT);
+        //            } else {
+        //                key = AMOUNT;
+        //            }
+        //
+        //            String msg = errMsgPropMap.get(snakeToCamel(key));
+        //
+        //            if (errMsgBuilder.indexOf(msg) > -1) {
+        //                continue;
+        //            }
+        //
+        //            if (errMsgBuilder.length() > 0) {
+        //                errMsgBuilder.append(Cnst.F_COMMA);
+        //            }
+        //
+        //            errMsgBuilder.append(msg);
+        //        }
+        //
+        //        return errMsgBuilder.append(errMsgPropMap.get(snakeToCamel(AMOUNT_RANGE))).toString();
 
+<<<<<<< HEAD
         List<FieldError> errLst = prmResult.getFieldErrors();
         for (FieldError elem : errLst) {
             String key = null;
@@ -239,11 +287,24 @@ public class IndexService {
     //--------------------------------------------------------------------------------
     /**
      * ダミー
+=======
+        return buildErrMsg(prmResult.getFieldErrors());
+    }
+
+    //--------------------------------------------------------------------------------
+    /**
+     * 日付の適当性、未入力項目の確認をし結果を返却する。
+     * 入力に不備がある場合はエラーメッセージの組立
+     * (関連チェック)
+     * 
+     * @param prmReceiptForm レシートフォーム
+     * @return 入力に不備がない場合は真。不備がある場合は偽
+>>>>>>> 98528cb6064eec4ced1d9eb0b7719fe8e1dd1ade
      */
     //--------------------------------------------------------------------------------
     public boolean isRelatedItemsEntered(ReceiptForm prmReceiptForm) {
         // 年月日が日付として適当か確認
-        boolean isDateXxx = isDateXxx(prmReceiptForm.getYear(), prmReceiptForm.getMonth(), prmReceiptForm.getDay());
+        boolean isDateXxx = isCorrectDate(prmReceiptForm.getYear(), prmReceiptForm.getMonth(), prmReceiptForm.getDay());
 
         // 科目・税率・金額の入力の有無の確認
         Map<Integer, List<String>> errItemMap = picupXxxItems(prmReceiptForm.getATAArr());
@@ -274,16 +335,27 @@ public class IndexService {
         if (!isDateXxx) {
             // 日付の入力に不備がある場合
             rltErrMsgLst.add(apnd(errMsgPropMap.get(DATE), errMsgPropMap.get(INCORRECT), Cnst.SPRT));
+<<<<<<< HEAD
             rltFldErrLst.add(createFieldError("day"));
+=======
+            rltFldErrLst.add(createFieldError(DAY_S));
+>>>>>>> 98528cb6064eec4ced1d9eb0b7719fe8e1dd1ade
         }
 
         if (errItemMap == null) {
             // 全ての科目・税率・金額が未入力の場合
             rltErrMsgLst.add(apnd(errMsgPropMap.get(ACCOUNT), errMsgPropMap.get(snakeToCamel(F_DOT)),
+<<<<<<< HEAD
                     errMsgPropMap.get(snakeToCamel(TAX_RATE)), errMsgPropMap.get(snakeToCamel(F_DOT)),
                     errMsgPropMap.get(AMOUNT), errMsgPropMap.get(snakeToCamel(NOT_ENTERED)), Cnst.SPRT));
             rltFldErrLst.add(createFieldError(apnd(A_T_A_0, ACCOUNT)));
             rltFldErrLst.add(createFieldError(apnd(A_T_A_0, snakeToCamel(TAX_RATE))));
+=======
+                    errMsgPropMap.get(buildCamelCase(TAX, RATE)), errMsgPropMap.get(snakeToCamel(F_DOT)),
+                    errMsgPropMap.get(AMOUNT), errMsgPropMap.get(snakeToCamel(NOT_ENTERED)), Cnst.SPRT));
+            rltFldErrLst.add(createFieldError(apnd(A_T_A_0, ACCOUNT)));
+            rltFldErrLst.add(createFieldError(apnd(A_T_A_0, buildCamelCase(TAX, RATE))));
+>>>>>>> 98528cb6064eec4ced1d9eb0b7719fe8e1dd1ade
             rltFldErrLst.add(createFieldError(apnd(A_T_A_0, AMOUNT)));
         } else {
             // 科目・税率・金額の組み合わせで未入力項目がある場合
@@ -294,9 +366,16 @@ public class IndexService {
 
         if (taxAmountFor08 == null && taxAmountFor10 == null) {
             // 税額のいずれもが未入力の場合
+<<<<<<< HEAD
             rltErrMsgLst.add(apnd(errMsgPropMap.get(snakeToCamel(TAX_AMOUNT)), errMsgPropMap.get(snakeToCamel(NOT_ENTERED)), Cnst.SPRT));
             rltFldErrLst.add(createFieldError(apnd(snakeToCamel(TAX_AMOUNT), FOR, P08)));
             rltFldErrLst.add(createFieldError(apnd(snakeToCamel(TAX_AMOUNT), FOR, P10)));
+=======
+            rltErrMsgLst.add(apnd(errMsgPropMap.get(buildCamelCase(TAX, AMOUNT)),
+                    errMsgPropMap.get(snakeToCamel(NOT_ENTERED)), Cnst.SPRT));
+            rltFldErrLst.add(createFieldError(apnd(buildCamelCase(TAX, AMOUNT), FOR, P08)));
+            rltFldErrLst.add(createFieldError(apnd(buildCamelCase(TAX, AMOUNT), FOR, P10)));
+>>>>>>> 98528cb6064eec4ced1d9eb0b7719fe8e1dd1ade
         }
 
         rltErrMsg = String.join(Cnst.EMPTY, rltErrMsgLst);
@@ -304,18 +383,33 @@ public class IndexService {
         return false;
     }
 
+    //--------------------------------------------------------------------------------
+    /**
+     * 関連チェックのエラーメッセージを返却する
+     * 
+     * @return 関連チェックのエラーメッセージ
+     */
+    //--------------------------------------------------------------------------------
     public String getRltErrMsg() {
         return rltErrMsg;
     }
 
+    //--------------------------------------------------------------------------------
+    /**
+     * 関連チェックのフィールドエラーのリストを返却する
+     * 
+     * @return 関連チェックのフィールドエラーのリスト
+     */
+    //--------------------------------------------------------------------------------
     public List<FieldError> getRltFldErrLst() {
         return rltFldErrLst;
     }
 
-    // privateメソッド ---------------------------------------------------------------
+    //TODO:以上値確認用publicメソッド。以下値加工用publicメソッド
 
     //--------------------------------------------------------------------------------
     /**
+<<<<<<< HEAD
      * エラーメッセージを返却する
      */
     //--------------------------------------------------------------------------------
@@ -330,21 +424,54 @@ public class IndexService {
 //            prpMap.put(elem, messageSource.getMessage(PREFIX + elem, null, Locale.JAPAN));
         }
         
+=======
+     * ダミー
+     */
+    //--------------------------------------------------------------------------------
+    public Object y230803_1(ReceiptForm prmReceiptForm) {
+
+        return null;
+    }
+
+    // privateメソッド ---------------------------------------------------------------
+
+    //--------------------------------------------------------------------------------
+    /**
+     * メッセージプロパティを取得する
+     * 
+     * @return 取得したメッセージプロパティ
+     */
+    //--------------------------------------------------------------------------------
+    private Map<String, String> getErrMsgPrpMap() {
+        Map<String, String> prpMap = new HashMap<>();
+
+        //        String[] codeArr = { AMOUNT, TAX_AMOUNT, AMOUNT_RANGE,
+        //                F_DOT, DATE, ACCOUNT, TAX_RATE, INCORRECT, NOT_ENTERED };
+        String[] codeArr = { AMOUNT, apnd(TAX, Cnst.UD_S, AMOUNT), AMOUNT_RANGE,
+                F_DOT, DATE, ACCOUNT, apnd(TAX, Cnst.UD_S, RATE), INCORRECT, NOT_ENTERED };
+        for (String elem : codeArr) {
+            prpMap.put(snakeToCamel(elem), messageSource.getMessage(PREFIX + elem, null, Locale.JAPAN));
+            //            prpMap.put(elem, messageSource.getMessage(PREFIX + elem, null, Locale.JAPAN));
+        }
+
+>>>>>>> 98528cb6064eec4ced1d9eb0b7719fe8e1dd1ade
         return prpMap;
     }
     
     //--------------------------------------------------------------------------------
     /**
-     * 日付の整合性を確認する旨
+     * 日付として適当か判定する
+     * 
+     * @param prmDate 年月日の文字列配列
+     * @return 日付として適当な場合、真。不適当な場合、偽
      */
     //--------------------------------------------------------------------------------
-    //TODO:メソッド名変更。日付が不正の場合は「日付が不正」だけをメッセージとするため、戻り値はbooleanで可
-    private boolean isDateXxx(String... prmDate) {
+    private boolean isCorrectDate(String... prmDate) {
         DateFormat format = DateFormat.getDateInstance();
         format.setLenient(false);
 
         try {
-            format.parse(apnd(prmDate[0], "/", prmDate[1], "/", prmDate[2]));
+            format.parse(apnd(prmDate[0], Cnst.SL, prmDate[1], Cnst.SL, prmDate[2]));
 
             return true;
         } catch (Exception e) {
@@ -359,58 +486,8 @@ public class IndexService {
     //--------------------------------------------------------------------------------
     //TODO:メソッド名検討
     private FieldError createFieldError(String prmField) {
-        return new FieldError("receiptForm", prmField, null);
+        return new FieldError(RECEIPT_FORM, prmField, null);
     }
-
-    //    //--------------------------------------------------------------------------------
-    //    /**
-    //     * ダミー
-    //     */
-    //    //--------------------------------------------------------------------------------
-    //    //TODO:メソッド名、引数名変更
-    //    private List<String> from0721_1(boolean prmIsDateXxx, Map<Integer, List<String>> prmErrItemMap,
-    //            Integer... prmTaxAmountArr) {
-    //
-    //        if (prmIsDateXxx && prmErrItemMap != null && prmErrItemMap.size() == 0
-    //                && (prmTaxAmountArr[0] != null || prmTaxAmountArr[1] != null)) {
-    //            return null;
-    //        }
-    //
-    //        //TODO:エラーメッセージ用のプロパティを取得(展開)する旨のコメント
-    //        if (rltErrMsgMap == null) {
-    //            rltErrMsgMap = getErrMsgMap(RLT_ERR_P, ACCOUNT, TAX + Cnst.UD_S + RATE, AMOUNT,
-    //                    INPUT + Cnst.UD_S + MESSAGE);
-    //        }
-    //
-    //        //TODO:名称変更
-    //        List<String> rtnLst = new ArrayList<String>();
-    //
-    //        //        if (!prmIsDateXxx) {
-    //        //            //TODO:プロパティから取得。改行
-    //        //            rtnLst.add("日付が不正");
-    //        //        }
-    //
-    //        if (prmErrItemMap == null) {
-    //            //TODO:プロパティから取得。改行
-    //            //            rtnLst.add("科目・税率・金額が未入力");
-    //            rtnLst.add("科目・税率・金額");
-    //        } else if (prmErrItemMap.size() > 0) {
-    //            //TODO:メソッド化もしくは直書き
-    //        }
-    //
-    //        if (prmTaxAmountArr[0] == null && prmTaxAmountArr[1] == null) {
-    //            //TODO:プロパティから取得。改行
-    //            //            rtnLst.add("税額が未入力");
-    //            rtnLst.add("税額");
-    //        }
-    //
-    //        if (!prmIsDateXxx) {
-    //            //TODO:プロパティから取得。改行。rtnLstの先頭に挿入
-    //            //      rtnLst.add("日付が不正");
-    //        }
-    //
-    //        return rtnLst;
-    //    }
 
     //--------------------------------------------------------------------------------
     /**
@@ -435,7 +512,7 @@ public class IndexService {
             }
 
             if (Cnst.EMPTY.equals(elem.getTaxRate())) {
-                errItemLst.add(buildKey(TAX, RATE));
+                errItemLst.add(buildCamelCase(TAX, RATE));
             }
 
             if (elem.getAmount() == null) {
@@ -465,6 +542,39 @@ public class IndexService {
         }
 
         return errItemMap;
+    }
+
+    //--------------------------------------------------------------------------------
+    /**
+     * ダミー
+     */
+    //--------------------------------------------------------------------------------
+    private String buildErrMsg(List<FieldError> prmErrLst) {
+        StringBuilder errMsgBuilder = new StringBuilder();
+
+        for (FieldError elem : prmErrLst) {
+            String key = null;
+            if (elem.getField().contains(TAX)) {
+                //                key = TAX_AMOUNT;
+                key = apnd(TAX, Cnst.UD_S, AMOUNT);
+            } else {
+                key = AMOUNT;
+            }
+
+            String msg = errMsgPropMap.get(snakeToCamel(key));
+
+            if (errMsgBuilder.indexOf(msg) > -1) {
+                continue;
+            }
+
+            if (errMsgBuilder.length() > 0) {
+                errMsgBuilder.append(Cnst.F_COMMA);
+            }
+
+            errMsgBuilder.append(msg);
+        }
+
+        return errMsgBuilder.append(errMsgPropMap.get(snakeToCamel(AMOUNT_RANGE))).toString();
     }
 
     //--------------------------------------------------------------------------------
@@ -505,6 +615,7 @@ public class IndexService {
      * ダミー
      */
     //--------------------------------------------------------------------------------
+    //科目・税率・金額の組み合わせで未入力項目がある場合
     private Pair<List<String>, List<FieldError>> Y230723_1(Map<Integer, List<String>> prmErrItemMap) {
         List<String> lRltErrMsgLst = new ArrayList<>();
         List<FieldError> lRltFldErrLst = new ArrayList<>();
@@ -519,7 +630,11 @@ public class IndexService {
                 i = 0;
                 lRltErrMsgLst.add(Cnst.SPRT);
             }
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> 98528cb6064eec4ced1d9eb0b7719fe8e1dd1ade
             lRltFldErrLst.addAll(buildRltFldErrLst(elem, valLst));
         }
 
@@ -528,6 +643,7 @@ public class IndexService {
         if (lastElem.equals(Cnst.SPRT)) {
             lRltErrMsgLst.remove(lastIndex);
         }
+<<<<<<< HEAD
         
         int lstIndex = lRltErrMsgLst.size() - 1;
         String lstElem = lRltErrMsgLst.get(lstIndex);
@@ -535,6 +651,15 @@ public class IndexService {
         
         lRltErrMsgLst.add(apnd(errMsgPropMap.get(snakeToCamel(NOT_ENTERED)), Cnst.SPRT));
         
+=======
+
+        int lstIndex = lRltErrMsgLst.size() - 1;
+        String lstElem = lRltErrMsgLst.get(lstIndex);
+        lRltErrMsgLst.set(lstIndex, lstElem.substring(0, lstElem.length() - 1));
+
+        lRltErrMsgLst.add(apnd(errMsgPropMap.get(snakeToCamel(NOT_ENTERED)), Cnst.SPRT));
+
+>>>>>>> 98528cb6064eec4ced1d9eb0b7719fe8e1dd1ade
         return Pair.of(lRltErrMsgLst, lRltFldErrLst);
     }
 
@@ -542,11 +667,12 @@ public class IndexService {
     /**
      * スネークケースからキャメルケースに変換して返却する
      *
-     * @param 処理対象文字列
+     * @param prmSnakeCase スネークケースの文字列
+     * @return キャメルケースに変換した文字列
      */
     //--------------------------------------------------------------------------------
-    private String snakeToCamel(String prmTarget) {
-        String[] split = prmTarget.split("_");
+    private String snakeToCamel(String prmSnakeCase) {
+        String[] split = prmSnakeCase.split(Cnst.UD_S);
         StringBuilder builder = new StringBuilder(split[0]);
 
         for (int i = 1; i < split.length; i++) {
@@ -558,13 +684,16 @@ public class IndexService {
 
     //--------------------------------------------------------------------------------
     /**
-     * ダミー
+     * 引数の文字列配列を連結してキャメルケースの文字列を作成し返却する
+     * 
+     * @param prmStrArr 処理対象の文字列配列
+     * @return 作成したキャメルケースの文字列
      */
     //--------------------------------------------------------------------------------
-    private String buildKey(String... prmKeyArr) {
+    private String buildCamelCase(String... prmStrArr) {
         StringBuilder builder = new StringBuilder();
 
-        for (String elem : prmKeyArr) {
+        for (String elem : prmStrArr) {
             builder.append(elem).append(Cnst.UD_S);
         }
 
@@ -585,5 +714,7 @@ public class IndexService {
 
         return builder.toString();
     }
+
+    //TODO:以上値確認用privateメソッド。以下値加工用privateメソッド
 
 }

@@ -13,6 +13,12 @@
 }
 */
 
+.err {
+    color: #f00;
+    line-height: 1.2em;
+    margin: 5px 0;
+}
+
 :focus {
     outline-style: solid;
 }

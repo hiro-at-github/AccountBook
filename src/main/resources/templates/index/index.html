@@ -369,7 +369,7 @@
 
 <input type="submit" name="create" th:value="#{idx.submit.create}" tabindex="7010">
 
-<table class="table_for_input">
+<table rules="cols" class="table_for_display">
 
 <tr>
 <th th:text="#{idx.date}"></th>
@@ -377,6 +377,14 @@
 <th th:text="|#{idx.tax_amount}#{idx.tax_rate_1}|"></th>
 <th th:text="|#{idx.tax_amount}#{idx.tax_rate_2}|"></th>
 <th th:text="|税込#{idx.amount}|"></th>
+</tr>
+
+<tr>
+<td>230804</td>
+<td>8888</td>
+<td>80</td>
+<td>100</td>
+<td>8888</td>
 </tr>
 
 <tr>

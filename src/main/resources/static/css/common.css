@@ -59,23 +59,35 @@ input[type="submit"] {
     margin-left: auto;
 }
 
-.table_for_input {
+.table_for_input,
+.table_for_display {
     border-color: #7CC0EF;
 }
 
-.table_for_input th {
+.table_for_input th,
+.table_for_display th {
     color: #FFF;
     background-color: #42A2E6;
     padding-top: 2px;
 }
 
-.table_for_input td {
+.table_for_display th {
+    padding-right: 10px;
+    padding-left: 10px;
+}
+.table_for_input td,
+.table_for_display td {
     white-space: nowrap;
     background-color: #EEE;
     padding: 2px 4px;
 }
 
-.table_for_input tr:nth-child(odd) td {
+.table_for_display td {
+    text-align: right;
+}
+
+.table_for_input tr:nth-child(odd) td,
+.table_for_display tr:nth-child(odd) td {
     background-color: #FFF;
 }
 

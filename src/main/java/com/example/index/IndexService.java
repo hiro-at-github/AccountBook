@@ -344,7 +344,15 @@ public class IndexService {
      */
     //--------------------------------------------------------------------------------
     public Object y230803_1(ReceiptForm prmReceiptForm) {
-
+        Registered rgsted = new Registered();
+        rgsted.setDate("230807");
+        rgsted.setSubtotal("8888");
+        rgsted.setTaxAmount1("80");
+        rgsted.setTaxAmount2("100");
+        rgsted.setTotal("8888");
+        
+        prmReceiptForm.setRgstedArr(new Registered[]{rgsted});
+        
         return null;
     }
 

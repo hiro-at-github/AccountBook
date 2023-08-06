@@ -373,18 +373,18 @@
 
 <tr>
 <th th:text="#{idx.date}"></th>
-<th th:text="|税抜#{idx.amount}|"></th>
+<th th:text="#{idx.subtotal}"></th>
 <th th:text="|#{idx.tax_amount}#{idx.tax_rate_1}|"></th>
 <th th:text="|#{idx.tax_amount}#{idx.tax_rate_2}|"></th>
-<th th:text="|税込#{idx.amount}|"></th>
+<th th:text="#{idx.total}"></th>
 </tr>
 
-<tr>
-<td>230804</td>
-<td>8888</td>
-<td>80</td>
-<td>100</td>
-<td>8888</td>
+<tr th:each="item: ${rgstedArr}">
+<td th:text="${item.date}"></td>
+<td th:text="${item.subtotal}"></td>
+<td th:text="${item.taxAmount1}"></td>
+<td th:text="${item.taxAmount2}"></td>
+<td th:text="${item.total}"></td>
 </tr>
 
 <tr>

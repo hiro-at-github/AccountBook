@@ -39,6 +39,9 @@ public class ReceiptForm {
     /** エラーメッセージ */
     private String errorMessage;
 
+    /** 登録したレシートの合計の配列 */
+    private Registered[] rgstedArr;
+    
     //--------------------------------------------------------------------------------
     /**
      * コンストラクタ

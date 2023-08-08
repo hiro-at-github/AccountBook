@@ -379,7 +379,7 @@
 <th th:text="#{idx.total}"></th>
 </tr>
 
-<tr th:each="item: ${rgstedArr}">
+<tr th:each="item: ${receiptForm.rgstedArr}">
 <td th:text="${item.date}"></td>
 <td th:text="${item.subtotal}"></td>
 <td th:text="${item.taxAmount1}"></td>

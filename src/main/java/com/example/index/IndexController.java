@@ -120,7 +120,7 @@ public class IndexController {
             return INDEX;
         }
 
-        Object obj = indexService.y230803_1(prmReceiptForm);
+        Object obj = indexService.getRegistered(prmReceiptForm);
 
         return INDEX;
     }

@@ -341,19 +341,44 @@ public class IndexService {
     //--------------------------------------------------------------------------------
     /**
      * ダミー
+     * TODO:返すのはコレクションかまたはその一要素か←一要素
+     * メソッド名変更
+     * 仕事はファイルへの登録と画面に表示する項目の返却
      */
     //--------------------------------------------------------------------------------
-    public Object y230803_1(ReceiptForm prmReceiptForm) {
-        Registered rgsted = new Registered();
-        rgsted.setDate("230807");
-        rgsted.setSubtotal("8888");
-        rgsted.setTaxAmount1("80");
-        rgsted.setTaxAmount2("100");
-        rgsted.setTotal("8888");
+    public Registered getRegistered(ReceiptForm prmReceiptForm) {
+        //TODO:イテレーションの下方に移動を検討
+        String year = prmReceiptForm.getYear();
+        String month = prmReceiptForm.getMonth();
+        String day = prmReceiptForm.getDay();
+        Integer taxAmount1 = prmReceiptForm.getTaxAmountFor08();
+        Integer taxAmount2 = prmReceiptForm.getTaxAmountFor10();
+        int subTotal = 0;
         
-        prmReceiptForm.setRgstedArr(new Registered[]{rgsted});
+        AccountTaxrateAmount[] aTAArr = prmReceiptForm.getATAArr();
+        for (AccountTaxrateAmount elem : aTAArr) {
+            Integer amount = elem.getAmount();
+            
+            if (amount == null) {
+                break;
+            }
+            
+            subTotal += amount;
+        }
         
-        return null;
+        // 登録処理
+        
+        
+        
+        // 戻り値を作る処理
+        Registered registered = new Registered();
+        registered.setDate(apnd(year, month, day));
+        registered.setSubtotal(String.valueOf(subTotal));
+        registered.setTaxAmount1(String.valueOf(taxAmount1));
+        registered.setTaxAmount2(String.valueOf(taxAmount2));
+        registered.setTotal(String.valueOf(subTotal + taxAmount1 + taxAmount2));
+        
+        return registered;
     }
 
     // privateメソッド ---------------------------------------------------------------

@@ -1,5 +1,7 @@
 package com.example.index;
 
+import java.util.List;
+
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -39,25 +41,21 @@ public class ReceiptForm {
     /** エラーメッセージ */
     private String errorMessage;
 
-    /** 登録したレシートの合計の配列 */
-    private Registered[] rgstedArr;
-    
+    /** 登録したレシートの合計のリスト */
+    private List<Registered> rgstedLst;
+
     //--------------------------------------------------------------------------------
     /**
      * コンストラクタ
      */
     //--------------------------------------------------------------------------------
-    public ReceiptForm(String prmYear, String prmMonth, String prmDay, Integer prmLength) {
-        year = prmYear;
-        month = prmMonth;
-        day = prmDay;
+    public ReceiptForm(Integer prmLength, String... prmDate) {
+        year = prmDate[0];
+        month = prmDate[1];
+        day = prmDate[2];
 
         if (prmLength != null) {
             aTAArr = new AccountTaxrateAmount[prmLength];
-
-            //            for (int i = 0; i < prmLength; i++) {
-            //                aTAArr[i].setNumber(String.format("%02d", i));
-            //            }
         }
     }
 }

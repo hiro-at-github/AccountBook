@@ -1,5 +1,6 @@
 package com.example.index;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -89,9 +90,7 @@ public class IndexController {
 
         addOptionArr(optionArr, prmModel);
 
-        String[] date = (String[]) optionArr[IndexService.CURRENT_DATE];
-        ReceiptForm receiptForm = new ReceiptForm(date[IndexService.YEAR], date[IndexService.MONTH],
-                date[IndexService.DAY], 32);
+        ReceiptForm receiptForm = new ReceiptForm(32, (String[]) optionArr[IndexService.CURRENT_DATE]);
         prmModel.addAttribute(RECEIPT_FORM, receiptForm);
 
         return INDEX;
@@ -120,7 +119,16 @@ public class IndexController {
             return INDEX;
         }
 
-        Object obj = indexService.getRegistered(prmReceiptForm);
+        List<Registered> rgstedLst = autoCast(httpSession.getAttribute("temp"));
+
+        if (rgstedLst == null) {
+            rgstedLst = new ArrayList<>();
+        }
+
+        rgstedLst.add(0, indexService.getRegistered(prmReceiptForm));
+        httpSession.setAttribute("temp", rgstedLst);
+
+        prmReceiptForm.setRgstedLst(rgstedLst);
 
         return INDEX;
     }
@@ -194,4 +202,10 @@ public class IndexController {
             prmBindingResult.addError(elem);
         }
     }
+
+    @SuppressWarnings("unchecked")
+    private <T> T autoCast(Object prmObj) {
+        return (T) prmObj;
+    }
+
 }

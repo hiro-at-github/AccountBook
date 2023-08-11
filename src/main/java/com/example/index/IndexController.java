@@ -128,7 +128,9 @@ public class IndexController {
         rgstedLst.add(0, indexService.getRegistered(prmReceiptForm));
         httpSession.setAttribute("temp", rgstedLst);
 
-        prmReceiptForm.setRgstedLst(rgstedLst);
+        ReceiptForm receiptForm = new ReceiptForm(32, (String[]) optionArr[IndexService.CURRENT_DATE]);
+        receiptForm.setRgstedLst(rgstedLst);
+        prmModel.addAttribute(RECEIPT_FORM, receiptForm);
 
         return INDEX;
     }

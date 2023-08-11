@@ -10,7 +10,7 @@ import lombok.Data;
 
 //--------------------------------------------------------------------------------
 /**
- * 
+ *
  */
 //--------------------------------------------------------------------------------
 @Data
@@ -50,12 +50,14 @@ public class ReceiptForm {
      */
     //--------------------------------------------------------------------------------
     public ReceiptForm(Integer prmLength, String... prmDate) {
-        year = prmDate[0];
-        month = prmDate[1];
-        day = prmDate[2];
-
         if (prmLength != null) {
             aTAArr = new AccountTaxrateAmount[prmLength];
+        }
+
+        if (prmDate != null) {
+            year = prmDate[0];
+            month = prmDate[1];
+            day = prmDate[2];
         }
     }
 }

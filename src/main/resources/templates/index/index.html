@@ -125,7 +125,7 @@
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
 <input type="text" th:field="*{aTAArr[7].amount}" tabindex="830" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
-<td rowspan="7" class="date_tax_rate"><span th:text="|#{idx.tax_rate_2}#{idx.h_colon}|"></span><input type="text" tabindex="6020" th:field="*{taxAmountFor10}" th:class="tax_amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
+<td class="date_tax_rate"><span th:text="|#{idx.tax_rate_2}#{idx.h_colon}|"></span><input type="text" tabindex="6020" th:field="*{taxAmountFor10}" th:class="tax_amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 </tr>
 
 <!-- 3行目 -->
@@ -168,6 +168,9 @@
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
 <input type="text" th:field="*{aTAArr[11].amount}" tabindex="1230" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
+
+<td rowspan="6" class="date_tax_rate" th:if="${receiptForm.subTotal==null}"></td>
+<th th:if="${receiptForm.subTotal!=null}" th:text="計"></th>
 </tr>
 
 <!-- 4行目 -->
@@ -207,6 +210,7 @@
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
 <input type="text" th:field="*{aTAArr[15].amount}" tabindex="1630" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
+<td th:if="${receiptForm.subTotal!=null}">小計：</td>
 </tr>
 
 <!-- 5行目 -->
@@ -246,6 +250,8 @@
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
 <input type="text" th:field="*{aTAArr[19].amount}" tabindex="2030" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
+
+<td th:if="${receiptForm.total!=null}" rowspan="4" class="date_tax_rate">合計：</td>
 </tr>
 
 <!-- 6行目 -->
@@ -367,7 +373,10 @@
 
 </table>
 
-<input type="submit" name="create" th:value="#{idx.submit.create}" tabindex="7010">
+<div>
+<input type="submit" name="confirm" th:value="#{idx.submit.confirm}" tabindex="7010">
+<input type="submit" name="create" th:value="#{idx.submit.create}" tabindex="7020">
+</div>
 
 <table rules="cols" class="table_for_display">
 

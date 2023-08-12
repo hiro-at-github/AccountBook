@@ -53,9 +53,9 @@ th {
 }
 
 input[type="submit"] {
-    display: block;
+    /* display: block; */
     padding: 0 10px;
-    margin-top: 10px;
+    /* margin-top: 10px; */
     margin-left: auto;
 }
 
@@ -125,3 +125,10 @@ input[type="submit"] {
     background-color: #ffb3da;
     /*border-width: 1px;*/
 }
+
+.table_for_input + div {
+    text-align: right;
+    margin-top: 10px;
+}
+
+

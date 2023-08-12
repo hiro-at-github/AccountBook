@@ -38,6 +38,12 @@ public class ReceiptForm {
     @Max(9999999)
     private Integer taxAmountFor10;
 
+    /** 小計 */
+    private String subTotal;
+
+    /** 合計 */
+    private String total;
+
     /** エラーメッセージ */
     private String errorMessage;
 

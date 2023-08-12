@@ -96,6 +96,13 @@ public class IndexController {
         return INDEX;
     }
 
+    @PostMapping(value = "/index", params = "confirm")
+    public String postConfirm(Model prmModel, @ModelAttribute @Validated ReceiptForm prmReceiptForm,
+            BindingResult prmBindingResult) {
+
+        return null;
+    }
+
     @PostMapping(value = "/index", params = "create")
     public String postIndex(Model prmModel, @ModelAttribute @Validated ReceiptForm prmReceiptForm,
             BindingResult prmBindingResult) {

@@ -39,10 +39,10 @@ public class ReceiptForm {
     private Integer taxAmountFor10;
 
     /** 小計 */
-    private String subTotal;
+    private String subtotal;
 
     /** 合計 */
-    private String total;
+    private String sumTotal;
 
     /** エラーメッセージ */
     private String errorMessage;

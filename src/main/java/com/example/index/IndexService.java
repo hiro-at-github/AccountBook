@@ -353,31 +353,29 @@ public class IndexService {
         String day = prmReceiptForm.getDay();
         Integer taxAmount1 = prmReceiptForm.getTaxAmountFor08();
         Integer taxAmount2 = prmReceiptForm.getTaxAmountFor10();
-        int subTotal = 0;
-        
+        int subtotal = 0;
+
         AccountTaxrateAmount[] aTAArr = prmReceiptForm.getATAArr();
         for (AccountTaxrateAmount elem : aTAArr) {
             Integer amount = elem.getAmount();
-            
+
             if (amount == null) {
                 break;
             }
-            
-            subTotal += amount;
+
+            subtotal += amount;
         }
-        
+
         // 登録処理
-        
-        
-        
+
         // 戻り値を作る処理
         Registered registered = new Registered();
         registered.setDate(apnd(year, month, day));
-        registered.setSubtotal(String.valueOf(subTotal));
+        registered.setSubtotal(String.valueOf(subtotal));
         registered.setTaxAmount1(String.valueOf(taxAmount1));
         registered.setTaxAmount2(String.valueOf(taxAmount2));
-        registered.setTotal(String.valueOf(subTotal + taxAmount1 + taxAmount2));
-        
+        registered.setSumTotal(String.valueOf(subtotal + taxAmount1 + taxAmount2));
+
         return registered;
     }
 

@@ -22,5 +22,5 @@ public class Registered {
     private String taxAmount2;
     
     /** 合計 */
-    private String total;
+    private String sumTotal;
 }

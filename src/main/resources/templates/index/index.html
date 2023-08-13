@@ -82,7 +82,7 @@
 </select>
 <input type="text" tabindex="430" maxlength="7" th:field="*{aTAArr[3].amount}" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
-<td class="date_tax_rate t_a_r"><span th:text="|#{idx.tax_rate_1}#{idx.h_colon}|"></span><input type="text" tabindex="6010" th:field="*{taxAmountFor08}" th:class="tax_amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
+<td class="right_end"><span th:text="|#{idx.tax_rate_1}#{idx.h_colon}|"></span><input type="text" tabindex="6010" th:field="*{taxAmountFor08}" th:class="tax_amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 </tr>
 
 <!-- 2行目 -->
@@ -169,8 +169,8 @@
 </select>
 <input type="text" th:field="*{aTAArr[11].amount}" tabindex="1230" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
-<td rowspan="6" class="date_tax_rate" th:if="${receiptForm.subTotal==null}"></td>
-<th th:if="${receiptForm.subTotal!=null}" th:text="計"></th>
+<td rowspan="6" class="date_tax_rate" th:if="${receiptForm.subtotal==null}"></td>
+<th th:if="${receiptForm.subtotal!=null}" th:text="計"></th>
 </tr>
 
 <!-- 4行目 -->
@@ -210,7 +210,8 @@
   <option th:each="item:${taxRateMap}" th:value="${item.value}" th:text="${item.key}"></option>
 </select>
 <input type="text" th:field="*{aTAArr[15].amount}" tabindex="1630" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
-<td th:if="${receiptForm.subTotal!=null}">小計：</td>
+
+<td th:if="${receiptForm.subtotal!=null}" th:text="|#{idx.subtotal}#{idx.h_colon}${receiptForm.subtotal}|"></td>
 </tr>
 
 <!-- 5行目 -->
@@ -251,7 +252,7 @@
 </select>
 <input type="text" th:field="*{aTAArr[19].amount}" tabindex="2030" th:class="amount" th:errorclass="error" oninput="this.value = disableNonNumeric(this.value)"></td>
 
-<td th:if="${receiptForm.total!=null}" rowspan="4" class="date_tax_rate">合計：</td>
+<td rowspan="4" class="date_tax_rate" th:if="${receiptForm.SumTotal!=null}" th:text="|#{idx.sum_total}#{idx.h_colon}${receiptForm.SumTotal}|"></td>
 </tr>
 
 <!-- 6行目 -->
@@ -385,7 +386,7 @@
 <th th:text="#{idx.subtotal}"></th>
 <th th:text="|#{idx.tax_amount}#{idx.tax_rate_1}|"></th>
 <th th:text="|#{idx.tax_amount}#{idx.tax_rate_2}|"></th>
-<th th:text="#{idx.total}"></th>
+<th th:text="#{idx.sum_total}"></th>
 </tr>
 
 <tr th:each="item: ${receiptForm.rgstedLst}">
@@ -393,7 +394,7 @@
 <td th:text="${item.subtotal}"></td>
 <td th:text="${item.taxAmount1}"></td>
 <td th:text="${item.taxAmount2}"></td>
-<td th:text="${item.total}"></td>
+<td th:text="${item.SumTotal}"></td>
 </tr>
 
 </table>

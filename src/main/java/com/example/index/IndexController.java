@@ -100,7 +100,15 @@ public class IndexController {
     public String postConfirm(Model prmModel, @ModelAttribute @Validated ReceiptForm prmReceiptForm,
             BindingResult prmBindingResult) {
 
-        return null;
+        addOptionArr((Object[]) httpSession.getAttribute(OPTION_ARR), prmModel);
+
+        if (validateEntry(prmReceiptForm, prmBindingResult)) {
+            Registered registered = indexService.getRegistered(prmReceiptForm);
+            prmReceiptForm.setSubtotal(registered.getSubtotal());
+            prmReceiptForm.setSumTotal(registered.getSumTotal());
+        }
+
+        return INDEX;
     }
 
     @PostMapping(value = "/index", params = "create")
@@ -140,6 +148,23 @@ public class IndexController {
         prmModel.addAttribute(RECEIPT_FORM, receiptForm);
 
         return INDEX;
+    }
+
+    private boolean validateEntry(ReceiptForm prmReceiptForm, BindingResult prmBindingResult) {
+        if (prmBindingResult.hasErrors()) {
+            prmReceiptForm.setErrorMessage(indexService.buildFldErrMsg(prmBindingResult));
+
+            return false;
+        }
+
+        if (!indexService.isRelatedItemsEntered(prmReceiptForm)) {
+            prmReceiptForm.setErrorMessage(indexService.getRltErrMsg());
+            addErr(indexService.getRltFldErrLst(), prmBindingResult);
+
+            return false;
+        }
+
+        return true;
     }
 
     @SuppressWarnings("unchecked")

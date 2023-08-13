@@ -91,9 +91,14 @@ input[type="submit"] {
     background-color: #FFF;
 }
 
-.table_for_input td.date_tax_rate {
+.table_for_input td.left_end,
+.table_for_input td.right_end {
     vertical-align: top;
     background-color: #FFF;
+}
+
+.table_for_input td.right_end {
+    text-align: right;
 }
 
 .table_for_input input[type="text"] {

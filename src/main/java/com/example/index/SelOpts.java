@@ -104,7 +104,7 @@ public class SelOpts {
         accountMap.put(Cnst.EMPTY, Cnst.EMPTY);
 
         for (String elem : accountKeyArr) {
-            accountMap.put(messageSource.getMessage("account" + Cnst.DOT + elem, null, Locale.JAPAN), elem);
+            accountMap.put(messageSource.getMessage("account" + Cnst.PROD + elem, null, Locale.JAPAN), elem);
         }
 
         return accountMap;
@@ -128,7 +128,7 @@ public class SelOpts {
 
         // 消費税率のキーは"no1"、"no2"だけのため直接記述
         for (int i = 0; i < 2; i++) {
-            String msg = messageSource.getMessage("tax_rate" + Cnst.DOT + "no" + String.valueOf(i + 1), null, Locale.JAPAN);
+            String msg = messageSource.getMessage("tax_rate" + Cnst.PROD + "no" + String.valueOf(i + 1), null, Locale.JAPAN);
             taxRateMap.put(msg, Integer.valueOf(msg));
         }
 

@@ -13,7 +13,7 @@
 }
 */
 
-.err {
+p.err {
     color: #f00;
     line-height: 1.2em;
     margin: 5px 0;
@@ -32,7 +32,7 @@
 }
 
 body {
-    background-color: /*#f1f1f1*/#EEE;
+    background-color: /*#f1f1f1*/#EFEFEF;
 }
 
 body > div {
@@ -59,79 +59,79 @@ input[type="submit"] {
     margin-left: auto;
 }
 
-.table_for_input,
-.table_for_display {
-    border-color: #7CC0EF;
+.tbl_for_entry,
+.tbl_for_registered {
+    border-color: /*#275866 #306E80*/ #35798C /*#3A8499*/;
 }
 
-.table_for_input th,
-.table_for_display th {
+.tbl_for_entry th,
+.tbl_for_registered th {
     color: #FFF;
-    background-color: #42A2E6;
+    background-color: #4BACC6;
     padding-top: 2px;
 }
 
-.table_for_display th {
+.tbl_for_registered th {
     padding-right: 10px;
     padding-left: 10px;
 }
-.table_for_input td,
-.table_for_display td {
+.tbl_for_entry td,
+.tbl_for_registered td {
     white-space: nowrap;
-    background-color: #EEE;
+    background-color: #FFF;
     padding: 2px 4px;
 }
 
-.table_for_display td {
+.tbl_for_registered td {
     text-align: right;
 }
 
-.table_for_input tr:nth-child(odd) td,
-.table_for_display tr:nth-child(odd) td {
-    background-color: #FFF;
+.tbl_for_entry tr:nth-child(odd) td,
+.tbl_for_registered tr:nth-child(odd) td {
+    background-color: #D0E3EA;
 }
 
-.table_for_input td.left_end,
-.table_for_input td.right_end {
+.tbl_for_entry td.left_end,
+.tbl_for_entry td.right_end {
     vertical-align: top;
     background-color: #FFF;
 }
 
-.table_for_input td.right_end {
+.tbl_for_entry td.right_end {
     text-align: right;
 }
 
-.table_for_input input[type="text"] {
+.tbl_for_entry input[type="text"] {
     text-align: right;
     width: 70px;
     height: 17px;
     padding: 1px;
 }
 
-.table_for_input .date,
-.table_for_input .account,
-.table_for_input .tax_rate,
-.table_for_input .amount,
-.table_for_input .tax_amount {
+.tbl_for_entry .date,
+.tbl_for_entry .account,
+.tbl_for_entry .tax_rate,
+.tbl_for_entry .amount,
+.tbl_for_entry .tax_amount {
     border-width:1px;
     border-style: solid;
 }
 
-.table_for_input .date,
-.table_for_input .tax_rate {
+.tbl_for_entry .date,
+.tbl_for_entry .tax_rate {
     width: 38px;
 }
 
-.table_for_input .account {
+.tbl_for_entry .account {
     width: 100px;
 }
 
-.table_for_input .error {
+.tbl_for_entry .err {
     background-color: #ffb3da;
     /*border-width: 1px;*/
 }
 
-.table_for_input + div {
+.tbl_for_entry + div {
     text-align: right;
     margin-top: 10px;
 }

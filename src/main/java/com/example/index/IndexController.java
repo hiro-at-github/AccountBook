@@ -114,38 +114,24 @@ public class IndexController {
     @PostMapping(value = "/index", params = "create")
     public String postIndex(Model prmModel, @ModelAttribute @Validated ReceiptForm prmReceiptForm,
             BindingResult prmBindingResult) {
+
         Object[] optionArr = (Object[]) httpSession.getAttribute(OPTION_ARR);
-        addOptionArr(optionArr, prmModel);
+        addOptionArr((Object[]) httpSession.getAttribute(OPTION_ARR), prmModel);
 
-        if (prmBindingResult.hasErrors()) {
-            prmReceiptForm.setErrorMessage(indexService.buildFldErrMsg(prmBindingResult));
+        if (validateEntry(prmReceiptForm, prmBindingResult)) {
+            List<Registered> rgstedLst = autoCast(httpSession.getAttribute("temp"));
 
-            return INDEX;
+            if (rgstedLst == null) {
+                rgstedLst = new ArrayList<>();
+            }
+
+            rgstedLst.add(0, indexService.getRegistered(prmReceiptForm));
+            httpSession.setAttribute("temp", rgstedLst);
+
+            ReceiptForm receiptForm = new ReceiptForm(32, (String[]) optionArr[IndexService.CURRENT_DATE]);
+            receiptForm.setRgstedLst(rgstedLst);
+            prmModel.addAttribute(RECEIPT_FORM, receiptForm);
         }
-
-        if (!indexService.isRelatedItemsEntered(prmReceiptForm)) {
-            prmReceiptForm.setErrorMessage(indexService.getRltErrMsg());
-            //            List<FieldError> errLst = indexService.getRltFldErrLst();
-            //            for (FieldError elem : errLst) {
-            //                prmBindingResult.addError(elem);
-            //            }
-            addErr(indexService.getRltFldErrLst(), prmBindingResult);
-
-            return INDEX;
-        }
-
-        List<Registered> rgstedLst = autoCast(httpSession.getAttribute("temp"));
-
-        if (rgstedLst == null) {
-            rgstedLst = new ArrayList<>();
-        }
-
-        rgstedLst.add(0, indexService.getRegistered(prmReceiptForm));
-        httpSession.setAttribute("temp", rgstedLst);
-
-        ReceiptForm receiptForm = new ReceiptForm(32, (String[]) optionArr[IndexService.CURRENT_DATE]);
-        receiptForm.setRgstedLst(rgstedLst);
-        prmModel.addAttribute(RECEIPT_FORM, receiptForm);
 
         return INDEX;
     }

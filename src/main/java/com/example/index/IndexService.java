@@ -348,35 +348,105 @@ public class IndexService {
     //--------------------------------------------------------------------------------
     public Registered getRegistered(ReceiptForm prmReceiptForm) {
         //TODO:イテレーションの下方に移動を検討
-        String year = prmReceiptForm.getYear();
-        String month = prmReceiptForm.getMonth();
-        String day = prmReceiptForm.getDay();
-        Integer taxAmount1 = prmReceiptForm.getTaxAmountFor08();
-        Integer taxAmount2 = prmReceiptForm.getTaxAmountFor10();
-        int subtotal = 0;
+        int subtotal = sumAmount(prmReceiptForm.getATAArr());
 
-        AccountTaxrateAmount[] aTAArr = prmReceiptForm.getATAArr();
-        for (AccountTaxrateAmount elem : aTAArr) {
-            Integer amount = elem.getAmount();
+        //        AccountTaxrateAmount[] aTAArr = prmReceiptForm.getATAArr();
+        //        for (AccountTaxrateAmount elem : aTAArr) {
+        //            Integer amount = elem.getAmount();
+        //
+        //            if (amount == null) {
+        //                break;
+        //            }
+        //
+        //            subtotal += amount;
+        //        }
 
-            if (amount == null) {
-                break;
-            }
+        Pair<String[], Integer> tmpPair = Y230815_1(prmReceiptForm.getTaxAmountFor08(),
+                prmReceiptForm.getTaxAmountFor10());
 
-            subtotal += amount;
-        }
+        //        Integer taxAmount1 = prmReceiptForm.getTaxAmountFor08();
+        //        Integer taxAmount2 = prmReceiptForm.getTaxAmountFor10();
+
+        int sumTotal = subtotal + tmpPair.getSecond();
+
+        //        if (taxAmount1 != null) {
+        //            sumTotal += taxAmount1;
+        //        }
+        //
+        //        if (taxAmount2 != null) {
+        //            sumTotal += taxAmount2;
+        //        }
+
+        //        Integer[] taxAmountArr = { prmReceiptForm.getTaxAmountFor08(), prmReceiptForm.getTaxAmountFor10() };
+        String[] tmpStrArr = tmpPair.getFirst();
+        //        for (Integer elem : taxAmountArr) {
+        //            if (elem == null) {
+        //                continue;
+        //            }
+        //
+        //            sumTotal += elem;
+        //        }
+
+        //        for (int i = 0; i < taxAmountArr.length; i++) {
+        //            Integer elem = taxAmountArr[i];
+        //
+        //            if (elem == null) {
+        //                tmpStrArr[i] = Cnst.DASH;
+        //
+        //                continue;
+        //            } else {
+        //                tmpStrArr[i] = String.valueOf(elem);
+        //            }
+        //
+        //            sumTotal += elem;
+        //        }
 
         // 登録処理
 
         // 戻り値を作る処理
         Registered registered = new Registered();
-        registered.setDate(apnd(year, month, day));
+        registered.setDate(apnd(prmReceiptForm.getYear(), prmReceiptForm.getMonth(), prmReceiptForm.getDay()));
         registered.setSubtotal(String.valueOf(subtotal));
-        registered.setTaxAmount1(String.valueOf(taxAmount1));
-        registered.setTaxAmount2(String.valueOf(taxAmount2));
-        registered.setSumTotal(String.valueOf(subtotal + taxAmount1 + taxAmount2));
+        registered.setTaxAmount1(tmpStrArr[0]);
+        registered.setTaxAmount2(tmpStrArr[1]);
+        registered.setSumTotal(String.valueOf(sumTotal));
 
         return registered;
+    }
+
+    //TODO:記載位置変更
+    private int sumAmount(AccountTaxrateAmount[] prmATAArr) {
+        int sumOfAmount = 0;
+
+        for (AccountTaxrateAmount elem : prmATAArr) {
+            Integer amount = elem.getAmount();
+
+            if (amount != null) {
+                sumOfAmount += amount;
+            }
+        }
+
+        return sumOfAmount;
+    }
+
+    private Pair<String[], Integer> Y230815_1(Integer... taxAmountArr) {
+        String[] tmpStrArr = new String[taxAmountArr.length];
+        int tmpInt = 0;
+
+        for (int i = 0; i < taxAmountArr.length; i++) {
+            Integer elem = taxAmountArr[i];
+
+            if (elem == null) {
+                tmpStrArr[i] = Cnst.DASH;
+
+                continue;
+            }
+
+            tmpStrArr[i] = String.valueOf(elem);
+            tmpInt += elem;
+        }
+
+        return Pair.of(tmpStrArr, tmpInt);
     }
 
     // privateメソッド ---------------------------------------------------------------
@@ -393,8 +463,8 @@ public class IndexService {
 
         //        String[] codeArr = { AMOUNT, TAX_AMOUNT, AMOUNT_RANGE,
         //                F_DOT, DATE, ACCOUNT, TAX_RATE, INCORRECT, NOT_ENTERED };
-        String[] codeArr = { AMOUNT, apnd(TAX, Cnst.UD_S, AMOUNT), AMOUNT_RANGE,
-                F_DOT, DATE, ACCOUNT, apnd(TAX, Cnst.UD_S, RATE), INCORRECT, NOT_ENTERED };
+        String[] codeArr = { AMOUNT, apnd(TAX, Cnst.US, AMOUNT), AMOUNT_RANGE,
+                F_DOT, DATE, ACCOUNT, apnd(TAX, Cnst.US, RATE), INCORRECT, NOT_ENTERED };
         for (String elem : codeArr) {
             prpMap.put(snakeToCamel(elem), messageSource.getMessage(PREFIX + elem, null, Locale.JAPAN));
             //            prpMap.put(elem, messageSource.getMessage(PREFIX + elem, null, Locale.JAPAN));
@@ -501,7 +571,7 @@ public class IndexService {
             String key = null;
             if (elem.getField().contains(TAX)) {
                 //                key = TAX_AMOUNT;
-                key = apnd(TAX, Cnst.UD_S, AMOUNT);
+                key = apnd(TAX, Cnst.US, AMOUNT);
             } else {
                 key = AMOUNT;
             }
@@ -603,7 +673,7 @@ public class IndexService {
      */
     //--------------------------------------------------------------------------------
     private String snakeToCamel(String prmSnakeCase) {
-        String[] split = prmSnakeCase.split(Cnst.UD_S);
+        String[] split = prmSnakeCase.split(Cnst.US);
         StringBuilder builder = new StringBuilder(split[0]);
 
         for (int i = 1; i < split.length; i++) {
@@ -625,7 +695,7 @@ public class IndexService {
         StringBuilder builder = new StringBuilder();
 
         for (String elem : prmStrArr) {
-            builder.append(elem).append(Cnst.UD_S);
+            builder.append(elem).append(Cnst.US);
         }
 
         return snakeToCamel(builder.deleteCharAt(builder.length() - 1).toString());

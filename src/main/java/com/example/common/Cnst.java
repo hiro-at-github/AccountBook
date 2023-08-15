@@ -9,15 +9,16 @@ public class Cnst {
     public static final String SPRT = System.getProperty("line.separator");
     /** 空文字列 */
     public static final String EMPTY = "";
-    /** ドット */
-    public static final String DOT = ".";
-    /**  */
-    //TODO:名称変更
-    public static final String UD_S = "_";
-    /**  */
+    /** ピリオド(period) */
+    public static final String PROD = ".";
+    /** アンダースコア(Underscore) */
+    public static final String US = "_";
+    /** ダッシュ(Dash) */
+    public static final String DASH = "-";
+    /** スラッシュ(Slash) */
     public static final String SL = "/";
 
-    /**  */
+    /** カンマ(全角) */
     public static final String F_COMMA = "、";
 
 }

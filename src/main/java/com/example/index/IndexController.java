@@ -116,16 +116,10 @@ public class IndexController {
             BindingResult prmBindingResult) {
 
         Object[] optionArr = (Object[]) httpSession.getAttribute(OPTION_ARR);
-        addOptionArr((Object[]) httpSession.getAttribute(OPTION_ARR), prmModel);
+        addOptionArr(optionArr, prmModel);
 
         if (validateEntry(prmReceiptForm, prmBindingResult)) {
-            List<Registered> rgstedLst = autoCast(httpSession.getAttribute("temp"));
-
-            if (rgstedLst == null) {
-                rgstedLst = new ArrayList<>();
-            }
-
-            rgstedLst.add(0, indexService.getRegistered(prmReceiptForm));
+            List<Registered> rgstedLst = addRgistedToLst(autoCast(httpSession.getAttribute("temp")), prmReceiptForm);
             httpSession.setAttribute("temp", rgstedLst);
 
             ReceiptForm receiptForm = new ReceiptForm(32, (String[]) optionArr[IndexService.CURRENT_DATE]);
@@ -151,6 +145,18 @@ public class IndexController {
         }
 
         return true;
+    }
+
+    private List<Registered> addRgistedToLst(List<Registered> prmRgstedLst, ReceiptForm prmReceiptForm) {
+        List<Registered> rgstedLst = prmRgstedLst;
+
+        if (rgstedLst == null) {
+            rgstedLst = new ArrayList<>();
+        }
+
+        rgstedLst.add(0, indexService.getRegistered(prmReceiptForm));
+
+        return rgstedLst;
     }
 
     @SuppressWarnings("unchecked")

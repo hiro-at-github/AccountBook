@@ -338,6 +338,24 @@ public class IndexService {
 
     //TODO:以上値確認用publicメソッド。以下値加工用publicメソッド
 
+    public Pair<String, String> getSubtotalAndSumTotal(ReceiptForm prmReceiptForm) {
+        int subtotal = sumAmount(prmReceiptForm.getATAArr());
+
+        Pair<String[], Integer> pairForTaxAmount = toStringAndSumForTaxAmount(prmReceiptForm.getTaxAmountFor08(),
+                prmReceiptForm.getTaxAmountFor10());
+
+        return Pair.of(String.valueOf(subtotal), String.valueOf(subtotal + pairForTaxAmount.getSecond()));
+    }
+
+    public String[] getSubtotalAndSumTotal_(ReceiptForm prmReceiptForm) {
+        int subtotal = sumAmount(prmReceiptForm.getATAArr());
+
+        Pair<String[], Integer> pairForTaxAmount = toStringAndSumForTaxAmount(prmReceiptForm.getTaxAmountFor08(),
+                prmReceiptForm.getTaxAmountFor10());
+        //230817続きはここから
+        return new String[] { String.valueOf(subtotal), String.valueOf(subtotal + pairForTaxAmount.getSecond()), "" };
+    }
+
     //--------------------------------------------------------------------------------
     /**
      * ダミー
@@ -347,59 +365,12 @@ public class IndexService {
      */
     //--------------------------------------------------------------------------------
     public Registered getRegistered(ReceiptForm prmReceiptForm) {
-        //TODO:イテレーションの下方に移動を検討
         int subtotal = sumAmount(prmReceiptForm.getATAArr());
 
-        //        AccountTaxrateAmount[] aTAArr = prmReceiptForm.getATAArr();
-        //        for (AccountTaxrateAmount elem : aTAArr) {
-        //            Integer amount = elem.getAmount();
-        //
-        //            if (amount == null) {
-        //                break;
-        //            }
-        //
-        //            subtotal += amount;
-        //        }
-
-        Pair<String[], Integer> tmpPair = Y230815_1(prmReceiptForm.getTaxAmountFor08(),
+        Pair<String[], Integer> pairForTaxAmount = toStringAndSumForTaxAmount(prmReceiptForm.getTaxAmountFor08(),
                 prmReceiptForm.getTaxAmountFor10());
 
-        //        Integer taxAmount1 = prmReceiptForm.getTaxAmountFor08();
-        //        Integer taxAmount2 = prmReceiptForm.getTaxAmountFor10();
-
-        int sumTotal = subtotal + tmpPair.getSecond();
-
-        //        if (taxAmount1 != null) {
-        //            sumTotal += taxAmount1;
-        //        }
-        //
-        //        if (taxAmount2 != null) {
-        //            sumTotal += taxAmount2;
-        //        }
-
-        //        Integer[] taxAmountArr = { prmReceiptForm.getTaxAmountFor08(), prmReceiptForm.getTaxAmountFor10() };
-        String[] tmpStrArr = tmpPair.getFirst();
-        //        for (Integer elem : taxAmountArr) {
-        //            if (elem == null) {
-        //                continue;
-        //            }
-        //
-        //            sumTotal += elem;
-        //        }
-
-        //        for (int i = 0; i < taxAmountArr.length; i++) {
-        //            Integer elem = taxAmountArr[i];
-        //
-        //            if (elem == null) {
-        //                tmpStrArr[i] = Cnst.DASH;
-        //
-        //                continue;
-        //            } else {
-        //                tmpStrArr[i] = String.valueOf(elem);
-        //            }
-        //
-        //            sumTotal += elem;
-        //        }
+        String[] strArr = pairForTaxAmount.getFirst();
 
         // 登録処理
 
@@ -407,9 +378,9 @@ public class IndexService {
         Registered registered = new Registered();
         registered.setDate(apnd(prmReceiptForm.getYear(), prmReceiptForm.getMonth(), prmReceiptForm.getDay()));
         registered.setSubtotal(String.valueOf(subtotal));
-        registered.setTaxAmount1(tmpStrArr[0]);
-        registered.setTaxAmount2(tmpStrArr[1]);
-        registered.setSumTotal(String.valueOf(sumTotal));
+        registered.setTaxAmount1(strArr[0]);
+        registered.setTaxAmount2(strArr[1]);
+        registered.setSumTotal(String.valueOf(subtotal + pairForTaxAmount.getSecond()));
 
         return registered;
     }
@@ -429,24 +400,25 @@ public class IndexService {
         return sumOfAmount;
     }
 
-    private Pair<String[], Integer> Y230815_1(Integer... taxAmountArr) {
-        String[] tmpStrArr = new String[taxAmountArr.length];
-        int tmpInt = 0;
+    //税額の文字列化と和
+    private Pair<String[], Integer> toStringAndSumForTaxAmount(Integer... prmTaxAmountArr) {
+        String[] strArr = new String[prmTaxAmountArr.length];
+        int sum = 0;
 
-        for (int i = 0; i < taxAmountArr.length; i++) {
-            Integer elem = taxAmountArr[i];
+        for (int i = 0; i < prmTaxAmountArr.length; i++) {
+            Integer elem = prmTaxAmountArr[i];
 
             if (elem == null) {
-                tmpStrArr[i] = Cnst.DASH;
+                strArr[i] = Cnst.DASH;
 
                 continue;
             }
 
-            tmpStrArr[i] = String.valueOf(elem);
-            tmpInt += elem;
+            strArr[i] = String.valueOf(elem);
+            sum += elem;
         }
 
-        return Pair.of(tmpStrArr, tmpInt);
+        return Pair.of(strArr, sum);
     }
 
     // privateメソッド ---------------------------------------------------------------

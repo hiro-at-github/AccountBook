@@ -353,7 +353,8 @@ public class IndexService {
         Pair<String[], Integer> pairForTaxAmount = toStringAndSumForTaxAmount(prmReceiptForm.getTaxAmountFor08(),
                 prmReceiptForm.getTaxAmountFor10());
         //230817続きはここから
-        return new String[] { String.valueOf(subtotal), String.valueOf(subtotal + pairForTaxAmount.getSecond()), "" };
+        return new String[] { String.valueOf(subtotal), String.valueOf(subtotal + pairForTaxAmount.getSecond()),
+                pairForTaxAmount.getFirst()[0], pairForTaxAmount.getFirst()[1] };
     }
 
     //--------------------------------------------------------------------------------

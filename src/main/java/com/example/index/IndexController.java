@@ -48,6 +48,9 @@ public class IndexController {
     private static final String OPTION_ARR = "optionArr";
 
     /**  */
+    private static final String REGISTERED_LST = "registeredLst";
+    
+    /**  */
     private static final String RECEIPT_FORM = "receiptForm";
 
     /** 遷移先 */
@@ -101,31 +104,35 @@ public class IndexController {
             BindingResult prmBindingResult) {
 
         addOptionArr((Object[]) httpSession.getAttribute(OPTION_ARR), prmModel);
+        prmReceiptForm.setRgstedLst(autoCast(httpSession.getAttribute(REGISTERED_LST)));
 
         if (validateEntry(prmReceiptForm, prmBindingResult)) {
-            Registered registered = indexService.getRegistered(prmReceiptForm);
-            prmReceiptForm.setSubtotal(registered.getSubtotal());
-            prmReceiptForm.setSumTotal(registered.getSumTotal());
+            String[] ttlAndTAmntArr = indexService.getTotalAndTaxAmountArr(prmReceiptForm);
+            prmReceiptForm.setSubtotal(ttlAndTAmntArr[0]);
+            prmReceiptForm.setSumTotal(ttlAndTAmntArr[1]);
         }
 
         return INDEX;
     }
 
     @PostMapping(value = "/index", params = "create")
-    public String postIndex(Model prmModel, @ModelAttribute @Validated ReceiptForm prmReceiptForm,
+    public String postCreate(Model prmModel, @ModelAttribute @Validated ReceiptForm prmReceiptForm,
             BindingResult prmBindingResult) {
 
         Object[] optionArr = (Object[]) httpSession.getAttribute(OPTION_ARR);
         addOptionArr(optionArr, prmModel);
 
+        List<Registered> rgstedLst = autoCast(httpSession.getAttribute(REGISTERED_LST));
+        
         if (validateEntry(prmReceiptForm, prmBindingResult)) {
-            List<Registered> rgstedLst = addRgistedToLst(autoCast(httpSession.getAttribute("temp")), prmReceiptForm);
-            httpSession.setAttribute("temp", rgstedLst);
+            rgstedLst = addRgistedToLst(rgstedLst, prmReceiptForm);
+            httpSession.setAttribute(REGISTERED_LST, rgstedLst);
 
-            ReceiptForm receiptForm = new ReceiptForm(32, (String[]) optionArr[IndexService.CURRENT_DATE]);
-            receiptForm.setRgstedLst(rgstedLst);
-            prmModel.addAttribute(RECEIPT_FORM, receiptForm);
+            prmReceiptForm = new ReceiptForm(32, (String[]) optionArr[IndexService.CURRENT_DATE]);
         }
+
+        prmReceiptForm.setRgstedLst(rgstedLst);
+        prmModel.addAttribute(RECEIPT_FORM, prmReceiptForm);
 
         return INDEX;
     }

@@ -106,7 +106,7 @@ public class IndexController {
         addOptionArr((Object[]) httpSession.getAttribute(OPTION_ARR), prmModel);
         prmReceiptForm.setRgstedLst(autoCast(httpSession.getAttribute(REGISTERED_LST)));
 
-        if (validateEntry(prmReceiptForm, prmBindingResult)) {
+        if (validateItems(prmReceiptForm, prmBindingResult)) {
             String[] ttlAndTAmntArr = indexService.getTotalAndTaxAmountArr(prmReceiptForm);
             prmReceiptForm.setSubtotal(ttlAndTAmntArr[0]);
             prmReceiptForm.setSumTotal(ttlAndTAmntArr[1]);
@@ -124,7 +124,7 @@ public class IndexController {
 
         List<Registered> rgstedLst = autoCast(httpSession.getAttribute(REGISTERED_LST));
         
-        if (validateEntry(prmReceiptForm, prmBindingResult)) {
+        if (validateItems(prmReceiptForm, prmBindingResult)) {
             rgstedLst = addRgistedToLst(rgstedLst, prmReceiptForm);
             httpSession.setAttribute(REGISTERED_LST, rgstedLst);
 
@@ -137,7 +137,7 @@ public class IndexController {
         return INDEX;
     }
 
-    private boolean validateEntry(ReceiptForm prmReceiptForm, BindingResult prmBindingResult) {
+    private boolean validateItems(ReceiptForm prmReceiptForm, BindingResult prmBindingResult) {
         if (prmBindingResult.hasErrors()) {
             prmReceiptForm.setErrorMessage(indexService.buildFldErrMsg(prmBindingResult));
 

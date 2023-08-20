@@ -210,33 +210,6 @@ public class IndexService {
             errMsgPropMap = getErrMsgPrpMap();
         }
 
-        //        StringBuilder errMsgBuilder = new StringBuilder();
-        //
-        //        List<FieldError> errLst = prmResult.getFieldErrors();
-        //        for (FieldError elem : errLst) {
-        //            String key = null;
-        //            if (elem.getField().contains(TAX)) {
-        //                //                key = TAX_AMOUNT;
-        //                key = apnd(TAX, Cnst.UD_S, AMOUNT);
-        //            } else {
-        //                key = AMOUNT;
-        //            }
-        //
-        //            String msg = errMsgPropMap.get(snakeToCamel(key));
-        //
-        //            if (errMsgBuilder.indexOf(msg) > -1) {
-        //                continue;
-        //            }
-        //
-        //            if (errMsgBuilder.length() > 0) {
-        //                errMsgBuilder.append(Cnst.F_COMMA);
-        //            }
-        //
-        //            errMsgBuilder.append(msg);
-        //        }
-        //
-        //        return errMsgBuilder.append(errMsgPropMap.get(snakeToCamel(AMOUNT_RANGE))).toString();
-
         return buildErrMsg(prmResult.getFieldErrors());
     }
 
@@ -252,16 +225,16 @@ public class IndexService {
     //--------------------------------------------------------------------------------
     public boolean isRelatedItemsEntered(ReceiptForm prmReceiptForm) {
         // 年月日が日付として適当か確認
-        boolean isDateXxx = isCorrectDate(prmReceiptForm.getYear(), prmReceiptForm.getMonth(), prmReceiptForm.getDay());
+        boolean isCrctDt = isCorrectDate(prmReceiptForm.getYear(), prmReceiptForm.getMonth(), prmReceiptForm.getDay());
 
         // 科目・税率・金額の入力の有無の確認
-        Map<Integer, List<String>> errItemMap = picupXxxItems(prmReceiptForm.getATAArr());
+        Map<Integer, List<String>> uentrdItemMap = pickUpUnenteredItemMap(prmReceiptForm.getATAArr());
 
         // 税額の取得
         Integer taxAmountFor08 = prmReceiptForm.getTaxAmountFor08();
         Integer taxAmountFor10 = prmReceiptForm.getTaxAmountFor10();
 
-        if (isDateXxx && errItemMap != null && errItemMap.size() == 0
+        if (isCrctDt && uentrdItemMap != null && uentrdItemMap.size() == 0
                 && (taxAmountFor08 != null || taxAmountFor10 != null)) {
             // 日付、科目・税率・金額、税額の入力に不備がなければ真を返却
             return true;
@@ -280,13 +253,13 @@ public class IndexService {
         List<String> rltErrMsgLst = new ArrayList<>();
         rltFldErrLst = new ArrayList<>();
 
-        if (!isDateXxx) {
+        if (!isCrctDt) {
             // 日付の入力に不備がある場合
             rltErrMsgLst.add(apnd(errMsgPropMap.get(DATE), errMsgPropMap.get(INCORRECT), Cnst.SPRT));
             rltFldErrLst.add(createFieldError(DAY_S));
         }
 
-        if (errItemMap == null) {
+        if (uentrdItemMap == null) {
             // 全ての科目・税率・金額が未入力の場合
             rltErrMsgLst.add(apnd(errMsgPropMap.get(ACCOUNT), errMsgPropMap.get(snakeToCamel(F_DOT)),
                     errMsgPropMap.get(buildCamelCase(TAX, RATE)), errMsgPropMap.get(snakeToCamel(F_DOT)),
@@ -296,9 +269,9 @@ public class IndexService {
             rltFldErrLst.add(createFieldError(apnd(A_T_A_0, AMOUNT)));
         } else {
             // 科目・税率・金額の組み合わせで未入力項目がある場合
-            Pair<List<String>, List<FieldError>> pair = Y230723_1(errItemMap);
-            rltErrMsgLst.addAll(pair.getFirst());
-            rltFldErrLst.addAll(pair.getSecond());
+            Pair<List<String>, List<FieldError>> errPair = buildCombiErrPair(uentrdItemMap);
+            rltErrMsgLst.addAll(errPair.getFirst());
+            rltFldErrLst.addAll(errPair.getSecond());
         }
 
         if (taxAmountFor08 == null && taxAmountFor10 == null) {
@@ -338,15 +311,6 @@ public class IndexService {
 
     //TODO:以上値確認用publicメソッド。以下値加工用publicメソッド
 
-//    public Pair<String, String> getSubtotalAndSumTotal(ReceiptForm prmReceiptForm) {
-//        int subtotal = sumAmount(prmReceiptForm.getATAArr());
-//
-//        Pair<String[], Integer> pairForTaxAmount = toStringAndSumForTaxAmount(prmReceiptForm.getTaxAmountFor08(),
-//                prmReceiptForm.getTaxAmountFor10());
-//
-//        return Pair.of(String.valueOf(subtotal), String.valueOf(subtotal + pairForTaxAmount.getSecond()));
-//    }
-
     public String[] getTotalAndTaxAmountArr(ReceiptForm prmReceiptForm) {
         int subtotal = sumAmount(prmReceiptForm.getATAArr());
 
@@ -365,29 +329,6 @@ public class IndexService {
      * 仕事はファイルへの登録と画面に表示する項目の返却
      */
     //--------------------------------------------------------------------------------
-//    public Registered getRegistered(ReceiptForm prmReceiptForm) {
-//        int subtotal = sumAmount(prmReceiptForm.getATAArr());
-//
-//        Pair<String[], Integer> pairForTaxAmount = toStringAndSumForTaxAmount(prmReceiptForm.getTaxAmountFor08(),
-//                prmReceiptForm.getTaxAmountFor10());
-//
-//        String[] strArr = pairForTaxAmount.getFirst();
-//
-//        // 登録処理
-//
-//        // 戻り値を作る処理
-//        Registered registered = new Registered();
-//        registered.setDate(apnd(prmReceiptForm.getYear(), prmReceiptForm.getMonth(), prmReceiptForm.getDay()));
-//        registered.setSubtotal(String.valueOf(subtotal));
-//        registered.setTaxAmount1(strArr[0]);
-//        registered.setTaxAmount2(strArr[1]);
-//        registered.setSumTotal(String.valueOf(subtotal + pairForTaxAmount.getSecond()));
-//
-//        return registered;
-//    }
-
-    
-    
     public Registered getRegistered(ReceiptForm prmReceiptForm) {
         String[] ttlAndTAmntArr = getTotalAndTaxAmountArr(prmReceiptForm);
     
@@ -504,38 +445,38 @@ public class IndexService {
     //TODO:問題ない場合：sizeが0のMapが返る。
     //問題ある場合：1以上、引数の長さ以下のMapが返る。
     //未入力の場合：nullを返す
-    private Map<Integer, List<String>> picupXxxItems(AccountTaxrateAmount[] prmATAArr) {
-        int emptyCounter = 0;
-        Map<Integer, List<String>> errItemMap = new LinkedHashMap<>();
+    private Map<Integer, List<String>> pickUpUnenteredItemMap(AccountTaxrateAmount[] prmATAArr) {
+        int uentrdCounter = 0;
+        Map<Integer, List<String>> uentrdItemMap = new LinkedHashMap<>();
 
         int length = prmATAArr.length;
         for (int i = 0; i < length; i++) {
             AccountTaxrateAmount elem = prmATAArr[i];
-            List<String> errItemLst = new ArrayList<>();
+            List<String> uentrdItemLst = new ArrayList<>();
 
             if (Cnst.EMPTY.equals(elem.getAccount())) {
-                errItemLst.add(ACCOUNT);
+                uentrdItemLst.add(ACCOUNT);
             }
 
             if (Cnst.EMPTY.equals(elem.getTaxRate())) {
-                errItemLst.add(buildCamelCase(TAX, RATE));
+                uentrdItemLst.add(buildCamelCase(TAX, RATE));
             }
 
             if (elem.getAmount() == null) {
-                errItemLst.add(AMOUNT);
+                uentrdItemLst.add(AMOUNT);
             }
 
-            switch (errItemLst.size()) {
+            switch (uentrdItemLst.size()) {
             case 0:
                 continue;
 
             case 1:
             case 2:
-                errItemMap.put(i, errItemLst);
+                uentrdItemMap.put(i, uentrdItemLst);
                 continue;
 
             case 3:
-                emptyCounter++;
+                uentrdCounter++;
                 continue;
 
             default:
@@ -543,11 +484,11 @@ public class IndexService {
             }
         }
 
-        if (emptyCounter == length) {
+        if (uentrdCounter == length) {
             return null;
         }
 
-        return errItemMap;
+        return uentrdItemMap;
     }
 
     //--------------------------------------------------------------------------------
@@ -622,7 +563,7 @@ public class IndexService {
      */
     //--------------------------------------------------------------------------------
     //科目・税率・金額の組み合わせで未入力項目がある場合
-    private Pair<List<String>, List<FieldError>> Y230723_1(Map<Integer, List<String>> prmErrItemMap) {
+    private Pair<List<String>, List<FieldError>> buildCombiErrPair(Map<Integer, List<String>> prmErrItemMap) {
         List<String> lRltErrMsgLst = new ArrayList<>();
         List<FieldError> lRltFldErrLst = new ArrayList<>();
 

@@ -2,7 +2,6 @@ package com.example.index;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -16,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.example.common.Cmn;
 
 @Controller
 @RequestMapping("/index")
@@ -62,23 +63,9 @@ public class IndexController {
     @Autowired
     private IndexService indexService;
 
-    /**  */
-    private String[] attrNameArr;
-
-    /**  */
-    private String[] stringKeyArr;
-    /**  */
-    private String[] arrayKeyArr;
-    /**  */
-    private String[] mapKeyArr;
-
+    //TODO:ここから作業再開
+    
     public IndexController() {
-        attrNameArr = new String[] { CURRENT_YEAR, CURRENT_MONTH, CURRENT_DAY,
-                YEAR_ARR, MONTH_ARR, DAY_ARR, ACCOUNT_MAP, TAX_RATE_MAP };
-
-        stringKeyArr = new String[] { CURRENT_YEAR, CURRENT_MONTH, CURRENT_DAY };
-        arrayKeyArr = new String[] { YEAR_ARR, MONTH_ARR, DAY_ARR };
-        mapKeyArr = new String[] { ACCOUNT_MAP, TAX_RATE_MAP };
 
     }
 
@@ -104,7 +91,7 @@ public class IndexController {
             BindingResult prmBindingResult) {
 
         addOptionArr((Object[]) httpSession.getAttribute(OPTION_ARR), prmModel);
-        prmReceiptForm.setRgstedLst(autoCast(httpSession.getAttribute(REGISTERED_LST)));
+        prmReceiptForm.setRgstedLst(Cmn.autoCast(httpSession.getAttribute(REGISTERED_LST)));
 
         if (validateItems(prmReceiptForm, prmBindingResult)) {
             String[] ttlAndTAmntArr = indexService.getTotalAndTaxAmountArr(prmReceiptForm);
@@ -122,7 +109,7 @@ public class IndexController {
         Object[] optionArr = (Object[]) httpSession.getAttribute(OPTION_ARR);
         addOptionArr(optionArr, prmModel);
 
-        List<Registered> rgstedLst = autoCast(httpSession.getAttribute(REGISTERED_LST));
+        List<Registered> rgstedLst = Cmn.autoCast(httpSession.getAttribute(REGISTERED_LST));
         
         if (validateItems(prmReceiptForm, prmBindingResult)) {
             rgstedLst = addRgistedToLst(rgstedLst, prmReceiptForm);
@@ -140,20 +127,18 @@ public class IndexController {
     // privateメソッド ---------------------------------------------------------------
     
     
-    //TODO:配列の長さの定数化
     private Object[] initOptionArr() {
-        Object[] optionArr = new Object[6];
-
-        optionArr[IndexService.CURRENT_DATE] = indexService.getCurrentDate();
-        optionArr[IndexService.YEAR_ARR] = indexService.getYearArr();
-        optionArr[IndexService.MONTH_ARR] = indexService.getMonthArr();
-        optionArr[IndexService.DAY_ARR] = indexService.getDayArr();
-        optionArr[IndexService.ACCOUNT_MAP] = indexService.getAccountMap();
-        optionArr[IndexService.TAX_RATE_MAP] = indexService.getTaxRateMap();
+        Object[] optionArr = new Object[] {
+                indexService.getCurrentDate(),
+                indexService.getYearArr(),
+                indexService.getMonthArr(),
+                indexService.getDayArr(),
+                indexService.getAccountMap(),
+                indexService.getTaxRateMap()
+        };
 
         return optionArr;
     }
-    
     
     private void addOptionArr(Object[] prmOptionArr, Model prmModel) {
         prmModel.addAttribute(YEAR_ARR, prmOptionArr[IndexService.YEAR_ARR]);
@@ -173,24 +158,18 @@ public class IndexController {
 
         if (!indexService.isRelatedItemsEntered(prmReceiptForm)) {
             prmReceiptForm.setErrorMessage(indexService.getRltErrMsg());
-            addErr(indexService.getRltFldErrLst(), prmBindingResult);
 
+            List<FieldError> fldErrLst = indexService.getRltFldErrLst();
+            for (FieldError elem : fldErrLst) {
+                prmBindingResult.addError(elem);
+            }
+            
             return false;
         }
 
         return true;
     }
 
-    
-    //TODO:以上記述位置確認OK
-    
-    //TODO:ここから作業再開
-    
-    
-    
-    
-    
-    
     
     
     private List<Registered> addRgistedToLst(List<Registered> prmRgstedLst, ReceiptForm prmReceiptForm) {
@@ -203,61 +182,6 @@ public class IndexController {
         rgstedLst.add(0, indexService.getRegistered(prmReceiptForm));
 
         return rgstedLst;
-    }
-
-    @SuppressWarnings("unchecked")
-    private void initOption(Model prmModel) {
-        //
-        String[] yearArr = (String[]) httpSession.getAttribute("");
-
-        if (yearArr == null) {
-            yearArr = indexService.getYearArr();
-
-        }
-
-        prmModel.addAttribute(YEAR_ARR, indexService.getYearArr());
-        prmModel.addAttribute(MONTH_ARR, indexService.getMonthArr());
-        prmModel.addAttribute(DAY_ARR, indexService.getDayArr());
-
-        // 科目の設定
-        Map<String, String> accountMap = (Map<String, String>) httpSession.getAttribute(ACCOUNT_MAP);
-
-        if (accountMap == null) {
-            accountMap = indexService.getAccountMap();
-            httpSession.setAttribute(ACCOUNT_MAP, accountMap);
-        }
-
-        prmModel.addAttribute(ACCOUNT_MAP, accountMap);
-
-        // 消費税率の設定
-        Map<String, Integer> taxRateMap = (Map<String, Integer>) httpSession.getAttribute(TAX_RATE_MAP);
-
-        if (taxRateMap == null) {
-            taxRateMap = indexService.getTaxRateMap();
-            httpSession.setAttribute(TAX_RATE_MAP, taxRateMap);
-        }
-
-        prmModel.addAttribute(TAX_RATE_MAP, taxRateMap);
-    }
-
-    private Map<String, Object> getFrmSession() {
-        // 年の取得
-        Object currentYear = null;
-
-        return null;
-    }
-
-
-
-    private void addErr(List<FieldError> prmErrLst, BindingResult prmBindingResult) {
-        for (FieldError elem : prmErrLst) {
-            prmBindingResult.addError(elem);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T> T autoCast(Object prmObj) {
-        return (T) prmObj;
     }
 
 }

@@ -137,6 +137,33 @@ public class IndexController {
         return INDEX;
     }
 
+    // privateメソッド ---------------------------------------------------------------
+    
+    
+    //TODO:配列の長さの定数化
+    private Object[] initOptionArr() {
+        Object[] optionArr = new Object[6];
+
+        optionArr[IndexService.CURRENT_DATE] = indexService.getCurrentDate();
+        optionArr[IndexService.YEAR_ARR] = indexService.getYearArr();
+        optionArr[IndexService.MONTH_ARR] = indexService.getMonthArr();
+        optionArr[IndexService.DAY_ARR] = indexService.getDayArr();
+        optionArr[IndexService.ACCOUNT_MAP] = indexService.getAccountMap();
+        optionArr[IndexService.TAX_RATE_MAP] = indexService.getTaxRateMap();
+
+        return optionArr;
+    }
+    
+    
+    private void addOptionArr(Object[] prmOptionArr, Model prmModel) {
+        prmModel.addAttribute(YEAR_ARR, prmOptionArr[IndexService.YEAR_ARR]);
+        prmModel.addAttribute(MONTH_ARR, prmOptionArr[IndexService.MONTH_ARR]);
+        prmModel.addAttribute(DAY_ARR, prmOptionArr[IndexService.DAY_ARR]);
+        prmModel.addAttribute(ACCOUNT_MAP, prmOptionArr[IndexService.ACCOUNT_MAP]);
+        prmModel.addAttribute(TAX_RATE_MAP, prmOptionArr[IndexService.TAX_RATE_MAP]);
+    }
+    
+    
     private boolean validateItems(ReceiptForm prmReceiptForm, BindingResult prmBindingResult) {
         if (prmBindingResult.hasErrors()) {
             prmReceiptForm.setErrorMessage(indexService.buildFldErrMsg(prmBindingResult));
@@ -154,6 +181,18 @@ public class IndexController {
         return true;
     }
 
+    
+    //TODO:以上記述位置確認OK
+    
+    //TODO:ここから作業再開
+    
+    
+    
+    
+    
+    
+    
+    
     private List<Registered> addRgistedToLst(List<Registered> prmRgstedLst, ReceiptForm prmReceiptForm) {
         List<Registered> rgstedLst = prmRgstedLst;
 
@@ -208,27 +247,7 @@ public class IndexController {
         return null;
     }
 
-    //TODO:配列の長さの定数化
-    private Object[] initOptionArr() {
-        Object[] optionArr = new Object[6];
 
-        optionArr[IndexService.CURRENT_DATE] = indexService.getCurrentDate();
-        optionArr[IndexService.YEAR_ARR] = indexService.getYearArr();
-        optionArr[IndexService.MONTH_ARR] = indexService.getMonthArr();
-        optionArr[IndexService.DAY_ARR] = indexService.getDayArr();
-        optionArr[IndexService.ACCOUNT_MAP] = indexService.getAccountMap();
-        optionArr[IndexService.TAX_RATE_MAP] = indexService.getTaxRateMap();
-
-        return optionArr;
-    }
-
-    private void addOptionArr(Object[] prmOptionArr, Model prmModel) {
-        prmModel.addAttribute(YEAR_ARR, prmOptionArr[IndexService.YEAR_ARR]);
-        prmModel.addAttribute(MONTH_ARR, prmOptionArr[IndexService.MONTH_ARR]);
-        prmModel.addAttribute(DAY_ARR, prmOptionArr[IndexService.DAY_ARR]);
-        prmModel.addAttribute(ACCOUNT_MAP, prmOptionArr[IndexService.ACCOUNT_MAP]);
-        prmModel.addAttribute(TAX_RATE_MAP, prmOptionArr[IndexService.TAX_RATE_MAP]);
-    }
 
     private void addErr(List<FieldError> prmErrLst, BindingResult prmBindingResult) {
         for (FieldError elem : prmErrLst) {

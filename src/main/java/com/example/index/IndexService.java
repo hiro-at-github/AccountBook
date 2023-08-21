@@ -202,7 +202,7 @@ public class IndexService {
      * @param prmResult バインディングリザルト
      * @return エラーメッセージ
      */
-    //--------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------TODO:142行目から呼び出し
     public String buildFldErrMsg(BindingResult prmResult) {
         // エラーメッセージ用プロパティが取得済みか確認
         if (errMsgPropMap == null) {
@@ -389,17 +389,14 @@ public class IndexService {
      * 
      * @return 取得したメッセージプロパティ
      */
-    //--------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------TODO:記述位置OK
     private Map<String, String> getErrMsgPrpMap() {
         Map<String, String> prpMap = new HashMap<>();
 
-        //        String[] codeArr = { AMOUNT, TAX_AMOUNT, AMOUNT_RANGE,
-        //                F_DOT, DATE, ACCOUNT, TAX_RATE, INCORRECT, NOT_ENTERED };
         String[] codeArr = { AMOUNT, apnd(TAX, Cnst.US, AMOUNT), AMOUNT_RANGE,
                 F_DOT, DATE, ACCOUNT, apnd(TAX, Cnst.US, RATE), INCORRECT, NOT_ENTERED };
         for (String elem : codeArr) {
             prpMap.put(snakeToCamel(elem), messageSource.getMessage(PREFIX + elem, null, Locale.JAPAN));
-            //            prpMap.put(elem, messageSource.getMessage(PREFIX + elem, null, Locale.JAPAN));
         }
 
         return prpMap;

@@ -188,7 +188,6 @@ public class IndexService {
      * 消費税率の選択肢を返却する
      *
      * @return 消費税率の選択肢
-     *
      */
     //--------------------------------------------------------------------------------
     public Map<String, Integer> getTaxRateMap() {

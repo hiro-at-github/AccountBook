@@ -21,37 +21,28 @@ import com.example.common.Cmn;
 @Controller
 @RequestMapping("/index")
 public class IndexController {
-    /** 現在の年 */
-    private static final String CURRENT_YEAR = "currentYear";
-
-    /** 現在の月 */
-    private static final String CURRENT_MONTH = "currentMonth";
-
-    /** 現在の日 */
-    private static final String CURRENT_DAY = "currentDay";
-
-    /** 年の配列 */
+    /** 年の配列のキー */
     private static final String YEAR_ARR = "yearArr";
 
-    /** 月の配列 */
+    /** 月の配列のキー */
     private static final String MONTH_ARR = "monthArr";
 
-    /** 日の配列 */
+    /** 日の配列のキー */
     private static final String DAY_ARR = "dayArr";
 
-    /** 勘定科目のマップ */
+    /** 勘定科目のマップのキー */
     private static final String ACCOUNT_MAP = "accountMap";
 
-    /** 消費税率のマップ */
+    /** 消費税率のマップのキー */
     private static final String TAX_RATE_MAP = "taxRateMap";
 
-    /**  */
+    /** セレクトボックスの選択肢のキー */
     private static final String OPTION_ARR = "optionArr";
 
-    /**  */
+    /** 登録済のレシートのリストのキー */
     private static final String REGISTERED_LST = "registeredLst";
     
-    /**  */
+    /** レシートフォームのキー */
     private static final String RECEIPT_FORM = "receiptForm";
 
     /** 遷移先 */
@@ -86,6 +77,12 @@ public class IndexController {
         return INDEX;
     }
 
+    //--------------------------------------------------------------------------------
+    /**
+     * 「確認」ボタン押下の処理
+     *
+     */
+    //--------------------------------------------------------------------------------
     @PostMapping(value = "/index", params = "confirm")
     public String postConfirm(Model prmModel, @ModelAttribute @Validated ReceiptForm prmReceiptForm,
             BindingResult prmBindingResult) {
@@ -102,6 +99,12 @@ public class IndexController {
         return INDEX;
     }
 
+    //--------------------------------------------------------------------------------
+    /**
+     * 「登録」ボタン押下の処理
+     *
+     */
+    //--------------------------------------------------------------------------------
     @PostMapping(value = "/index", params = "create")
     public String postCreate(Model prmModel, @ModelAttribute @Validated ReceiptForm prmReceiptForm,
             BindingResult prmBindingResult) {
@@ -126,7 +129,13 @@ public class IndexController {
 
     // privateメソッド ---------------------------------------------------------------
     
-    
+    //--------------------------------------------------------------------------------
+    /**
+     * セレクトボックスの選択肢を初期化して返却する
+     *
+     * @return セレクトボックスの選択肢
+     */
+    //--------------------------------------------------------------------------------
     private Object[] initOptionArr() {
         Object[] optionArr = new Object[] {
                 indexService.getCurrentDate(),

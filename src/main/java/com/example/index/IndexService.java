@@ -9,6 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -392,12 +393,17 @@ public class IndexService {
     private Map<String, String> getErrMsgPrpMap() {
         Map<String, String> prpMap = new HashMap<>();
 
-        String[] codeArr = { AMOUNT, apnd(TAX, Cnst.US, AMOUNT), AMOUNT_RANGE,
-                F_DOT, DATE, ACCOUNT, apnd(TAX, Cnst.US, RATE), INCORRECT, NOT_ENTERED };
-        for (String elem : codeArr) {
-            prpMap.put(snakeToCamel(elem), messageSource.getMessage(PREFIX + elem, null, Locale.JAPAN));
-        }
+//        String[] codeArr = { AMOUNT, apnd(TAX, Cnst.US, AMOUNT), AMOUNT_RANGE,
+//                F_DOT, DATE, ACCOUNT, apnd(TAX, Cnst.US, RATE), INCORRECT, NOT_ENTERED };
+//        for (String elem : codeArr) {
+//            prpMap.put(snakeToCamel(elem), messageSource.getMessage(PREFIX + elem, null, Locale.JAPAN));
+//        }
 
+        Stream<String> codeStream = Stream.of(AMOUNT, apnd(TAX, Cnst.US, AMOUNT), AMOUNT_RANGE,
+                F_DOT, DATE, ACCOUNT, apnd(TAX, Cnst.US, RATE), INCORRECT, NOT_ENTERED);
+        
+        codeStream.forEach(e -> prpMap.put(snakeToCamel(e), messageSource.getMessage(PREFIX + e, null, Locale.JAPAN)));
+        
         return prpMap;
     }
 

@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -48,9 +47,11 @@ public class IndexController {
     /** 遷移先 */
     private static final String INDEX = "index/index";
 
+    /** セッション */
     @Autowired
     private HttpSession httpSession;
 
+    /** インデックスサービス */
     @Autowired
     private IndexService indexService;
 
@@ -149,6 +150,14 @@ public class IndexController {
         return optionArr;
     }
     
+    //--------------------------------------------------------------------------------
+    /**
+     * セレクトボックスの選択肢をモデルに登録する
+     * 
+     * @param prmOptionArr セレクトボックスの選択肢の配列
+     * @param prmModel モデル
+     */
+    //--------------------------------------------------------------------------------
     private void addOptionArr(Object[] prmOptionArr, Model prmModel) {
         prmModel.addAttribute(YEAR_ARR, prmOptionArr[IndexService.YEAR_ARR]);
         prmModel.addAttribute(MONTH_ARR, prmOptionArr[IndexService.MONTH_ARR]);
@@ -157,7 +166,16 @@ public class IndexController {
         prmModel.addAttribute(TAX_RATE_MAP, prmOptionArr[IndexService.TAX_RATE_MAP]);
     }
     
-    
+    //--------------------------------------------------------------------------------
+    /**
+     * レシートフォームの各項目の入力値の妥当性を検査する。
+     * 入力値が不適当な場合、レシートフォームにエラーメッセージをセットする
+     * 
+     * @param prmReceiptForm レシートフォーム
+     * @param prmBindingResult バインディングリザルト
+     * @return 入力値が適当な場合、真。不適切な場合、偽
+     */
+    //--------------------------------------------------------------------------------
     private boolean validateItems(ReceiptForm prmReceiptForm, BindingResult prmBindingResult) {
         if (prmBindingResult.hasErrors()) {
             prmReceiptForm.setErrorMessage(indexService.buildFldErrMsg(prmBindingResult));
@@ -168,10 +186,12 @@ public class IndexController {
         if (!indexService.isRelatedItemsEntered(prmReceiptForm)) {
             prmReceiptForm.setErrorMessage(indexService.getRltErrMsg());
 
-            List<FieldError> fldErrLst = indexService.getRltFldErrLst();
-            for (FieldError elem : fldErrLst) {
-                prmBindingResult.addError(elem);
-            }
+//            List<FieldError> fldErrLst = indexService.getRltFldErrLst();
+//            for (FieldError elem : fldErrLst) {
+//                prmBindingResult.addError(elem);
+//            }
+            //TODO:上記コメントアウト部分の代替処理。問題なければこのTODOと共に上記コメントアウト要削除
+            indexService.getRltFldErrLst().forEach(e -> prmBindingResult.addError(e));
             
             return false;
         }
@@ -179,8 +199,16 @@ public class IndexController {
         return true;
     }
 
-    
-    
+    //--------------------------------------------------------------------------------
+    /**
+     * レシートフォームの各項目の入力値を登録する。
+     * その後、登録したレシートの概要をリストに加える
+     * 
+     * @param prmRgstedLst 登録したレシートの概要のリスト
+     * @param prmReceiptForm レシートフォーム
+     * @return 登録したレシートの概要のリスト
+     */
+    //--------------------------------------------------------------------------------
     private List<Registered> addRgistedToLst(List<Registered> prmRgstedLst, ReceiptForm prmReceiptForm) {
         List<Registered> rgstedLst = prmRgstedLst;
 

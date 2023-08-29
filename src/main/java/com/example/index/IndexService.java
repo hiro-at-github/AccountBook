@@ -309,8 +309,17 @@ public class IndexService {
         return rltFldErrLst;
     }
 
-    //TODO:以上値確認用publicメソッド。以下値加工用publicメソッド
+    // 以上値確認用publicメソッド。以下値加工用publicメソッド
 
+    
+    //--------------------------------------------------------------------------------
+    /**
+     * 小計、合計を算出し、小計、合計、外税額8％、外税額10％を返す
+     *
+     * @param prmReceiptForm レシートフォーム
+     * @return 小計、合計、外税額8％、外税額10％の配列
+     */
+    //--------------------------------------------------------------------------------
     public String[] getTotalAndTaxAmountArr(ReceiptForm prmReceiptForm) {
         int subtotal = sumAmount(prmReceiptForm.getATAArr());
 
@@ -323,12 +332,13 @@ public class IndexService {
 
     //--------------------------------------------------------------------------------
     /**
-     * ダミー
-     * TODO:返すのはコレクションかまたはその一要素か←一要素
-     * メソッド名変更
-     * 仕事はファイルへの登録と画面に表示する項目の返却
+     * レシートフォームの内容をファイルに登録(書き込み)し、登録したレシートの概要を返す
+     *
+     * @param prmReceiptForm レシートフォーム
+     * @return 登録したレシートの概要
      */
     //--------------------------------------------------------------------------------
+    //TODO:メソッド名変更
     public Registered getRegistered(ReceiptForm prmReceiptForm) {
         String[] ttlAndTAmntArr = getTotalAndTaxAmountArr(prmReceiptForm);
     
@@ -346,6 +356,14 @@ public class IndexService {
     
     
     //TODO:記載位置変更
+    //--------------------------------------------------------------------------------
+    /**
+     * 金額を和を求めて返す
+     *
+     * @param prmATAArr 科目・税率・金額の配列
+     * @return 金額の和
+     */
+    //--------------------------------------------------------------------------------
     private int sumAmount(AccountTaxrateAmount[] prmATAArr) {
         int sumOfAmount = 0;
 
@@ -360,6 +378,7 @@ public class IndexService {
         return sumOfAmount;
     }
 
+    //TODO:230829以降ここから
     //税額の文字列化と和
     private Pair<String[], Integer> toStringAndSumForTaxAmount(Integer... prmTaxAmountArr) {
         String[] strArr = new String[prmTaxAmountArr.length];

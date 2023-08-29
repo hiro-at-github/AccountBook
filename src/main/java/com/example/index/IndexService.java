@@ -352,53 +352,6 @@ public class IndexService {
 
         return registered;
     }
-    
-    
-    
-    //TODO:記載位置変更
-    //--------------------------------------------------------------------------------
-    /**
-     * 金額を和を求めて返す
-     *
-     * @param prmATAArr 科目・税率・金額の配列
-     * @return 金額の和
-     */
-    //--------------------------------------------------------------------------------
-    private int sumAmount(AccountTaxrateAmount[] prmATAArr) {
-        int sumOfAmount = 0;
-
-        for (AccountTaxrateAmount elem : prmATAArr) {
-            Integer amount = elem.getAmount();
-
-            if (amount != null) {
-                sumOfAmount += amount;
-            }
-        }
-
-        return sumOfAmount;
-    }
-
-    //TODO:230829以降ここから
-    //税額の文字列化と和
-    private Pair<String[], Integer> toStringAndSumForTaxAmount(Integer... prmTaxAmountArr) {
-        String[] strArr = new String[prmTaxAmountArr.length];
-        int sum = 0;
-
-        for (int i = 0; i < prmTaxAmountArr.length; i++) {
-            Integer elem = prmTaxAmountArr[i];
-
-            if (elem == null) {
-                strArr[i] = Cnst.DASH;
-
-                continue;
-            }
-
-            strArr[i] = String.valueOf(elem);
-            sum += elem;
-        }
-
-        return Pair.of(strArr, sum);
-    }
 
     // privateメソッド ---------------------------------------------------------------
 
@@ -671,4 +624,53 @@ public class IndexService {
 
     //TODO:以上値確認用privateメソッド。以下値加工用privateメソッド
 
+    //--------------------------------------------------------------------------------
+    /**
+     * 金額の和を求めて返す
+     *
+     * @param prmATAArr 科目・税率・金額の配列
+     * @return 金額の和
+     */
+    //--------------------------------------------------------------------------------
+    private int sumAmount(AccountTaxrateAmount[] prmATAArr) {
+        int sumOfAmount = 0;
+
+        for (AccountTaxrateAmount elem : prmATAArr) {
+            Integer amount = elem.getAmount();
+
+            if (amount != null) {
+                sumOfAmount += amount;
+            }
+        }
+
+        return sumOfAmount;
+    }
+
+    //--------------------------------------------------------------------------------
+    /**
+     * 外税額の文字列化と外税額の和を求めて返す
+     * 
+     * @param prmTaxAmountArr 外税額の配列
+     * @return first：文字列化した外税額の配列。second：外税額の和
+     */
+    //--------------------------------------------------------------------------------
+    private Pair<String[], Integer> toStringAndSumForTaxAmount(Integer... prmTaxAmountArr) {
+        String[] strArr = new String[prmTaxAmountArr.length];
+        int sum = 0;
+
+        for (int i = 0; i < prmTaxAmountArr.length; i++) {
+            Integer elem = prmTaxAmountArr[i];
+
+            if (elem == null) {
+                strArr[i] = Cnst.DASH;
+
+                continue;
+            }
+
+            strArr[i] = String.valueOf(elem);
+            sum += elem;
+        }
+
+        return Pair.of(strArr, sum);
+    }
 }

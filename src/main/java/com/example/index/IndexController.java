@@ -92,7 +92,7 @@ public class IndexController {
         prmReceiptForm.setRgstedLst(Cmn.autoCast(httpSession.getAttribute(REGISTERED_LST)));
 
         if (validateItems(prmReceiptForm, prmBindingResult)) {
-            String[] ttlAndTAmntArr = indexService.getTotalAndTaxAmountArr(prmReceiptForm);
+            String[] ttlAndTAmntArr = indexService.getSubtotalAndSumTotalArr(prmReceiptForm);
             prmReceiptForm.setSubtotal(ttlAndTAmntArr[0]);
             prmReceiptForm.setSumTotal(ttlAndTAmntArr[1]);
         }

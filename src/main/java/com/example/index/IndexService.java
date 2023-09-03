@@ -330,15 +330,20 @@ public class IndexService {
                 pairForTaxAmount.getFirst()[0], pairForTaxAmount.getFirst()[1] };
     }
 
-    public String[] getSubtotalAndSumTotal(ReceiptForm prmReceiptForm) {
-        int subtotal = Stream.of(prmReceiptForm.getATAArr()).mapToInt(e -> e.getAmount()).sum();
+    public String[] getSubtotalAndSumTotalArr(ReceiptForm prmReceiptForm) {
+        int subtotal = Stream.of(prmReceiptForm.getATAArr()).filter(e -> e.getAmount() != null).mapToInt(e -> e.getAmount()).sum();
         
         int sumTotal = subtotal;
         
+        if (prmReceiptForm.getTaxAmountFor08() != null) {
+            sumTotal += prmReceiptForm.getTaxAmountFor08();
+        }
         
+        if (prmReceiptForm.getTaxAmountFor10() != null) {
+            sumTotal += prmReceiptForm.getTaxAmountFor10();
+        }
         
-        
-        return null;
+        return new String[] {String.valueOf(subtotal), String.valueOf(sumTotal)};
     }
     
     
@@ -360,10 +365,14 @@ public class IndexService {
         // 戻り値を作る処理
         Registered registered = new Registered();
         registered.setDate(apnd(prmReceiptForm.getYear(), prmReceiptForm.getMonth(), prmReceiptForm.getDay()));
-        registered.setSubtotal(ttlAndTAmntArr[0]);
+        
+        String[] totalArr = getSubtotalAndSumTotalArr(prmReceiptForm);
+        
+        registered.setSubtotal(totalArr[0]);
+        registered.setSumTotal(totalArr[1]);
+        
         registered.setTaxAmount1(ttlAndTAmntArr[2]);
         registered.setTaxAmount2(ttlAndTAmntArr[3]);
-        registered.setSumTotal(ttlAndTAmntArr[1]);
 
         return registered;
     }

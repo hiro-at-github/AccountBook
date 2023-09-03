@@ -78,12 +78,12 @@ public class IndexController {
         return INDEX;
     }
 
-    //--------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------
     /**
      * 「確認」ボタン押下の処理
      *
      */
-    //--------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------
     @PostMapping(value = "/index", params = "confirm")
     public String postConfirm(Model prmModel, @ModelAttribute @Validated ReceiptForm prmReceiptForm,
             BindingResult prmBindingResult) {
@@ -100,12 +100,12 @@ public class IndexController {
         return INDEX;
     }
 
-    //--------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------
     /**
      * 「登録」ボタン押下の処理
      *
      */
-    //--------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------
     @PostMapping(value = "/index", params = "create")
     public String postCreate(Model prmModel, @ModelAttribute @Validated ReceiptForm prmReceiptForm,
             BindingResult prmBindingResult) {
@@ -130,13 +130,13 @@ public class IndexController {
 
     // privateメソッド ---------------------------------------------------------------
     
-    //--------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------
     /**
      * セレクトボックスの選択肢を初期化して返す
      *
      * @return セレクトボックスの選択肢
      */
-    //--------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------
     private Object[] initOptionArr() {
         Object[] optionArr = new Object[] {
                 indexService.getCurrentDate(),
@@ -150,14 +150,14 @@ public class IndexController {
         return optionArr;
     }
     
-    //--------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------
     /**
      * セレクトボックスの選択肢をモデルに登録する
      * 
      * @param prmOptionArr セレクトボックスの選択肢の配列
      * @param prmModel モデル
      */
-    //--------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------
     private void addOptionArr(Object[] prmOptionArr, Model prmModel) {
         prmModel.addAttribute(YEAR_ARR, prmOptionArr[IndexService.YEAR_ARR]);
         prmModel.addAttribute(MONTH_ARR, prmOptionArr[IndexService.MONTH_ARR]);
@@ -166,7 +166,7 @@ public class IndexController {
         prmModel.addAttribute(TAX_RATE_MAP, prmOptionArr[IndexService.TAX_RATE_MAP]);
     }
     
-    //--------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------
     /**
      * レシートフォームの各項目の入力値の妥当性を検査してその結果を返す
      * 入力値が不適当な場合、レシートフォームにエラーメッセージをセットする
@@ -175,7 +175,7 @@ public class IndexController {
      * @param prmBindingResult バインディングリザルト
      * @return 入力値が適当な場合、真。不適切な場合、偽
      */
-    //--------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------
     private boolean validateItems(ReceiptForm prmReceiptForm, BindingResult prmBindingResult) {
         if (prmBindingResult.hasErrors()) {
             prmReceiptForm.setErrorMessage(indexService.buildFldErrMsg(prmBindingResult));
@@ -199,7 +199,7 @@ public class IndexController {
         return true;
     }
 
-    //--------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------
     /**
      * レシートフォームの各項目の入力値を登録する。
      * その後、登録したレシートの概要をリストに加えて返す
@@ -208,7 +208,7 @@ public class IndexController {
      * @param prmReceiptForm レシートフォーム
      * @return 登録したレシートの概要のリスト
      */
-    //--------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------
     private List<Registered> addRgistedToLst(List<Registered> prmRgstedLst, ReceiptForm prmReceiptForm) {
         List<Registered> rgstedLst = prmRgstedLst;
 

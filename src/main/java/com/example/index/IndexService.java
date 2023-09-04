@@ -320,16 +320,24 @@ public class IndexService {
      * @return 小計、合計、外税額8％、外税額10％の配列
      */
     //----------------------------------------------------------------------------------------------------
-    public String[] getTotalAndTaxAmountArr(ReceiptForm prmReceiptForm) {
-        int subtotal = sumAmount(prmReceiptForm.getATAArr());
+//    public String[] getTotalAndTaxAmountArr(ReceiptForm prmReceiptForm) {
+//        int subtotal = sumAmount(prmReceiptForm.getATAArr());
+//
+//        Pair<String[], Integer> pairForTaxAmount = toStringAndSumForTaxAmount(prmReceiptForm.getTaxAmountFor08(),
+//                prmReceiptForm.getTaxAmountFor10());
+//
+//        return new String[] { String.valueOf(subtotal), String.valueOf(subtotal + pairForTaxAmount.getSecond()),
+//                pairForTaxAmount.getFirst()[0], pairForTaxAmount.getFirst()[1] };
+//    }
 
-        Pair<String[], Integer> pairForTaxAmount = toStringAndSumForTaxAmount(prmReceiptForm.getTaxAmountFor08(),
-                prmReceiptForm.getTaxAmountFor10());
-
-        return new String[] { String.valueOf(subtotal), String.valueOf(subtotal + pairForTaxAmount.getSecond()),
-                pairForTaxAmount.getFirst()[0], pairForTaxAmount.getFirst()[1] };
-    }
-
+    //----------------------------------------------------------------------------------------------------
+    /**
+     * 小計、合計を算出し返す
+     *
+     * @param prmReceiptForm レシートフォーム
+     * @return 小計、合計の配列
+     */
+    //----------------------------------------------------------------------------------------------------
     public String[] getSubtotalAndSumTotalArr(ReceiptForm prmReceiptForm) {
         int subtotal = Stream.of(prmReceiptForm.getATAArr()).filter(e -> e.getAmount() != null).mapToInt(e -> e.getAmount()).sum();
         
@@ -360,8 +368,6 @@ public class IndexService {
     //----------------------------------------------------------------------------------------------------
     //TODO:メソッド名変更
     public Registered getRegistered(ReceiptForm prmReceiptForm) {
-        String[] ttlAndTAmntArr = getTotalAndTaxAmountArr(prmReceiptForm);
-    
         // 戻り値を作る処理
         Registered registered = new Registered();
         registered.setDate(apnd(prmReceiptForm.getYear(), prmReceiptForm.getMonth(), prmReceiptForm.getDay()));
@@ -371,8 +377,8 @@ public class IndexService {
         registered.setSubtotal(totalArr[0]);
         registered.setSumTotal(totalArr[1]);
         
-        registered.setTaxAmount1(ttlAndTAmntArr[2]);
-        registered.setTaxAmount2(ttlAndTAmntArr[3]);
+        registered.setTaxAmount1(intToStr(prmReceiptForm.getTaxAmountFor08()));
+        registered.setTaxAmount2(intToStr(prmReceiptForm.getTaxAmountFor10()));
 
         return registered;
     }
@@ -702,19 +708,6 @@ public class IndexService {
         }
 
         return Pair.of(strArr, sum);
-    }
-    
-    private Registered tmpMtd(ReceiptForm prmReceiptForm) {
-        Registered registered = new Registered();
-        registered.setTaxAmount1(intToStr(prmReceiptForm.getTaxAmountFor08()));
-        registered.setTaxAmount2(intToStr(prmReceiptForm.getTaxAmountFor10()));
-        
-        Integer.toString(1);
-        
-        
-        
-        
-        return registered;
     }
     
     private String intToStr(Integer prmInt) {

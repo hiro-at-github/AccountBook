@@ -584,31 +584,31 @@ public class IndexService {
 
     //----------------------------------------------------------------------------------------------------
     /**
-     * 引数の文字列配列を連結してキャメルケースの文字列を作成し返す
+     * 文字列配列を連結してキャメルケースの文字列を作成し返す
      * 
      * @param prmStrArr 処理対象の文字列配列
      * @return 作成したキャメルケースの文字列
      */
     //----------------------------------------------------------------------------------------------------
     private String buildCamelCase(String... prmStrArr) {
-//        StringBuilder builder = new StringBuilder();
-//
-//        for (String elem : prmStrArr) {
-//            builder.append(elem).append(Cnst.US);
-//        }
-//
-//        return snakeToCamel(builder.deleteCharAt(builder.length() - 1).toString());
-        
-        
-        StringBuilder blder = new StringBuilder(prmStrArr[0]);
+        StringBuilder sb = new StringBuilder(prmStrArr[0]);
         
         for (int i = 1; i < prmStrArr.length; i++) {
-//            char c = Character.toUpperCase(prmStrArr[i].charAt(0));
-//            blder.append(c).append(prmStrArr[i].substring(1));
-            blder.append(Character.toUpperCase(prmStrArr[i].charAt(0))).append(prmStrArr[i].substring(1));
+            sb.append(Character.toUpperCase(prmStrArr[i].charAt(0))).append(prmStrArr[i].substring(1));
         }
         
-        return blder.toString();
+        return sb.toString();
+        
+        //TODO:230907ここまで
+//        Stream<String> s = Stream.of(prmStrArr);
+//        
+//        Stream<String> x =
+//        
+//        s.skip(1).map(e -> String.join("",  String.valueOf(   Character.toUpperCase(e.charAt(0))), e.substring(1))       );
+//        
+//        String tmp = String.join("", x.toArray(String[]::new));        
+//        
+//        return tmp;
     }
 
     //----------------------------------------------------------------------------------------------------

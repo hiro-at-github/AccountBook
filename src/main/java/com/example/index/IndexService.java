@@ -1,6 +1,5 @@
 package com.example.index;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -18,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
+import com.example.common.Cmn;
 import com.example.common.Cnst;
 
 @Service
@@ -225,7 +225,7 @@ public class IndexService {
     //----------------------------------------------------------------------------------------------------
     public boolean isRelatedItemsEntered(ReceiptForm prmReceiptForm) {
         // 年月日が日付として適当か確認
-        boolean isCrctDt = isCorrectDate(prmReceiptForm.getYear(), prmReceiptForm.getMonth(), prmReceiptForm.getDay());
+        boolean isCrctDt = Cmn.isCorrectDate(prmReceiptForm.getYear(), prmReceiptForm.getMonth(), prmReceiptForm.getDay());
 
         // 科目・税率・金額の入力の有無の確認
         Map<Integer, List<String>> uentrdItemMap = pickUpUnenteredItemMap(prmReceiptForm.getATAArr());
@@ -255,18 +255,18 @@ public class IndexService {
 
         if (!isCrctDt) {
             // 日付の入力に不備がある場合
-            rltErrMsgLst.add(apnd(errMsgPropMap.get(DATE), errMsgPropMap.get(INCORRECT), Cnst.SPRT));
+            rltErrMsgLst.add(String.join(Cnst.EMPTY, errMsgPropMap.get(DATE), errMsgPropMap.get(INCORRECT), Cnst.SPRT));
             rltFldErrLst.add(createFieldError(DAY_S));
         }
 
         if (uentrdItemMap == null) {
             // 全ての科目・税率・金額が未入力の場合
-            rltErrMsgLst.add(apnd(errMsgPropMap.get(ACCOUNT), errMsgPropMap.get(snakeToCamel(F_DOT)),
+            rltErrMsgLst.add(String.join(Cnst.EMPTY, errMsgPropMap.get(ACCOUNT), errMsgPropMap.get(snakeToCamel(F_DOT)),
                     errMsgPropMap.get(buildCamelCase(TAX, RATE)), errMsgPropMap.get(snakeToCamel(F_DOT)),
                     errMsgPropMap.get(AMOUNT), errMsgPropMap.get(snakeToCamel(NOT_ENTERED)), Cnst.SPRT));
-            rltFldErrLst.add(createFieldError(apnd(A_T_A_0, ACCOUNT)));
-            rltFldErrLst.add(createFieldError(apnd(A_T_A_0, buildCamelCase(TAX, RATE))));
-            rltFldErrLst.add(createFieldError(apnd(A_T_A_0, AMOUNT)));
+            rltFldErrLst.add(createFieldError(String.join(Cnst.EMPTY, A_T_A_0, ACCOUNT)));
+            rltFldErrLst.add(createFieldError(String.join(Cnst.EMPTY, A_T_A_0, buildCamelCase(TAX, RATE))));
+            rltFldErrLst.add(createFieldError(String.join(Cnst.EMPTY, A_T_A_0, AMOUNT)));
         } else {
             // 科目・税率・金額の組み合わせで未入力項目がある場合
             Pair<List<String>, List<FieldError>> errPair = buildCombiErrPair(uentrdItemMap);
@@ -276,10 +276,10 @@ public class IndexService {
 
         if (taxAmountFor08 == null && taxAmountFor10 == null) {
             // 税額のいずれもが未入力の場合
-            rltErrMsgLst.add(apnd(errMsgPropMap.get(buildCamelCase(TAX, AMOUNT)),
+            rltErrMsgLst.add(String.join(Cnst.EMPTY, errMsgPropMap.get(buildCamelCase(TAX, AMOUNT)),
                     errMsgPropMap.get(snakeToCamel(NOT_ENTERED)), Cnst.SPRT));
-            rltFldErrLst.add(createFieldError(apnd(buildCamelCase(TAX, AMOUNT), FOR, P08)));
-            rltFldErrLst.add(createFieldError(apnd(buildCamelCase(TAX, AMOUNT), FOR, P10)));
+            rltFldErrLst.add(createFieldError(String.join(Cnst.EMPTY, buildCamelCase(TAX, AMOUNT), FOR, P08)));
+            rltFldErrLst.add(createFieldError(String.join(Cnst.EMPTY, buildCamelCase(TAX, AMOUNT), FOR, P10)));
         }
 
         rltErrMsg = String.join(Cnst.EMPTY, rltErrMsgLst);
@@ -311,25 +311,6 @@ public class IndexService {
 
     // 以上値確認用publicメソッド。以下値加工用publicメソッド
 
-    
-    //----------------------------------------------------------------------------------------------------
-    /**
-     * 小計、合計を算出し、小計、合計、外税額8％、外税額10％を返す
-     *
-     * @param prmReceiptForm レシートフォーム
-     * @return 小計、合計、外税額8％、外税額10％の配列
-     */
-    //----------------------------------------------------------------------------------------------------
-//    public String[] getTotalAndTaxAmountArr(ReceiptForm prmReceiptForm) {
-//        int subtotal = sumAmount(prmReceiptForm.getATAArr());
-//
-//        Pair<String[], Integer> pairForTaxAmount = toStringAndSumForTaxAmount(prmReceiptForm.getTaxAmountFor08(),
-//                prmReceiptForm.getTaxAmountFor10());
-//
-//        return new String[] { String.valueOf(subtotal), String.valueOf(subtotal + pairForTaxAmount.getSecond()),
-//                pairForTaxAmount.getFirst()[0], pairForTaxAmount.getFirst()[1] };
-//    }
-
     //----------------------------------------------------------------------------------------------------
     /**
      * 小計、合計を算出し返す
@@ -354,10 +335,6 @@ public class IndexService {
         return new String[] {String.valueOf(subtotal), String.valueOf(sumTotal)};
     }
     
-    
-    
-    
-    
     //----------------------------------------------------------------------------------------------------
     /**
      * レシートフォームの内容をファイルに登録(書き込み)し、登録したレシートの概要を返す
@@ -370,7 +347,7 @@ public class IndexService {
     public Registered getRegistered(ReceiptForm prmReceiptForm) {
         // 戻り値を作る処理
         Registered registered = new Registered();
-        registered.setDate(apnd(prmReceiptForm.getYear(), prmReceiptForm.getMonth(), prmReceiptForm.getDay()));
+        registered.setDate(String.join(Cnst.EMPTY, prmReceiptForm.getYear(), prmReceiptForm.getMonth(), prmReceiptForm.getDay()));
         
         String[] totalArr = getSubtotalAndSumTotalArr(prmReceiptForm);
         
@@ -403,33 +380,12 @@ public class IndexService {
 //            prpMap.put(snakeToCamel(elem), messageSource.getMessage(PREFIX + elem, null, Locale.JAPAN));
 //        }
 
-        Stream<String> codeStream = Stream.of(AMOUNT, apnd(TAX, Cnst.US, AMOUNT), AMOUNT_RANGE,
-                F_DOT, DATE, ACCOUNT, apnd(TAX, Cnst.US, RATE), INCORRECT, NOT_ENTERED);
+        Stream<String> codeStream = Stream.of(AMOUNT, String.join(Cnst.EMPTY, TAX, Cnst.US, AMOUNT), AMOUNT_RANGE,
+                F_DOT, DATE, ACCOUNT, String.join(Cnst.EMPTY, TAX, Cnst.US, RATE), INCORRECT, NOT_ENTERED);
         
         codeStream.forEach(e -> prpMap.put(snakeToCamel(e), messageSource.getMessage(PREFIX + e, null, Locale.JAPAN)));
         
         return prpMap;
-    }
-
-    //----------------------------------------------------------------------------------------------------
-    /**
-     * 日付として適当か判定する
-     * 
-     * @param prmDate 年月日の文字列配列
-     * @return 日付として適当な場合、真。不適当な場合、偽
-     */
-    //----------------------------------------------------------------------------------------------------
-    private boolean isCorrectDate(String... prmDate) {
-        DateFormat format = DateFormat.getDateInstance();
-        format.setLenient(false);
-
-        try {
-            format.parse(apnd(prmDate[0], Cnst.SL, prmDate[1], Cnst.SL, prmDate[2]));
-
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
     }
 
     //----------------------------------------------------------------------------------------------------
@@ -512,7 +468,7 @@ public class IndexService {
             String key = null;
             if (elem.getField().contains(TAX)) {
                 //                key = TAX_AMOUNT;
-                key = apnd(TAX, Cnst.US, AMOUNT);
+                key = String.join(Cnst.EMPTY, TAX, Cnst.US, AMOUNT);
             } else {
                 key = AMOUNT;
             }
@@ -560,7 +516,7 @@ public class IndexService {
         List<FieldError> errLst = new ArrayList<>();
 
         for (String elem : prmValLst) {
-            FieldError err = new FieldError("receiptForm", apnd(String.format("aTAArr[%01d].", prmKey), elem), null);
+            FieldError err = new FieldError("receiptForm", String.join(Cnst.EMPTY, String.format("aTAArr[%01d].", prmKey), elem), null);
             errLst.add(err);
         }
 
@@ -601,11 +557,12 @@ public class IndexService {
         String lstElem = lRltErrMsgLst.get(lstIndex);
         lRltErrMsgLst.set(lstIndex, lstElem.substring(0, lstElem.length() - 1));
 
-        lRltErrMsgLst.add(apnd(errMsgPropMap.get(snakeToCamel(NOT_ENTERED)), Cnst.SPRT));
+        lRltErrMsgLst.add(String.join(Cnst.EMPTY, errMsgPropMap.get(snakeToCamel(NOT_ENTERED)), Cnst.SPRT));
 
         return Pair.of(lRltErrMsgLst, lRltFldErrLst);
     }
 
+    //TODO:230905以下Cmnに移動
     //----------------------------------------------------------------------------------------------------
     /**
      * スネークケースからキャメルケースに変換して返却する
@@ -648,68 +605,6 @@ public class IndexService {
      * ダミー
      */
     //----------------------------------------------------------------------------------------------------
-    private String apnd(String... prmStrArr) {
-        StringBuilder builder = new StringBuilder();
-
-        for (String elem : prmStrArr) {
-            builder.append(elem);
-        }
-
-        return builder.toString();
-    }
-
-    //TODO:以上値確認用privateメソッド。以下値加工用privateメソッド
-
-    //----------------------------------------------------------------------------------------------------
-    /**
-     * 金額の和を求めて返す
-     *
-     * @param prmATAArr 科目・税率・金額の配列
-     * @return 金額の和
-     */
-    //----------------------------------------------------------------------------------------------------
-    private int sumAmount(AccountTaxrateAmount[] prmATAArr) {
-        int sumOfAmount = 0;
-
-        for (AccountTaxrateAmount elem : prmATAArr) {
-            Integer amount = elem.getAmount();
-
-            if (amount != null) {
-                sumOfAmount += amount;
-            }
-        }
-
-        return sumOfAmount;
-    }
-
-    //----------------------------------------------------------------------------------------------------
-    /**
-     * 外税額の文字列化と外税額の和を求めて返す
-     * 
-     * @param prmTaxAmountArr 外税額の配列
-     * @return first：文字列化した外税額の配列。second：外税額の和
-     */
-    //----------------------------------------------------------------------------------------------------
-    private Pair<String[], Integer> toStringAndSumForTaxAmount(Integer... prmTaxAmountArr) {
-        String[] strArr = new String[prmTaxAmountArr.length];
-        int sum = 0;
-
-        for (int i = 0; i < prmTaxAmountArr.length; i++) {
-            Integer elem = prmTaxAmountArr[i];
-
-            if (elem == null) {
-                strArr[i] = Cnst.DASH;
-
-                continue;
-            }
-
-            strArr[i] = String.valueOf(elem);
-            sum += elem;
-        }
-
-        return Pair.of(strArr, sum);
-    }
-    
     private String intToStr(Integer prmInt) {
         return prmInt == null ? Cnst.DASH : String.valueOf(prmInt);
     }

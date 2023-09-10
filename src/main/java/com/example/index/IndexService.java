@@ -8,6 +8,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -243,6 +246,9 @@ public class IndexService {
         // 以下、入力に不備がある場合の処理
         // エラーメッセージ、フィールドエラーの作成、偽の返却
 
+        // レシートフォーム用のフィールドエラーを生成して返す
+        Function<String, FieldError> cretErr = s -> new FieldError(RECEIPT_FORM, s, null);
+        
         // エラーメッセージ用プロパティが取得済みか確認
         if (errMsgPropMap == null) {
             // エラーメッセージ用プロパティの取得
@@ -256,17 +262,17 @@ public class IndexService {
         if (!isCrctDt) {
             // 日付の入力に不備がある場合
             rltErrMsgLst.add(String.join(Cnst.EMPTY, errMsgPropMap.get(DATE), errMsgPropMap.get(INCORRECT), Cnst.SPRT));
-            rltFldErrLst.add(createFieldError(DAY_S));
+            rltFldErrLst.add(cretErr.apply(DAY_S));
         }
 
         if (uentrdItemMap == null) {
             // 全ての科目・税率・金額が未入力の場合
-            rltErrMsgLst.add(String.join(Cnst.EMPTY, errMsgPropMap.get(ACCOUNT), errMsgPropMap.get(snakeToCamel(F_DOT)),
-                    errMsgPropMap.get(buildCamelCase(TAX, RATE)), errMsgPropMap.get(snakeToCamel(F_DOT)),
-                    errMsgPropMap.get(AMOUNT), errMsgPropMap.get(snakeToCamel(NOT_ENTERED)), Cnst.SPRT));
-            rltFldErrLst.add(createFieldError(String.join(Cnst.EMPTY, A_T_A_0, ACCOUNT)));
-            rltFldErrLst.add(createFieldError(String.join(Cnst.EMPTY, A_T_A_0, buildCamelCase(TAX, RATE))));
-            rltFldErrLst.add(createFieldError(String.join(Cnst.EMPTY, A_T_A_0, AMOUNT)));
+            rltErrMsgLst.add(String.join(Cnst.EMPTY, errMsgPropMap.get(ACCOUNT), errMsgPropMap.get(Cmn.arrToCamel(F_DOT.split(Cnst.US))),
+                    errMsgPropMap.get(Cmn.arrToCamel(TAX, RATE)), errMsgPropMap.get(Cmn.arrToCamel(F_DOT.split(Cnst.US))),
+                    errMsgPropMap.get(AMOUNT), errMsgPropMap.get(Cmn.arrToCamel(NOT_ENTERED.split(Cnst.US))), Cnst.SPRT));
+            rltFldErrLst.add(cretErr.apply(String.join(Cnst.EMPTY, A_T_A_0, ACCOUNT)));
+            rltFldErrLst.add(cretErr.apply(String.join(Cnst.EMPTY, A_T_A_0, Cmn.arrToCamel(TAX, RATE))));
+            rltFldErrLst.add(cretErr.apply(String.join(Cnst.EMPTY, A_T_A_0, AMOUNT)));
         } else {
             // 科目・税率・金額の組み合わせで未入力項目がある場合
             Pair<List<String>, List<FieldError>> errPair = buildCombiErrPair(uentrdItemMap);
@@ -276,10 +282,10 @@ public class IndexService {
 
         if (taxAmountFor08 == null && taxAmountFor10 == null) {
             // 税額のいずれもが未入力の場合
-            rltErrMsgLst.add(String.join(Cnst.EMPTY, errMsgPropMap.get(buildCamelCase(TAX, AMOUNT)),
-                    errMsgPropMap.get(snakeToCamel(NOT_ENTERED)), Cnst.SPRT));
-            rltFldErrLst.add(createFieldError(String.join(Cnst.EMPTY, buildCamelCase(TAX, AMOUNT), FOR, P08)));
-            rltFldErrLst.add(createFieldError(String.join(Cnst.EMPTY, buildCamelCase(TAX, AMOUNT), FOR, P10)));
+            rltErrMsgLst.add(String.join(Cnst.EMPTY, errMsgPropMap.get(Cmn.arrToCamel(TAX, AMOUNT)),
+                    errMsgPropMap.get(Cmn.arrToCamel(NOT_ENTERED.split(Cnst.US))), Cnst.SPRT));
+            rltFldErrLst.add(cretErr.apply(String.join(Cnst.EMPTY, Cmn.arrToCamel(TAX, AMOUNT), FOR, P08)));
+            rltFldErrLst.add(cretErr.apply(String.join(Cnst.EMPTY, Cmn.arrToCamel(TAX, AMOUNT), FOR, P10)));
         }
 
         rltErrMsg = String.join(Cnst.EMPTY, rltErrMsgLst);
@@ -354,8 +360,9 @@ public class IndexService {
         registered.setSubtotal(totalArr[0]);
         registered.setSumTotal(totalArr[1]);
         
-        registered.setTaxAmount1(intToStr(prmReceiptForm.getTaxAmountFor08()));
-        registered.setTaxAmount2(intToStr(prmReceiptForm.getTaxAmountFor10()));
+        Function<Integer, String> intToStr = i -> i == null ? Cnst.DASH : String.valueOf(i);
+        registered.setTaxAmount1(intToStr.apply(prmReceiptForm.getTaxAmountFor08()));
+        registered.setTaxAmount2(intToStr.apply(prmReceiptForm.getTaxAmountFor10()));
 
         return registered;
     }
@@ -370,7 +377,8 @@ public class IndexService {
      * 
      * @return 取得したメッセージプロパティ
      */
-    //----------------------------------------------------------------------------------------------------TODO:記述位置OK
+    //----------------------------------------------------------------------------------------------------
+    //TODO:230910StreamからMapへの変換方法がないか？
     private Map<String, String> getErrMsgPrpMap() {
         Map<String, String> prpMap = new HashMap<>();
 
@@ -383,30 +391,66 @@ public class IndexService {
         Stream<String> codeStream = Stream.of(AMOUNT, String.join(Cnst.EMPTY, TAX, Cnst.US, AMOUNT), AMOUNT_RANGE,
                 F_DOT, DATE, ACCOUNT, String.join(Cnst.EMPTY, TAX, Cnst.US, RATE), INCORRECT, NOT_ENTERED);
         
-        codeStream.forEach(e -> prpMap.put(snakeToCamel(e), messageSource.getMessage(PREFIX + e, null, Locale.JAPAN)));
+        codeStream.forEach(e -> prpMap.put(Cmn.arrToCamel(e.split(Cnst.US)), messageSource.getMessage(PREFIX + e, null, Locale.JAPAN)));
         
         return prpMap;
     }
 
     //----------------------------------------------------------------------------------------------------
     /**
-     * ダミー
+     * フィールドエラーのフィールドをキーに、エラーメッセージを組み立てて返す
+     * 
+     * @param prmErrLst フィールドエラーのリスト
+     * @return エラーメッセージ
      */
     //----------------------------------------------------------------------------------------------------
-    //TODO:メソッド名検討
-    private FieldError createFieldError(String prmField) {
-        return new FieldError(RECEIPT_FORM, prmField, null);
+    private String buildErrMsg(List<FieldError> prmErrLst) {
+        StringBuilder errMsgBuilder = new StringBuilder();
+
+        for (FieldError elem : prmErrLst) {
+            String key = null;
+            if (elem.getField().contains(TAX)) {
+                //                key = TAX_AMOUNT;
+                key = String.join(Cnst.EMPTY, TAX, Cnst.US, AMOUNT);
+            } else {
+                key = AMOUNT;
+            }
+
+            String msg = errMsgPropMap.get(Cmn.arrToCamel(key.split(Cnst.US)));
+
+            if (errMsgBuilder.indexOf(msg) > -1) {
+                continue;
+            }
+
+            if (errMsgBuilder.length() > 0) {
+                errMsgBuilder.append(Cnst.F_COMMA);
+            }
+
+            errMsgBuilder.append(msg);
+        }
+        
+        Stream<FieldError> strErr = prmErrLst.stream();
+        
+        Stream<FieldError> temp = strErr.map(e ->);
+        
+        
+        
+        
+        
+
+        return errMsgBuilder.append(errMsgPropMap.get(Cmn.arrToCamel(AMOUNT_RANGE.split(Cnst.US)))).toString();
     }
 
     //----------------------------------------------------------------------------------------------------
     /**
-     * ダミー
+     * 科目・税率・金額(の組み合わせ)で1または2個の入力の場合に未入力の項目をピックアップして返す
+     * 
+     * @param prmATAArr　科目・税率・金額の配列
+     * @return 配列の全ての科目・税率・金額が未入力の場合：null。
+     *         入力の状態に不備がある場合：1以上、引数の長さ以下のMap
+     *         入力の状態に不備がない場合：size0のMap
      */
     //----------------------------------------------------------------------------------------------------
-    //TODO:未入力の項目をピックアップする旨の名称に変更
-    //TODO:問題ない場合：sizeが0のMapが返る。
-    //問題ある場合：1以上、引数の長さ以下のMapが返る。
-    //未入力の場合：nullを返す
     private Map<Integer, List<String>> pickUpUnenteredItemMap(AccountTaxrateAmount[] prmATAArr) {
         int uentrdCounter = 0;
         Map<Integer, List<String>> uentrdItemMap = new LinkedHashMap<>();
@@ -421,7 +465,7 @@ public class IndexService {
             }
 
             if (Cnst.EMPTY.equals(elem.getTaxRate())) {
-                uentrdItemLst.add(buildCamelCase(TAX, RATE));
+                uentrdItemLst.add(Cmn.arrToCamel(TAX, RATE));
             }
 
             if (elem.getAmount() == null) {
@@ -455,81 +499,37 @@ public class IndexService {
 
     //----------------------------------------------------------------------------------------------------
     /**
-     * フィールドエラーのフィールドをキーに、エラーメッセージを組み立てて返す
-     * 
-     * @param prmErrLst フィールドエラーのリスト
-     * @return エラーメッセージ
-     */
-    //----------------------------------------------------------------------------------------------------
-    private String buildErrMsg(List<FieldError> prmErrLst) {
-        StringBuilder errMsgBuilder = new StringBuilder();
-
-        for (FieldError elem : prmErrLst) {
-            String key = null;
-            if (elem.getField().contains(TAX)) {
-                //                key = TAX_AMOUNT;
-                key = String.join(Cnst.EMPTY, TAX, Cnst.US, AMOUNT);
-            } else {
-                key = AMOUNT;
-            }
-
-            String msg = errMsgPropMap.get(snakeToCamel(key));
-
-            if (errMsgBuilder.indexOf(msg) > -1) {
-                continue;
-            }
-
-            if (errMsgBuilder.length() > 0) {
-                errMsgBuilder.append(Cnst.F_COMMA);
-            }
-
-            errMsgBuilder.append(msg);
-        }
-
-        return errMsgBuilder.append(errMsgPropMap.get(snakeToCamel(AMOUNT_RANGE))).toString();
-    }
-
-    //----------------------------------------------------------------------------------------------------
-    /**
-     * 科目・税率・金額(の組み合わせ)で1または2個の入力の場合にエラーメッセージを組み立てて返す
-     * 20230831ここ
-     */
-    //----------------------------------------------------------------------------------------------------
-    private String buildRltErrMsg(int prmKey, List<String> prmValLst) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(String.format("%02d", prmKey + 1)).append("の").append(errMsgPropMap.get(prmValLst.get(0)));
-
-        if (prmValLst.size() == 2) {
-            builder.append("と").append(errMsgPropMap.get(prmValLst.get(1)));
-        }
-
-        return builder.append(Cnst.F_COMMA).toString();
-    }
-
-    //----------------------------------------------------------------------------------------------------
-    /**
-     * ダミー
-     */
-    //----------------------------------------------------------------------------------------------------
-    //TODO:メソッド名変更検討
-    private List<FieldError> buildRltFldErrLst(int prmKey, List<String> prmValLst) {
-        List<FieldError> errLst = new ArrayList<>();
-
-        for (String elem : prmValLst) {
-            FieldError err = new FieldError("receiptForm", String.join(Cnst.EMPTY, String.format("aTAArr[%01d].", prmKey), elem), null);
-            errLst.add(err);
-        }
-
-        return errLst;
-    }
-
-    //----------------------------------------------------------------------------------------------------
-    /**
      * ダミー
      */
     //----------------------------------------------------------------------------------------------------
     //科目・税率・金額の組み合わせで未入力項目がある場合
     private Pair<List<String>, List<FieldError>> buildCombiErrPair(Map<Integer, List<String>> prmErrItemMap) {
+        // 科目・税率・金額(の組み合わせ)で1または2個の入力の場合にエラーメッセージを組み立てて返す
+        BiFunction<Integer, List<String>, String> buildRltErrMsg = (i, l) -> {
+            StringBuilder builder = new StringBuilder();
+            builder.append(String.format("%02d", i + 1)).append("の").append(errMsgPropMap.get(l.get(0)));
+
+            if (l.size() == 2) {
+                builder.append("と").append(errMsgPropMap.get(l.get(1)));
+            }
+
+            return builder.append(Cnst.F_COMMA).toString();
+        };
+        
+        
+        BiFunction<Integer, List<String>, List<FieldError>> buildRltFldErrLst = (i, l) -> {
+//            List<FieldError> errLst = new ArrayList<>();
+//
+//            for (String elem : l) {
+//                FieldError err = new FieldError("receiptForm", String.join(Cnst.EMPTY, String.format("aTAArr[%01d].", i), elem), null);
+//                errLst.add(err);
+//            }
+            
+            Stream<FieldError> errStr = l.stream().map(e -> new FieldError("receiptForm", String.join(Cnst.EMPTY, String.format("aTAArr[%01d].", i), e), null));
+
+            return errStr.collect(Collectors.toList());
+        };
+        
         List<String> lRltErrMsgLst = new ArrayList<>();
         List<FieldError> lRltFldErrLst = new ArrayList<>();
 
@@ -537,14 +537,14 @@ public class IndexService {
         for (int elem : prmErrItemMap.keySet()) {
             List<String> valLst = prmErrItemMap.get(elem);
 
-            lRltErrMsgLst.add(buildRltErrMsg(elem, valLst));
+            lRltErrMsgLst.add(buildRltErrMsg.apply(elem, valLst));
             i++;
             if (i == 8) {
                 i = 0;
                 lRltErrMsgLst.add(Cnst.SPRT);
             }
 
-            lRltFldErrLst.addAll(buildRltFldErrLst(elem, valLst));
+            lRltFldErrLst.addAll(buildRltFldErrLst.apply(elem, valLst));
         }
 
         int lastIndex = lRltErrMsgLst.size() - 1;
@@ -557,70 +557,8 @@ public class IndexService {
         String lstElem = lRltErrMsgLst.get(lstIndex);
         lRltErrMsgLst.set(lstIndex, lstElem.substring(0, lstElem.length() - 1));
 
-        lRltErrMsgLst.add(String.join(Cnst.EMPTY, errMsgPropMap.get(snakeToCamel(NOT_ENTERED)), Cnst.SPRT));
+        lRltErrMsgLst.add(String.join(Cnst.EMPTY, errMsgPropMap.get(Cmn.arrToCamel(NOT_ENTERED.split(Cnst.US))), Cnst.SPRT));
 
         return Pair.of(lRltErrMsgLst, lRltFldErrLst);
     }
-
-    //TODO:230905以下Cmnに移動
-    //----------------------------------------------------------------------------------------------------
-    /**
-     * スネークケースからキャメルケースに変換して返却する
-     *
-     * @param prmSnakeCase スネークケースの文字列
-     * @return キャメルケースに変換した文字列
-     */
-    //----------------------------------------------------------------------------------------------------
-    private String snakeToCamel(String prmSnakeCase) {
-        String[] split = prmSnakeCase.split(Cnst.US);
-        StringBuilder builder = new StringBuilder(split[0]);
-
-        for (int i = 1; i < split.length; i++) {
-            builder.append(split[i].substring(0, 1).toUpperCase()).append(split[i].substring(1));
-        }
-
-        return builder.toString();
-    }
-
-    //----------------------------------------------------------------------------------------------------
-    /**
-     * 文字列配列を連結してキャメルケースの文字列を作成し返す
-     * 
-     * @param prmStrArr 処理対象の文字列配列
-     * @return 作成したキャメルケースの文字列
-     */
-    //----------------------------------------------------------------------------------------------------
-    private String buildCamelCase(String... prmStrArr) {
-        StringBuilder sb = new StringBuilder(prmStrArr[0]);
-        
-        for (int i = 1; i < prmStrArr.length; i++) {
-            sb.append(Character.toUpperCase(prmStrArr[i].charAt(0))).append(prmStrArr[i].substring(1));
-        }
-        
-        return sb.toString();
-        
-        //TODO:230907ここまで
-//        Stream<String> s = Stream.of(prmStrArr);
-//        
-//        Stream<String> x =
-//        
-//        s.skip(1).map(e -> String.join("",  String.valueOf(   Character.toUpperCase(e.charAt(0))), e.substring(1))       );
-//        
-//        String tmp = String.join("", x.toArray(String[]::new));        
-//        
-//        return tmp;
-    }
-
-    //----------------------------------------------------------------------------------------------------
-    /**
-     * ダミー
-     */
-    //----------------------------------------------------------------------------------------------------
-    private String intToStr(Integer prmInt) {
-        return prmInt == null ? Cnst.DASH : String.valueOf(prmInt);
-    }
-    
-    
-    
-    
 }

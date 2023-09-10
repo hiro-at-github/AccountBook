@@ -1,6 +1,7 @@
 package com.example.common;
 
 import java.text.DateFormat;
+import java.util.stream.Stream;
 
 public class Cmn {
     @SuppressWarnings("unchecked")
@@ -29,8 +30,34 @@ public class Cmn {
         }
     }
 
-    
-    
+    //----------------------------------------------------------------------------------------------------
+    /**
+     * 文字列配列を連結してキャメルケースの文字列を作成し返す
+     * 
+     * @param prmStrArr 処理対象の文字列配列
+     * @return 作成したキャメルケースの文字列
+     */
+    //----------------------------------------------------------------------------------------------------
+    public static String arrToCamel(String... prmStrArr) {
+        Stream<String> strStr =
+            Stream.of(prmStrArr).skip(1)
+                .map(e -> String.join(Cnst.EMPTY , String.valueOf(Character.toUpperCase(e.charAt(0))), e.substring(1)));
+        
+        return String.join(Cnst.EMPTY, prmStrArr[0],   String.join(Cnst.EMPTY, strStr.toArray(String[]::new)));        
+    }
+
+    //TODO:230908暫くして不要なら削除
+    //----------------------------------------------------------------------------------------------------
+    /**
+     * スネークケースからキャメルケースに変換し返す
+     *
+     * @param prmSnakeCase スネークケースの文字列
+     * @return キャメルケースに変換した文字列
+     */
+    //----------------------------------------------------------------------------------------------------
+//    public static String snakeToCamel(String prmSnakeCase) {
+//        return arrToCamel(prmSnakeCase.split(Cnst.US));
+//    }
     
     
     

@@ -205,7 +205,7 @@ public class IndexService {
      * @param prmResult バインディングリザルト
      * @return エラーメッセージ
      */
-    //----------------------------------------------------------------------------------------------------TODO:142行目から呼び出し
+    //----------------------------------------------------------------------------------------------------
     public String buildFldErrMsg(BindingResult prmResult) {
         // エラーメッセージ用プロパティが取得済みか確認
         if (errMsgPropMap == null) {
@@ -429,15 +429,6 @@ public class IndexService {
             errMsgBuilder.append(msg);
         }
         
-        Stream<FieldError> strErr = prmErrLst.stream();
-        
-        Stream<FieldError> temp = strErr.map(e ->);
-        
-        
-        
-        
-        
-
         return errMsgBuilder.append(errMsgPropMap.get(Cmn.arrToCamel(AMOUNT_RANGE.split(Cnst.US)))).toString();
     }
 

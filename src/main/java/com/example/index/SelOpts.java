@@ -44,7 +44,7 @@ public class SelOpts {
 
     //----------------------------------------------------------------------------------------------------
     /**
-     * 年の選択肢を返却する
+     * 年の選択肢を返す
      *
      * @param prmYear 選択肢の末尾の年
      * @return 年の選択肢
@@ -71,7 +71,7 @@ public class SelOpts {
 
     //----------------------------------------------------------------------------------------------------
     /**
-     * 月の選択肢を返却する
+     * 月の選択肢を返す
      *
      * @return 月の選択肢
      */
@@ -82,7 +82,7 @@ public class SelOpts {
 
     //----------------------------------------------------------------------------------------------------
     /**
-     * 日の選択肢を返却する
+     * 日の選択肢を返す
      *
      * @param prmYear
      * @return 日の選択肢
@@ -94,7 +94,7 @@ public class SelOpts {
 
     //----------------------------------------------------------------------------------------------------
     /**
-     * 科目の選択肢を返却する
+     * 科目の選択肢を返す
      *
      * @return 科目の選択肢
      */
@@ -112,7 +112,7 @@ public class SelOpts {
 
     //----------------------------------------------------------------------------------------------------
     /**
-     * 消費税率の選択肢を返却する
+     * 消費税率の選択肢を返す
      *
      * @return 消費税率の選択肢
      */
@@ -120,11 +120,6 @@ public class SelOpts {
     public Map<String, Integer> getTaxRateMap() {
         Map<String, Integer> taxRateMap = new LinkedHashMap<>();
         taxRateMap.put(Cnst.EMPTY, null);
-
-//        for (String elem : new String[] {"no1", "no2"}) {
-//            String msg = messageSource.getMessage("tax_rate" + Cnst.DOT + elem, null, Locale.JAPAN);
-//            taxRateMap.put(msg, Integer.valueOf(msg));
-//        }
 
         // 消費税率のキーは"no1"、"no2"だけのため直接記述
         for (int i = 0; i < 2; i++) {
@@ -137,7 +132,7 @@ public class SelOpts {
 
     //----------------------------------------------------------------------------------------------------
     /**
-     * 先頭が"01"、末尾が引数の長さの選択肢を返却する
+     * 先頭が"01"、末尾が引数の長さの選択肢を返す
      *
      * @param prmLength 選択肢の長さ
      * @return 選択肢
@@ -152,25 +147,4 @@ public class SelOpts {
 
         return optArr;
     }
-
-//    private Map<String, List<String>> getSelectOptionsKeysMap() {
-//        String msg = messageSource.getMessage("select_options.keys", null, Locale.JAPAN);
-//        String[] msgArr = msg.split(",");
-//        Map<String, List<String>> selectOptionsKeysMap = new LinkedHashMap<>();
-//
-//        for (String elem : msgArr) {
-//            String[] elemArr = elem.split(Pattern.quote("."));
-//            List<String> valueList = selectOptionsKeysMap.get(elemArr[0]);
-//
-//            if (valueList == null) {
-//                List<String> newValueList = new ArrayList<>();
-//                newValueList.add(elem);
-//                selectOptionsKeysMap.put(elemArr[0], newValueList);
-//            } else {
-//                valueList.add(elem);
-//            }
-//        }
-//
-//        return selectOptionsKeysMap;
-//    }
 }

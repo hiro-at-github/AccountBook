@@ -515,7 +515,6 @@ public class IndexService {
 //                FieldError err = new FieldError("receiptForm", String.join(Cnst.EMPTY, String.format("aTAArr[%01d].", i), elem), null);
 //                errLst.add(err);
 //            }
-            
             Stream<FieldError> errStr = l.stream().map(e -> new FieldError("receiptForm", String.join(Cnst.EMPTY, String.format("aTAArr[%01d].", i), e), null));
 
             return errStr.collect(Collectors.toList());

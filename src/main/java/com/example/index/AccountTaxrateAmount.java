@@ -3,6 +3,8 @@ package com.example.index;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
+import com.example.common.Cnst;
+
 import lombok.Data;
 
 //----------------------------------------------------------------------------------------------------
@@ -23,9 +25,20 @@ public class AccountTaxrateAmount {
     @Max(9999999)
     private Integer amount;
 
-    /** 番号(確認用) */
-    private String numForCnfrm;
-
-    /** 金額(確認用) */
-    private String amntForCnfrm;
+//    /** 番号(確認用) */
+//    private String numForCnfrm;
+//
+//    /** 金額(確認用) */
+//    private String amntForCnfrm;
+    
+    public String getStatus() {
+        StringBuilder sb = new StringBuilder();
+        
+        sb.append(Cnst.EMPTY.equals(account) ? "0" : "1");
+        
+        
+        
+        
+        return sb.toString();
+    }
 }

@@ -18,6 +18,11 @@ public class Cnst {
     /** スラッシュ(Slash) */
     public static final String SL = "/";
 
+    /** 文字列の0 */
+    public static final String ZERO = "0";
+    /** 文字列の1 */
+    public static final String ONE = "1";
+    
     /** カンマ(全角) */
     public static final String F_COMMA = "、";
 

@@ -488,6 +488,45 @@ public class IndexService {
         return uentrdItemMap;
     }
 
+    private Object tmpMtd(AccountTaxrateAmount[] prmATAArr) {
+        List<AccountTaxrateAmount> tmpLst = new ArrayList<>();
+        
+        int emptyCnt = 0;
+        
+        for (int i = 0; i < prmATAArr.length; i++) {
+            AccountTaxrateAmount elem = prmATAArr[i];
+            String status = prmATAArr[i].getStatus();
+            
+            switch (status) {
+            case "000":
+                emptyCnt++;
+                
+                continue;
+                
+            case "111":
+                continue;
+                
+            default:
+                elem.setNo(i);
+                tmpLst.add(elem);
+                
+                continue;
+                
+            }
+        }
+        
+        if (emptyCnt == prmATAArr.length) {
+            return null;
+        }
+        
+        return tmpLst;
+    }
+    
+    
+    
+    
+    
+    
     //----------------------------------------------------------------------------------------------------
     /**
      * ダミー

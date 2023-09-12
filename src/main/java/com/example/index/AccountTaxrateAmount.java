@@ -14,6 +14,9 @@ import lombok.Data;
 //----------------------------------------------------------------------------------------------------
 @Data
 public class AccountTaxrateAmount {
+    /** 番号 */
+    private int no;
+    
     /** 勘定科目 */
     private String account;
 
@@ -34,10 +37,9 @@ public class AccountTaxrateAmount {
     public String getStatus() {
         StringBuilder sb = new StringBuilder();
         
-        sb.append(Cnst.EMPTY.equals(account) ? "0" : "1");
-        
-        
-        
+        sb.append(Cnst.EMPTY.equals(account) ? Cnst.ZERO : Cnst.ONE)
+        .append(Cnst.EMPTY.equals(taxRate) ? Cnst.ZERO : Cnst.ONE)
+        .append(amount == null ? Cnst.ZERO : Cnst.ONE);
         
         return sb.toString();
     }

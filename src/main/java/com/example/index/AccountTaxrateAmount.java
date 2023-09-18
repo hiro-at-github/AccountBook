@@ -1,5 +1,8 @@
 package com.example.index;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
@@ -43,4 +46,47 @@ public class AccountTaxrateAmount {
         
         return sb.toString();
     }
+    
+    public String getStatus2() {
+        StringBuilder sb = new StringBuilder();
+        
+        if (account.equals(Cnst.EMPTY)) {
+            sb.append("account");
+        }
+        
+        if (taxRate.equals(Cnst.EMPTY)) {
+            sb.append(Cnst.US).append("taxRate");
+        }
+        
+        if (amount == null) {
+            sb.append("amount");
+        }
+        
+        return sb.toString();
+    }
+    
+    public List<String> getEmptyItemLst() {
+        List<String> emptyItemLst = new ArrayList<>();
+        
+        if (account.equals(Cnst.EMPTY)) {
+            emptyItemLst.add("account");
+        }
+        
+        if (taxRate.equals(Cnst.EMPTY)) {
+            emptyItemLst.add("taxRate");
+        }
+        
+        if (amount == null) {
+            emptyItemLst.add("amount");
+        }
+        
+        return emptyItemLst;
+    }
+    
+    
+    
+    
+    
+    
+    
 }

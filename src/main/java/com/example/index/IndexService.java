@@ -228,10 +228,12 @@ public class IndexService {
     //----------------------------------------------------------------------------------------------------
     public boolean isRelatedItemsEntered(ReceiptForm prmReceiptForm) {
         // 年月日が日付として適当か確認
-        boolean isCrctDt = Cmn.isCorrectDate(prmReceiptForm.getYear(), prmReceiptForm.getMonth(), prmReceiptForm.getDay());
+        boolean isCrctDt = Cmn.isCorrectDate(prmReceiptForm.getYear(), prmReceiptForm.getMonth(),
+                prmReceiptForm.getDay());
 
         // 科目・税率・金額の入力の有無の確認
         Map<Integer, List<String>> uentrdItemMap = pickUpUnenteredItemMap(prmReceiptForm.getATAArr());
+        List<AccountTaxrateAmount> tmpLst = tmpMtd(prmReceiptForm.getATAArr());
 
         // 税額の取得
         Integer taxAmountFor08 = prmReceiptForm.getTaxAmountFor08();
@@ -248,7 +250,7 @@ public class IndexService {
 
         // レシートフォーム用のフィールドエラーを生成して返す
         Function<String, FieldError> cretErr = s -> new FieldError(RECEIPT_FORM, s, null);
-        
+
         // エラーメッセージ用プロパティが取得済みか確認
         if (errMsgPropMap == null) {
             // エラーメッセージ用プロパティの取得
@@ -267,17 +269,23 @@ public class IndexService {
 
         if (uentrdItemMap == null) {
             // 全ての科目・税率・金額が未入力の場合
-            rltErrMsgLst.add(String.join(Cnst.EMPTY, errMsgPropMap.get(ACCOUNT), errMsgPropMap.get(Cmn.arrToCamel(F_DOT.split(Cnst.US))),
-                    errMsgPropMap.get(Cmn.arrToCamel(TAX, RATE)), errMsgPropMap.get(Cmn.arrToCamel(F_DOT.split(Cnst.US))),
-                    errMsgPropMap.get(AMOUNT), errMsgPropMap.get(Cmn.arrToCamel(NOT_ENTERED.split(Cnst.US))), Cnst.SPRT));
+            rltErrMsgLst.add(String.join(Cnst.EMPTY, errMsgPropMap.get(ACCOUNT),
+                    errMsgPropMap.get(Cmn.arrToCamel(F_DOT.split(Cnst.US))),
+                    errMsgPropMap.get(Cmn.arrToCamel(TAX, RATE)),
+                    errMsgPropMap.get(Cmn.arrToCamel(F_DOT.split(Cnst.US))),
+                    errMsgPropMap.get(AMOUNT), errMsgPropMap.get(Cmn.arrToCamel(NOT_ENTERED.split(Cnst.US))),
+                    Cnst.SPRT));
             rltFldErrLst.add(cretErr.apply(String.join(Cnst.EMPTY, A_T_A_0, ACCOUNT)));
             rltFldErrLst.add(cretErr.apply(String.join(Cnst.EMPTY, A_T_A_0, Cmn.arrToCamel(TAX, RATE))));
             rltFldErrLst.add(cretErr.apply(String.join(Cnst.EMPTY, A_T_A_0, AMOUNT)));
         } else {
             // 科目・税率・金額の組み合わせで未入力項目がある場合
             Pair<List<String>, List<FieldError>> errPair = buildCombiErrPair(uentrdItemMap);
-            rltErrMsgLst.addAll(errPair.getFirst());
+            rltErrMsgLst.addAll(buildRltErrMsgLst(tmpLst));
             rltFldErrLst.addAll(errPair.getSecond());
+
+            List<String> aaa = buildRltErrMsgLst(tmpLst);
+            List<String> bbb = aaa;
         }
 
         if (taxAmountFor08 == null && taxAmountFor10 == null) {
@@ -326,21 +334,22 @@ public class IndexService {
      */
     //----------------------------------------------------------------------------------------------------
     public String[] getSubtotalAndSumTotalArr(ReceiptForm prmReceiptForm) {
-        int subtotal = Stream.of(prmReceiptForm.getATAArr()).filter(e -> e.getAmount() != null).mapToInt(e -> e.getAmount()).sum();
-        
+        int subtotal = Stream.of(prmReceiptForm.getATAArr()).filter(e -> e.getAmount() != null)
+                .mapToInt(e -> e.getAmount()).sum();
+
         int sumTotal = subtotal;
-        
+
         if (prmReceiptForm.getTaxAmountFor08() != null) {
             sumTotal += prmReceiptForm.getTaxAmountFor08();
         }
-        
+
         if (prmReceiptForm.getTaxAmountFor10() != null) {
             sumTotal += prmReceiptForm.getTaxAmountFor10();
         }
-        
-        return new String[] {String.valueOf(subtotal), String.valueOf(sumTotal)};
+
+        return new String[] { String.valueOf(subtotal), String.valueOf(sumTotal) };
     }
-    
+
     //----------------------------------------------------------------------------------------------------
     /**
      * レシートフォームの内容をファイルに登録(書き込み)し、登録したレシートの概要を返す
@@ -353,13 +362,14 @@ public class IndexService {
     public Registered getRegistered(ReceiptForm prmReceiptForm) {
         // 戻り値を作る処理
         Registered registered = new Registered();
-        registered.setDate(String.join(Cnst.EMPTY, prmReceiptForm.getYear(), prmReceiptForm.getMonth(), prmReceiptForm.getDay()));
-        
+        registered.setDate(
+                String.join(Cnst.EMPTY, prmReceiptForm.getYear(), prmReceiptForm.getMonth(), prmReceiptForm.getDay()));
+
         String[] totalArr = getSubtotalAndSumTotalArr(prmReceiptForm);
-        
+
         registered.setSubtotal(totalArr[0]);
         registered.setSumTotal(totalArr[1]);
-        
+
         Function<Integer, String> intToStr = i -> i == null ? Cnst.DASH : String.valueOf(i);
         registered.setTaxAmount1(intToStr.apply(prmReceiptForm.getTaxAmountFor08()));
         registered.setTaxAmount2(intToStr.apply(prmReceiptForm.getTaxAmountFor10()));
@@ -382,17 +392,18 @@ public class IndexService {
     private Map<String, String> getErrMsgPrpMap() {
         Map<String, String> prpMap = new HashMap<>();
 
-//        String[] codeArr = { AMOUNT, apnd(TAX, Cnst.US, AMOUNT), AMOUNT_RANGE,
-//                F_DOT, DATE, ACCOUNT, apnd(TAX, Cnst.US, RATE), INCORRECT, NOT_ENTERED };
-//        for (String elem : codeArr) {
-//            prpMap.put(snakeToCamel(elem), messageSource.getMessage(PREFIX + elem, null, Locale.JAPAN));
-//        }
+        //        String[] codeArr = { AMOUNT, apnd(TAX, Cnst.US, AMOUNT), AMOUNT_RANGE,
+        //                F_DOT, DATE, ACCOUNT, apnd(TAX, Cnst.US, RATE), INCORRECT, NOT_ENTERED };
+        //        for (String elem : codeArr) {
+        //            prpMap.put(snakeToCamel(elem), messageSource.getMessage(PREFIX + elem, null, Locale.JAPAN));
+        //        }
 
         Stream<String> codeStream = Stream.of(AMOUNT, String.join(Cnst.EMPTY, TAX, Cnst.US, AMOUNT), AMOUNT_RANGE,
                 F_DOT, DATE, ACCOUNT, String.join(Cnst.EMPTY, TAX, Cnst.US, RATE), INCORRECT, NOT_ENTERED);
-        
-        codeStream.forEach(e -> prpMap.put(Cmn.arrToCamel(e.split(Cnst.US)), messageSource.getMessage(PREFIX + e, null, Locale.JAPAN)));
-        
+
+        codeStream.forEach(e -> prpMap.put(Cmn.arrToCamel(e.split(Cnst.US)),
+                messageSource.getMessage(PREFIX + e, null, Locale.JAPAN)));
+
         return prpMap;
     }
 
@@ -428,7 +439,7 @@ public class IndexService {
 
             errMsgBuilder.append(msg);
         }
-        
+
         return errMsgBuilder.append(errMsgPropMap.get(Cmn.arrToCamel(AMOUNT_RANGE.split(Cnst.US)))).toString();
     }
 
@@ -488,45 +499,57 @@ public class IndexService {
         return uentrdItemMap;
     }
 
-    private Object tmpMtd(AccountTaxrateAmount[] prmATAArr) {
+    private List<AccountTaxrateAmount> tmpMtd(AccountTaxrateAmount[] prmATAArr) {
         List<AccountTaxrateAmount> tmpLst = new ArrayList<>();
-        
+
         int emptyCnt = 0;
-        
+
         for (int i = 0; i < prmATAArr.length; i++) {
             AccountTaxrateAmount elem = prmATAArr[i];
             String status = prmATAArr[i].getStatus();
-            
-            switch (status) {
-            case "000":
+
+            //            switch (status) {
+            //            case "000":
+            //                emptyCnt++;
+            //                
+            //                continue;
+            //                
+            //            case "111":
+            //                continue;
+            //                
+            //            default:
+            //                elem.setNo(i);
+            //                tmpLst.add(elem);
+            //                
+            //                continue;
+            //            }
+
+            //            List<String> tmpLst2 = prmATAArr[i].getEmptyItemLst();
+
+            switch (elem.getEmptyItemLst().size()) {
+            case 3:
                 emptyCnt++;
-                
+
                 continue;
-                
-            case "111":
+
+            case 0:
                 continue;
-                
+
             default:
                 elem.setNo(i);
+
                 tmpLst.add(elem);
-                
-                continue;
-                
             }
+
         }
-        
+
         if (emptyCnt == prmATAArr.length) {
             return null;
         }
-        
+
         return tmpLst;
     }
-    
-    
-    
-    
-    
-    
+
     //----------------------------------------------------------------------------------------------------
     /**
      * ダミー
@@ -545,20 +568,20 @@ public class IndexService {
 
             return builder.append(Cnst.F_COMMA).toString();
         };
-        
-        
+
         BiFunction<Integer, List<String>, List<FieldError>> buildRltFldErrLst = (i, l) -> {
-//            List<FieldError> errLst = new ArrayList<>();
-//
-//            for (String elem : l) {
-//                FieldError err = new FieldError("receiptForm", String.join(Cnst.EMPTY, String.format("aTAArr[%01d].", i), elem), null);
-//                errLst.add(err);
-//            }
-            Stream<FieldError> errStr = l.stream().map(e -> new FieldError("receiptForm", String.join(Cnst.EMPTY, String.format("aTAArr[%01d].", i), e), null));
+            //            List<FieldError> errLst = new ArrayList<>();
+            //
+            //            for (String elem : l) {
+            //                FieldError err = new FieldError("receiptForm", String.join(Cnst.EMPTY, String.format("aTAArr[%01d].", i), elem), null);
+            //                errLst.add(err);
+            //            }
+            Stream<FieldError> errStr = l.stream().map(e -> new FieldError("receiptForm",
+                    String.join(Cnst.EMPTY, String.format("aTAArr[%01d].", i), e), null));
 
             return errStr.collect(Collectors.toList());
         };
-        
+
         List<String> lRltErrMsgLst = new ArrayList<>();
         List<FieldError> lRltFldErrLst = new ArrayList<>();
 
@@ -586,8 +609,87 @@ public class IndexService {
         String lstElem = lRltErrMsgLst.get(lstIndex);
         lRltErrMsgLst.set(lstIndex, lstElem.substring(0, lstElem.length() - 1));
 
-        lRltErrMsgLst.add(String.join(Cnst.EMPTY, errMsgPropMap.get(Cmn.arrToCamel(NOT_ENTERED.split(Cnst.US))), Cnst.SPRT));
+        lRltErrMsgLst
+                .add(String.join(Cnst.EMPTY, errMsgPropMap.get(Cmn.arrToCamel(NOT_ENTERED.split(Cnst.US))), Cnst.SPRT));
 
         return Pair.of(lRltErrMsgLst, lRltFldErrLst);
     }
+
+    private List<String> buildRltErrMsgLst(List<AccountTaxrateAmount> prmATALst) {
+        // 科目・税率・金額の組み合わせで1または2個の入力の場合にエラーメッセージを組み立てて返す
+        Function<AccountTaxrateAmount, String> func = t -> {
+            List<String> emptyItemLst = t.getEmptyItemLst();
+            StringBuilder sb = new StringBuilder();
+            sb.append(String.format("%02d", t.getNo() + 1)).append("の").append(errMsgPropMap.get(emptyItemLst.get(0)));
+
+            if (emptyItemLst.size() == 2) {
+                sb.append("と").append(errMsgPropMap.get(emptyItemLst.get(1)));
+            }
+
+            return sb.toString();
+        };
+
+        List<String> appliedLst = prmATALst.stream().map(e -> func.apply(e)).collect(Collectors.toList());
+
+        // 末尾の要素を除き、各要素の文字列の末尾に全角カンマを加える
+        int lastIndex = appliedLst.size() - 1;
+        String lastElem = appliedLst.get(lastIndex);
+        appliedLst.replaceAll(e -> String.join(Cnst.EMPTY, e, Cnst.F_COMMA));
+        appliedLst.set(lastIndex, lastElem);
+
+        // 「…が未入力」を加える
+        //TODO:キーの定数化
+        appliedLst.add(errMsgPropMap.get("notEntered"));
+
+        return appliedLst;
+    }
+
+    private List<String> y230917_1(List<AccountTaxrateAmount> prmATALst) {
+        Function<List<AccountTaxrateAmount>, List<String>> func = t -> {
+            List<String> lst = t.stream().map(e -> {
+                List<String> lst2 = e.getEmptyItemLst();
+                StringBuilder sb = new StringBuilder();
+                sb.append(String.format("%02d", e.getNo() + 1)).append("の").append(errMsgPropMap.get(lst2.get(0)));
+
+                if (lst2.size() == 2) {
+                    sb.append("と").append(errMsgPropMap.get(lst2.get(1)));
+                }
+
+            });
+
+            return null;
+
+        };
+
+        return null;
+    }
+
+    private List<String> y230917_2(List<AccountTaxrateAmount> prmATALst) {
+        Stream<String> strStr = prmATALst.stream().map(e -> {
+            List<String> lst = e.getEmptyItemLst();
+            StringBuilder sb = new StringBuilder();
+            sb.append(String.format("%02d", e.getNo() + 1)).append("の").append(errMsgPropMap.get(lst.get(0)));
+
+            if (lst.size() == 2) {
+                sb.append("と").append(errMsgPropMap.get(lst.get(1)));
+            }
+
+        });
+
+        return null;
+    }
+
+    private List<FieldError> y230916(List<AccountTaxrateAmount> prmATALst) {
+        BiFunction<Integer, List<String>, List<FieldError>> func = (i, l) -> {
+            Stream<FieldError> errStr = l.stream().map(e -> new FieldError("receiptForm",
+                    String.join(Cnst.EMPTY, String.format("aTAArr[%01d].", i), e), null));
+
+            return errStr.collect(Collectors.toList());
+        };
+
+        List<FieldError> tmpLst = prmATALst.stream().map(e -> func.apply(null, null)).collect(Collectors.toList());
+
+        return null;
+    }
+
 }

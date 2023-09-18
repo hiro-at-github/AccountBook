@@ -281,11 +281,9 @@ public class IndexService {
         } else {
             // 科目・税率・金額の組み合わせで未入力項目がある場合
             Pair<List<String>, List<FieldError>> errPair = buildCombiErrPair(uentrdItemMap);
+//            rltErrMsgLst.addAll(buildRltErrMsgLst(tmpLst));
             rltErrMsgLst.addAll(buildRltErrMsgLst(tmpLst));
             rltFldErrLst.addAll(errPair.getSecond());
-
-            List<String> aaa = buildRltErrMsgLst(tmpLst);
-            List<String> bbb = aaa;
         }
 
         if (taxAmountFor08 == null && taxAmountFor10 == null) {
@@ -616,21 +614,36 @@ public class IndexService {
     }
 
     private List<String> buildRltErrMsgLst(List<AccountTaxrateAmount> prmATALst) {
-        // 科目・税率・金額の組み合わせで1または2個の入力の場合にエラーメッセージを組み立てて返す
-        Function<AccountTaxrateAmount, String> func = t -> {
-            List<String> emptyItemLst = t.getEmptyItemLst();
+//        // 科目・税率・金額の組み合わせで1または2個の入力の場合にエラーメッセージを組み立てて返す
+//        Function<AccountTaxrateAmount, String> func = t -> {
+//            List<String> emptyItemLst = t.getEmptyItemLst();
+//            StringBuilder sb = new StringBuilder();
+//            sb.append(String.format("%02d", t.getNo() + 1)).append("の").append(errMsgPropMap.get(emptyItemLst.get(0)));
+//
+//            if (emptyItemLst.size() == 2) {
+//                sb.append("と").append(errMsgPropMap.get(emptyItemLst.get(1)));
+//            }
+//
+//            return sb.toString();
+//        };
+//
+//        List<String> appliedLst = prmATALst.stream().map(e -> func.apply(e)).collect(Collectors.toList());
+        
+        Stream<String> strStr = prmATALst.stream().map(e -> {
+            List<String> emptyItemLst = e.getEmptyItemLst();
             StringBuilder sb = new StringBuilder();
-            sb.append(String.format("%02d", t.getNo() + 1)).append("の").append(errMsgPropMap.get(emptyItemLst.get(0)));
+            sb.append(String.format("%02d", e.getNo() + 1)).append("の").append(errMsgPropMap.get(emptyItemLst.get(0)));
 
             if (emptyItemLst.size() == 2) {
                 sb.append("と").append(errMsgPropMap.get(emptyItemLst.get(1)));
             }
-
+            
             return sb.toString();
-        };
 
-        List<String> appliedLst = prmATALst.stream().map(e -> func.apply(e)).collect(Collectors.toList());
+        });
 
+        List<String> appliedLst =  strStr.collect(Collectors.toList());
+        
         // 末尾の要素を除き、各要素の文字列の末尾に全角カンマを加える
         int lastIndex = appliedLst.size() - 1;
         String lastElem = appliedLst.get(lastIndex);
@@ -644,52 +657,29 @@ public class IndexService {
         return appliedLst;
     }
 
-    private List<String> y230917_1(List<AccountTaxrateAmount> prmATALst) {
-        Function<List<AccountTaxrateAmount>, List<String>> func = t -> {
-            List<String> lst = t.stream().map(e -> {
-                List<String> lst2 = e.getEmptyItemLst();
-                StringBuilder sb = new StringBuilder();
-                sb.append(String.format("%02d", e.getNo() + 1)).append("の").append(errMsgPropMap.get(lst2.get(0)));
-
-                if (lst2.size() == 2) {
-                    sb.append("と").append(errMsgPropMap.get(lst2.get(1)));
-                }
-
-            });
-
-            return null;
-
-        };
-
-        return null;
-    }
-
-    private List<String> y230917_2(List<AccountTaxrateAmount> prmATALst) {
-        Stream<String> strStr = prmATALst.stream().map(e -> {
-            List<String> lst = e.getEmptyItemLst();
-            StringBuilder sb = new StringBuilder();
-            sb.append(String.format("%02d", e.getNo() + 1)).append("の").append(errMsgPropMap.get(lst.get(0)));
-
-            if (lst.size() == 2) {
-                sb.append("と").append(errMsgPropMap.get(lst.get(1)));
-            }
-
+    private List<FieldError> y230919(List<AccountTaxrateAmount> prmATALst) {
+        Stream<FieldError> errStr = prmATALst.stream().map(e -> {
+            
         });
-
+        
+        
+        
+        
         return null;
     }
-
-    private List<FieldError> y230916(List<AccountTaxrateAmount> prmATALst) {
-        BiFunction<Integer, List<String>, List<FieldError>> func = (i, l) -> {
-            Stream<FieldError> errStr = l.stream().map(e -> new FieldError("receiptForm",
-                    String.join(Cnst.EMPTY, String.format("aTAArr[%01d].", i), e), null));
-
-            return errStr.collect(Collectors.toList());
-        };
-
-        List<FieldError> tmpLst = prmATALst.stream().map(e -> func.apply(null, null)).collect(Collectors.toList());
-
-        return null;
-    }
+    
+    
+//    private List<FieldError> y230916(List<AccountTaxrateAmount> prmATALst) {
+//        BiFunction<Integer, List<String>, List<FieldError>> func = (i, l) -> {
+//            Stream<FieldError> errStr = l.stream().map(e -> new FieldError("receiptForm",
+//                    String.join(Cnst.EMPTY, String.format("aTAArr[%01d].", i), e), null));
+//
+//            return errStr.collect(Collectors.toList());
+//        };
+//
+//        List<FieldError> tmpLst = prmATALst.stream().map(e -> func.apply(null, null)).collect(Collectors.toList());
+//
+//        return null;
+//    }
 
 }

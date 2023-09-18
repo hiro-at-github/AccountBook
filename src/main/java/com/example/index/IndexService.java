@@ -658,14 +658,24 @@ public class IndexService {
     }
 
     private List<FieldError> y230919(List<AccountTaxrateAmount> prmATALst) {
-        Stream<FieldError> errStr = prmATALst.stream().map(e -> {
-            
+        Stream<FieldError> errStr = prmATALst.stream().map(e -> 
+            new FieldError("receiptForm", String.join(Cnst.EMPTY, String.format("aTAArr[%01d].", e.getNo()), e), null)
+        );
+        
+        Stream<FieldError> errStr2 = prmATALst.stream().flatMap(e -> {
+            e.getEmptyItemLst().stream().flatMap(f -> {
+                new FieldError("receiptForm", String.join(Cnst.EMPTY, String.format("aTAArr[%01d].", e.getNo()), f), null);
+            });
         });
         
         
         
         
-        return null;
+        
+        
+        
+        
+        return errStr.collect(Collectors.toList());
     }
     
     

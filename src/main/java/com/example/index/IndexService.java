@@ -410,6 +410,10 @@ public class IndexService {
     //----------------------------------------------------------------------------------------------------
     //TODO:230921ここ
     private String buildErrMsg(List<FieldError> prmErrLst) {
+        Function<FieldError, String> func = t -> errMsgPropMap.get(t.getField().contains(TAX) ? "taxAmount" : AMOUNT);
+        
+        
+        
         StringBuilder errMsgBuilder = new StringBuilder();
 
         for (FieldError elem : prmErrLst) {
@@ -434,6 +438,22 @@ public class IndexService {
             errMsgBuilder.append(msg);
         }
 
+        Stream<String> strStr = prmErrLst.stream().map(e -> errMsgPropMap.get(e.getField().contains(TAX) ? "taxAmount" : AMOUNT))
+        .distinct();
+        
+        
+        
+        
+        String[] tmpStrArr = (String[]) strStr.toArray();
+        
+        List<String> tmpLst = strStr.collect(Collectors.toList());
+//        tmpLst.add(null);
+        
+        String tmpStr = String.join(Cnst.F_COMMA, tmpStrArr);
+        
+        
+        
+        
         return errMsgBuilder.append(errMsgPropMap.get(Cmn.arrToCamel(AMOUNT_RANGE.split(Cnst.US)))).toString();
     }
 

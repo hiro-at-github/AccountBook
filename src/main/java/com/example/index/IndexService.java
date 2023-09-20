@@ -4,18 +4,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -232,14 +229,14 @@ public class IndexService {
                 prmReceiptForm.getDay());
 
         // 科目・税率・金額の入力の有無の確認
-        Map<Integer, List<String>> uentrdItemMap = pickUpUnenteredItemMap(prmReceiptForm.getATAArr());
-        List<AccountTaxrateAmount> tmpLst = tmpMtd(prmReceiptForm.getATAArr());
+//        Map<Integer, List<String>> uentrdItemMap = pickUpUnenteredItemMap(prmReceiptForm.getATAArr());
+        List<AccountTaxrateAmount> uentrdItemLst = pickUpUnenteredItem(prmReceiptForm.getATAArr());
 
         // 税額の取得
         Integer taxAmountFor08 = prmReceiptForm.getTaxAmountFor08();
         Integer taxAmountFor10 = prmReceiptForm.getTaxAmountFor10();
 
-        if (isCrctDt && uentrdItemMap != null && uentrdItemMap.size() == 0
+        if (isCrctDt && uentrdItemLst != null && uentrdItemLst.size() == 0
                 && (taxAmountFor08 != null || taxAmountFor10 != null)) {
             // 日付、科目・税率・金額、税額の入力に不備がなければ真を返却
             return true;
@@ -267,7 +264,7 @@ public class IndexService {
             rltFldErrLst.add(cretErr.apply(DAY_S));
         }
 
-        if (uentrdItemMap == null) {
+        if (uentrdItemLst == null) {
             // 全ての科目・税率・金額が未入力の場合
             rltErrMsgLst.add(String.join(Cnst.EMPTY, errMsgPropMap.get(ACCOUNT),
                     errMsgPropMap.get(Cmn.arrToCamel(F_DOT.split(Cnst.US))),
@@ -280,10 +277,8 @@ public class IndexService {
             rltFldErrLst.add(cretErr.apply(String.join(Cnst.EMPTY, A_T_A_0, AMOUNT)));
         } else {
             // 科目・税率・金額の組み合わせで未入力項目がある場合
-            Pair<List<String>, List<FieldError>> errPair = buildCombiErrPair(uentrdItemMap);
-            //            rltErrMsgLst.addAll(buildRltErrMsgLst(tmpLst));
-            rltErrMsgLst.addAll(buildRltErrMsgLst(tmpLst));
-            rltFldErrLst.addAll(buildRltFldErrLst(tmpLst));
+            rltErrMsgLst.addAll(buildRltErrMsgLst(uentrdItemLst));
+            rltFldErrLst.addAll(buildRltFldErrLst(uentrdItemLst));
         }
 
         if (taxAmountFor08 == null && taxAmountFor10 == null) {
@@ -413,6 +408,7 @@ public class IndexService {
      * @return エラーメッセージ
      */
     //----------------------------------------------------------------------------------------------------
+    //TODO:230921ここ
     private String buildErrMsg(List<FieldError> prmErrLst) {
         StringBuilder errMsgBuilder = new StringBuilder();
 
@@ -447,82 +443,17 @@ public class IndexService {
      * 
      * @param prmATAArr　科目・税率・金額の配列
      * @return 配列の全ての科目・税率・金額が未入力の場合：null。
-     *         入力の状態に不備がある場合：1以上、引数の長さ以下のMap
-     *         入力の状態に不備がない場合：size0のMap
+     *         入力の状態に不備がある場合：1以上、引数の長さ以下のList
+     *         入力の状態に不備がない場合：size0のList
      */
     //----------------------------------------------------------------------------------------------------
-    private Map<Integer, List<String>> pickUpUnenteredItemMap(AccountTaxrateAmount[] prmATAArr) {
-        int uentrdCounter = 0;
-        Map<Integer, List<String>> uentrdItemMap = new LinkedHashMap<>();
-
-        int length = prmATAArr.length;
-        for (int i = 0; i < length; i++) {
-            AccountTaxrateAmount elem = prmATAArr[i];
-            List<String> uentrdItemLst = new ArrayList<>();
-
-            if (Cnst.EMPTY.equals(elem.getAccount())) {
-                uentrdItemLst.add(ACCOUNT);
-            }
-
-            if (Cnst.EMPTY.equals(elem.getTaxRate())) {
-                uentrdItemLst.add(Cmn.arrToCamel(TAX, RATE));
-            }
-
-            if (elem.getAmount() == null) {
-                uentrdItemLst.add(AMOUNT);
-            }
-
-            switch (uentrdItemLst.size()) {
-            case 0:
-                continue;
-
-            case 1:
-            case 2:
-                uentrdItemMap.put(i, uentrdItemLst);
-                continue;
-
-            case 3:
-                uentrdCounter++;
-                continue;
-
-            default:
-                continue;
-            }
-        }
-
-        if (uentrdCounter == length) {
-            return null;
-        }
-
-        return uentrdItemMap;
-    }
-
-    private List<AccountTaxrateAmount> tmpMtd(AccountTaxrateAmount[] prmATAArr) {
+    private List<AccountTaxrateAmount> pickUpUnenteredItem(AccountTaxrateAmount[] prmATAArr) {
         List<AccountTaxrateAmount> tmpLst = new ArrayList<>();
 
         int emptyCnt = 0;
 
         for (int i = 0; i < prmATAArr.length; i++) {
             AccountTaxrateAmount elem = prmATAArr[i];
-            String status = prmATAArr[i].getStatus();
-
-            //            switch (status) {
-            //            case "000":
-            //                emptyCnt++;
-            //                
-            //                continue;
-            //                
-            //            case "111":
-            //                continue;
-            //                
-            //            default:
-            //                elem.setNo(i);
-            //                tmpLst.add(elem);
-            //                
-            //                continue;
-            //            }
-
-            //            List<String> tmpLst2 = prmATAArr[i].getEmptyItemLst();
 
             switch (elem.getEmptyItemLst().size()) {
             case 3:
@@ -546,71 +477,6 @@ public class IndexService {
         }
 
         return tmpLst;
-    }
-
-    //----------------------------------------------------------------------------------------------------
-    /**
-     * ダミー
-     */
-    //----------------------------------------------------------------------------------------------------
-    //科目・税率・金額の組み合わせで未入力項目がある場合
-    private Pair<List<String>, List<FieldError>> buildCombiErrPair(Map<Integer, List<String>> prmErrItemMap) {
-        // 科目・税率・金額(の組み合わせ)で1または2個の入力の場合にエラーメッセージを組み立てて返す
-        BiFunction<Integer, List<String>, String> buildRltErrMsg = (i, l) -> {
-            StringBuilder builder = new StringBuilder();
-            builder.append(String.format("%02d", i + 1)).append("の").append(errMsgPropMap.get(l.get(0)));
-
-            if (l.size() == 2) {
-                builder.append("と").append(errMsgPropMap.get(l.get(1)));
-            }
-
-            return builder.append(Cnst.F_COMMA).toString();
-        };
-
-        BiFunction<Integer, List<String>, List<FieldError>> buildRltFldErrLst = (i, l) -> {
-            //            List<FieldError> errLst = new ArrayList<>();
-            //
-            //            for (String elem : l) {
-            //                FieldError err = new FieldError("receiptForm", String.join(Cnst.EMPTY, String.format("aTAArr[%01d].", i), elem), null);
-            //                errLst.add(err);
-            //            }
-            Stream<FieldError> errStr = l.stream().map(e -> new FieldError("receiptForm",
-                    String.join(Cnst.EMPTY, String.format("aTAArr[%01d].", i), e), null));
-
-            return errStr.collect(Collectors.toList());
-        };
-
-        List<String> lRltErrMsgLst = new ArrayList<>();
-        List<FieldError> lRltFldErrLst = new ArrayList<>();
-
-        int i = 0;
-        for (int elem : prmErrItemMap.keySet()) {
-            List<String> valLst = prmErrItemMap.get(elem);
-
-            lRltErrMsgLst.add(buildRltErrMsg.apply(elem, valLst));
-            i++;
-            if (i == 8) {
-                i = 0;
-                lRltErrMsgLst.add(Cnst.SPRT);
-            }
-
-            lRltFldErrLst.addAll(buildRltFldErrLst.apply(elem, valLst));
-        }
-
-        int lastIndex = lRltErrMsgLst.size() - 1;
-        String lastElem = lRltErrMsgLst.get(lastIndex);
-        if (lastElem.equals(Cnst.SPRT)) {
-            lRltErrMsgLst.remove(lastIndex);
-        }
-
-        int lstIndex = lRltErrMsgLst.size() - 1;
-        String lstElem = lRltErrMsgLst.get(lstIndex);
-        lRltErrMsgLst.set(lstIndex, lstElem.substring(0, lstElem.length() - 1));
-
-        lRltErrMsgLst
-                .add(String.join(Cnst.EMPTY, errMsgPropMap.get(Cmn.arrToCamel(NOT_ENTERED.split(Cnst.US))), Cnst.SPRT));
-
-        return Pair.of(lRltErrMsgLst, lRltFldErrLst);
     }
 
     private List<String> buildRltErrMsgLst(List<AccountTaxrateAmount> prmATALst) {

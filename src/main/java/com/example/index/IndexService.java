@@ -439,22 +439,27 @@ public class IndexService {
         }
 
         Stream<String> strStr = prmErrLst.stream().map(e -> errMsgPropMap.get(e.getField().contains(TAX) ? "taxAmount" : AMOUNT))
-        .distinct();
+                .peek(System.out::println).distinct();
+        
+        
+        Stream<String> strStr2 = Stream.concat(strStr, Stream.of(errMsgPropMap.get(Cmn.arrToCamel(AMOUNT_RANGE.split(Cnst.US)))));
+        
+//        Object[] tmpStrArr = strStr2.toArray();
+        
+        List<String> tmpLst = strStr2.collect(Collectors.toList());
         
         
         
         
-        String[] tmpStrArr = (String[]) strStr.toArray();
-        
-        List<String> tmpLst = strStr.collect(Collectors.toList());
+//        List<String> tmpLst = strStr.collect(Collectors.toList());
 //        tmpLst.add(null);
         
-        String tmpStr = String.join(Cnst.F_COMMA, tmpStrArr);
+        String tmpStr = String.join(Cnst.F_COMMA, tmpLst);
         
         
+        return tmpStr;
         
-        
-        return errMsgBuilder.append(errMsgPropMap.get(Cmn.arrToCamel(AMOUNT_RANGE.split(Cnst.US)))).toString();
+//        return errMsgBuilder.append(errMsgPropMap.get(Cmn.arrToCamel(AMOUNT_RANGE.split(Cnst.US)))).toString();
     }
 
     //----------------------------------------------------------------------------------------------------

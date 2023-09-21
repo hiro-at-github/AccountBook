@@ -1,6 +1,7 @@
 package com.example.index;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -209,8 +210,15 @@ public class IndexService {
             // エラーメッセージ用プロパティの取得
             errMsgPropMap = getErrMsgPrpMap();
         }
-
-        return buildErrMsg(prmResult.getFieldErrors());
+        
+        // フィールドエラーのフィールドをキーに、エラーメッセージを組み立てて返す
+        //TODO:キーの定数化2ヵ所
+        Stream<String> strStr =
+                prmResult.getFieldErrors().stream().map(e -> errMsgPropMap.get(e.getField().contains(TAX) ? "taxAmount" : AMOUNT)).distinct();
+            
+        String joined = String.join(Cnst.F_COMMA, strStr.collect(Collectors.toList()));
+            
+        return String.join(Cnst.EMPTY, joined, errMsgPropMap.get(Cmn.arrToCamel(AMOUNT_RANGE.split(Cnst.US))));
     }
 
     //----------------------------------------------------------------------------------------------------
@@ -402,68 +410,6 @@ public class IndexService {
 
     //----------------------------------------------------------------------------------------------------
     /**
-     * フィールドエラーのフィールドをキーに、エラーメッセージを組み立てて返す
-     * 
-     * @param prmErrLst フィールドエラーのリスト
-     * @return エラーメッセージ
-     */
-    //----------------------------------------------------------------------------------------------------
-    //TODO:230921ここ
-    private String buildErrMsg(List<FieldError> prmErrLst) {
-        Function<FieldError, String> func = t -> errMsgPropMap.get(t.getField().contains(TAX) ? "taxAmount" : AMOUNT);
-        
-        
-        
-        StringBuilder errMsgBuilder = new StringBuilder();
-
-        for (FieldError elem : prmErrLst) {
-            String key = null;
-            if (elem.getField().contains(TAX)) {
-                //                key = TAX_AMOUNT;
-                key = String.join(Cnst.EMPTY, TAX, Cnst.US, AMOUNT);
-            } else {
-                key = AMOUNT;
-            }
-
-            String msg = errMsgPropMap.get(Cmn.arrToCamel(key.split(Cnst.US)));
-
-            if (errMsgBuilder.indexOf(msg) > -1) {
-                continue;
-            }
-
-            if (errMsgBuilder.length() > 0) {
-                errMsgBuilder.append(Cnst.F_COMMA);
-            }
-
-            errMsgBuilder.append(msg);
-        }
-
-        Stream<String> strStr = prmErrLst.stream().map(e -> errMsgPropMap.get(e.getField().contains(TAX) ? "taxAmount" : AMOUNT))
-                .peek(System.out::println).distinct();
-        
-        
-        Stream<String> strStr2 = Stream.concat(strStr, Stream.of(errMsgPropMap.get(Cmn.arrToCamel(AMOUNT_RANGE.split(Cnst.US)))));
-        
-//        Object[] tmpStrArr = strStr2.toArray();
-        
-        List<String> tmpLst = strStr2.collect(Collectors.toList());
-        
-        
-        
-        
-//        List<String> tmpLst = strStr.collect(Collectors.toList());
-//        tmpLst.add(null);
-        
-        String tmpStr = String.join(Cnst.F_COMMA, tmpLst);
-        
-        
-        return tmpStr;
-        
-//        return errMsgBuilder.append(errMsgPropMap.get(Cmn.arrToCamel(AMOUNT_RANGE.split(Cnst.US)))).toString();
-    }
-
-    //----------------------------------------------------------------------------------------------------
-    /**
      * 科目・税率・金額(の組み合わせ)で1または2個の入力の場合に未入力の項目をピックアップして返す
      * 
      * @param prmATAArr　科目・税率・金額の配列
@@ -501,6 +447,12 @@ public class IndexService {
             return null;
         }
 
+        Stream<Integer> sizeStr = Arrays.stream(prmATAArr).map(e -> e.getEmptyItemLst().size());
+        
+        //TODO:230922ここ
+//        Stream<Object> objStr = sizeStr.filter(e -> )
+        
+        
         return tmpLst;
     }
 

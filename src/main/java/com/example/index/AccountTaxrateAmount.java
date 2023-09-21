@@ -37,34 +37,7 @@ public class AccountTaxrateAmount {
 //    /** 金額(確認用) */
 //    private String amntForCnfrm;
     
-    public String getStatus() {
-        StringBuilder sb = new StringBuilder();
-        
-        sb.append(Cnst.EMPTY.equals(account) ? Cnst.ZERO : Cnst.ONE)
-        .append(Cnst.EMPTY.equals(taxRate) ? Cnst.ZERO : Cnst.ONE)
-        .append(amount == null ? Cnst.ZERO : Cnst.ONE);
-        
-        return sb.toString();
-    }
-    
-    public String getStatus2() {
-        StringBuilder sb = new StringBuilder();
-        
-        if (account.equals(Cnst.EMPTY)) {
-            sb.append("account");
-        }
-        
-        if (taxRate.equals(Cnst.EMPTY)) {
-            sb.append(Cnst.US).append("taxRate");
-        }
-        
-        if (amount == null) {
-            sb.append("amount");
-        }
-        
-        return sb.toString();
-    }
-    
+    //TODO:キーの定数化
     public List<String> getEmptyItemLst() {
         List<String> emptyItemLst = new ArrayList<>();
         
@@ -82,11 +55,4 @@ public class AccountTaxrateAmount {
         
         return emptyItemLst;
     }
-    
-    
-    
-    
-    
-    
-    
 }

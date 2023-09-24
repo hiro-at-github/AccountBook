@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -443,17 +444,57 @@ public class IndexService {
 
         }
 
-        if (emptyCnt == prmATAArr.length) {
-            return null;
-        }
+//        if (emptyCnt == prmATAArr.length) {
+//            return null;
+//        }
 
         Stream<Integer> sizeStr = Arrays.stream(prmATAArr).map(e -> e.getEmptyItemLst().size());
         
         //TODO:230922ここ
-//        Stream<Object> objStr = sizeStr.filter(e -> )
+//        if (sizeStr.filter(e -> e == 3).count() == prmATAArr.length) {
+//            return null;
+//        }
+//        
+//        if (sizeStr.filter(e -> e == 0).count() == 0) {
+//            return new ArrayList<AccountTaxrateAmount>();
+//        }
+        
+        List<Integer> tmpList = sizeStr.collect(Collectors.toList());
+        
+//        if (tmpList.stream().filter(e -> e == 3).count() == prmATAArr.length) {
+//            return null;
+//        }
+//        
+//        if (tmpList.stream().filter(e -> e == 0).count() == prmATAArr.length) {
+//            return new ArrayList<AccountTaxrateAmount>();
+//        }
         
         
-        return tmpLst;
+        
+        List<AccountTaxrateAmount> aTALst = Arrays.asList(prmATAArr);
+        
+        AtomicInteger aI = new AtomicInteger(1);
+        
+        aTALst.forEach(e -> e.setNo(aI.getAndIncrement()));
+        
+//        Stream<AccountTaxrateAmount> objStr = aTALst.stream().filter(e -> e.getEmptyItemLst().size() != 3);
+//        
+//        if (objStr.count() == 0) {
+//            return null;
+//        }
+        
+        Stream<AccountTaxrateAmount> abcStr = aTALst.stream().filter(e -> e.getEmptyItemLst().size() != 0);
+        
+        long leng = abcStr.count();
+        
+        if (leng == 0) {
+            return new ArrayList<AccountTaxrateAmount>();
+        }
+        
+        
+        
+        
+        return abcStr.collect(Collectors.toList());
     }
 
     private List<String> buildRltErrMsgLst(List<AccountTaxrateAmount> prmATALst) {

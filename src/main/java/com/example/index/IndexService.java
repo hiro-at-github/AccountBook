@@ -451,15 +451,22 @@ public class IndexService {
         Stream<Integer> sizeStr = Arrays.stream(prmATAArr).map(e -> e.getEmptyItemLst().size());
         
         //TODO:230922ここ
-//        if (sizeStr.filter(e -> e == 3).count() == prmATAArr.length) {
-//            return null;
-//        }
-//        
-//        if (sizeStr.filter(e -> e == 0).count() == 0) {
-//            return new ArrayList<AccountTaxrateAmount>();
-//        }
+        if (sizeStr.filter(e -> e == 3).count() == prmATAArr.length) {
+            return null;
+        }
         
-        List<Integer> tmpList = sizeStr.collect(Collectors.toList());
+        if (sizeStr.filter(e -> e == 0).count() == 0) {
+            return new ArrayList<AccountTaxrateAmount>();
+        }
+        
+        List<Integer> sizeLst = sizeStr.collect(Collectors.toList());
+        
+        final int cnt3 = 0;
+        sizeLst.forEach(e -> cnt3 = e == 3 ? cnt3 : cnt3);
+        
+        
+        
+        
         
 //        if (tmpList.stream().filter(e -> e == 3).count() == prmATAArr.length) {
 //            return null;
@@ -485,11 +492,11 @@ public class IndexService {
         
         Stream<AccountTaxrateAmount> abcStr = aTALst.stream().filter(e -> e.getEmptyItemLst().size() != 0);
         
-        long leng = abcStr.count();
-        
-        if (leng == 0) {
-            return new ArrayList<AccountTaxrateAmount>();
-        }
+//        long leng = abcStr.count();
+//        
+//        if (leng == 0) {
+//            return new ArrayList<AccountTaxrateAmount>();
+//        }
         
         
         

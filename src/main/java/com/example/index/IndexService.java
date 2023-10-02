@@ -115,11 +115,11 @@ public class IndexService {
      */
     //----------------------------------------------------------------------------------------------------
     public IndexService() {
-        taxAmount = String.join(Cnst.EMPTY, TAX_AMOUNT.split(Cnst.US));
-        amountRange = String.join(Cnst.EMPTY, AMOUNT_RANGE.split(Cnst.US));
-        fDot = String.join(Cnst.EMPTY, F_DOT.split(Cnst.US));
-        taxRate = String.join(Cnst.EMPTY, TAX_RATE.split(Cnst.US));
-        notEntered = String.join(Cnst.EMPTY, NOT_ENTERED.split(Cnst.US));
+        taxAmount = Cmn.arrToCamel(TAX_AMOUNT.split(Cnst.US));
+        amountRange = Cmn.arrToCamel(AMOUNT_RANGE.split(Cnst.US));
+        fDot = Cmn.arrToCamel(F_DOT.split(Cnst.US));
+        taxRate = Cmn.arrToCamel(TAX_RATE.split(Cnst.US));
+        notEntered = Cmn.arrToCamel(NOT_ENTERED.split(Cnst.US));
         
         Calendar calendar = GregorianCalendar.getInstance();
         thisYear = calendar.get(Calendar.YEAR);

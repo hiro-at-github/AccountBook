@@ -46,6 +46,9 @@ public class IndexController {
 
     /** 遷移先 */
     private static final String INDEX = "index/index";
+    
+    /**  */
+    private static final int TMP_INT_CNST = 8;
 
     /** セッション */
     @Autowired
@@ -186,7 +189,7 @@ public class IndexController {
             return false;
         }
 
-        if (!indexService.isRelatedItemsEntered(prmReceiptForm)) {
+        if (!indexService.isRelatedItemsEntered(prmReceiptForm, TMP_INT_CNST)) {
             prmReceiptForm.setErrorMessage(indexService.getRltErrMsg());
 
 //            List<FieldError> fldErrLst = indexService.getRltFldErrLst();

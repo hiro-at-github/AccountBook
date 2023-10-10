@@ -109,6 +109,9 @@ public class IndexService {
     /**  */
     private List<FieldError> rltFldErrLst;
 
+    /**  */
+    private Integer tmpLength;
+    
     //----------------------------------------------------------------------------------------------------
     /**
      * コンストラクタ
@@ -126,6 +129,8 @@ public class IndexService {
         currentDateArr = new String[] { String.valueOf(thisYear).substring(2),
                 String.format("%02d", calendar.get(Calendar.MONTH) + 1),
                 String.format("%02d", calendar.get(Calendar.DATE)) };
+        
+        tmpLength = null;
     }
 
     //----------------------------------------------------------------------------------------------------
@@ -228,7 +233,7 @@ public class IndexService {
      * @return 入力に不備がない場合は真。不備がある場合は偽
      */
     //----------------------------------------------------------------------------------------------------
-    public boolean isRelatedItemsEntered(ReceiptForm prmReceiptForm) {
+    public boolean isRelatedItemsEntered(ReceiptForm prmReceiptForm, int prmTmpLength) {
         // レシートフォーム用のフィールドエラーを生成して返す
         Function<String, FieldError> cretErr = s -> new FieldError(RECEIPT_FORM, s, null);
         

@@ -48,7 +48,7 @@ public class IndexController {
     private static final String INDEX = "index/index";
     
     /**  */
-    private static final int TMP_INT_CNST = 8;
+    private static final int TMP_INT_CNST = 4;
 
     /** セッション */
     @Autowired

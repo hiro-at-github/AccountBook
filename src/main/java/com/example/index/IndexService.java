@@ -291,7 +291,7 @@ public class IndexService {
             rltFldErrLst.add(cretErr.apply(bldFldNm.apply(AMOUNT)));
         } else {
             // 科目・税率・金額の組み合わせで未入力項目がある場合
-            rltErrMsgLst.addAll(buildRltErrMsgLst(uentrdItemLst));
+            rltErrMsgLst.addAll(buildRltErrMsgLst(uentrdItemLst, prmTmpLength));
             rltFldErrLst.addAll(buildRltFldErrLst(uentrdItemLst));
         }
 
@@ -437,7 +437,7 @@ public class IndexService {
         return aTAStr.collect(Collectors.toList());
     }
 
-    private List<String> buildRltErrMsgLst(List<AccountTaxrateAmount> prmATALst) {
+    private List<String> buildRltErrMsgLst(List<AccountTaxrateAmount> prmATALst, int prmTmpLength) {
         //        // 科目・税率・金額の組み合わせで1または2個の入力の場合にエラーメッセージを組み立てて返す
         //        Function<AccountTaxrateAmount, String> func = t -> {
         //            List<String> emptyItemLst = t.getEmptyItemLst();
@@ -469,15 +469,26 @@ public class IndexService {
         List<String> appliedLst = strStr.collect(Collectors.toList());
 
         // 末尾の要素を除き、各要素の文字列の末尾に全角カンマを加える
-        int lastIndex = appliedLst.size() - 1;
-        String lastElem = appliedLst.get(lastIndex);
-        appliedLst.replaceAll(e -> String.join(Cnst.EMPTY, e, Cnst.F_COMMA));
-        appliedLst.set(lastIndex, lastElem);
+        appliedLst.subList(0, appliedLst.size() - 1).replaceAll(e -> String.join(Cnst.EMPTY, e, Cnst.F_COMMA));
 
+        // ★要素毎に改行コードを加える
+        AtomicInteger aI = new AtomicInteger();
+        
+        List<String> tmpLst = appliedLst.stream().map(e -> {
+            aI.incrementAndGet();
+            
+            if (aI.compareAndSet(prmTmpLength, 0)) {
+                return String.join(Cnst.EMPTY, e, Cnst.SPRT);
+            } else {
+                return e;
+            }
+        }).collect(Collectors.toList());
+        
         // 「…が未入力」を加える
-        appliedLst.add(errMsgPropMap.get(notEntered));
+//        appliedLst.add(errMsgPropMap.get(notEntered));
+        tmpLst.add(String.join(Cnst.EMPTY, errMsgPropMap.get(notEntered), Cnst.SPRT));
 
-        return appliedLst;
+        return tmpLst;
     }
 
     private List<FieldError> buildRltFldErrLst(List<AccountTaxrateAmount> prmATALst) {

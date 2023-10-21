@@ -24,54 +24,51 @@ import com.example.common.Cnst;
 
 @Service
 public class IndexService {
-    /**  */
-    public static final int YEAR = 0;
-    /**  */
-    public static final int MONTH = 1;
-    /**  */
-    public static final int DAY = 2;
-    /**  */
+//    /**  */
+//    public static final int YEAR = 0;
+//    /**  */
+//    public static final int MONTH = 1;
+//    /**  */
+//    public static final int DAY = 2;
+    /** 現在の日付 */
     public static final int CURRENT_DATE = 0;
-    /**  */
+    /** 年の配列 */
     public static final int YEAR_ARR = 1;
-    /**  */
+    /** 月の配列 */
     public static final int MONTH_ARR = 2;
-    /**  */
+    /** 日の配列 */
     public static final int DAY_ARR = 3;
-    /**  */
+    /** 勘定科目のマップ */
     public static final int ACCOUNT_MAP = 4;
-    /**  */
+    /** 税率のマップ */
     public static final int TAX_RATE_MAP = 5;
 
-    /**  */
+    //TODO:231020現在参照一カ所により最後に直書き化
     private static final String PREFIX = "idx.";
 
-    /**  */
+    /** "f_dot" */
     private static final String F_DOT = "f_dot";
-    /**  */
+    /** "date" */
     private static final String DATE = "date";
-
-    /**  */
+    /** "account" */
     private static final String ACCOUNT = "account";
-    /**  */
+    /** "amount" */
     private static final String AMOUNT = "amount";
-    /**  */
+    /** "tax_rate" */
     private static final String TAX_RATE = "tax_rate";
-    /**  */
+    /** "tax_amount" */
     private static final String TAX_AMOUNT = "tax_amount";
-    /**  */
+    /** "amount_range" */
     private static final String AMOUNT_RANGE = "amount_range";
-    /**  */
+    /** "incorrect" */
     private static final String INCORRECT = "incorrect";
-    /**  */
+    /** "not_entered" */
     private static final String NOT_ENTERED = "not_entered";
-
-    /**  */
+    /** "For" */
     private static final String FOR = "For";
-
-    /**  */
+    /** レシートフォーム */
     private static final String RECEIPT_FORM = "receiptForm";
-    
+
     /** メッセージソース */
     @Autowired
     private MessageSource messageSource;
@@ -80,21 +77,21 @@ public class IndexService {
     @Autowired
     private SelOpts selOpts;
 
-    /**  */
+    /** エラーメッセージのマップのキー() */
     private String taxAmount;
-    
-    /**  */
+
+    /** エラーメッセージのマップのキー() */
     private String amountRange;
 
-    /**  */
+    /** エラーメッセージのマップのキー() */
     private String fDot;
-    
-    /**  */
+
+    /** エラーメッセージのマップのキー() */
     private String taxRate;
 
-    /**  */
+    /** エラーメッセージのマップのキー() */
     private String notEntered;
-    
+
     /** 現在の年(整数) */
     private int thisYear;
     /** 現在の日付 */
@@ -103,15 +100,12 @@ public class IndexService {
     /** バインディングリザルトのフィールドエラーズ用のエラーメッセージのマップ */
     private Map<String, String> errMsgPropMap;
 
-    /**  */
+    /** 関連チェックのエラーメッセージ */
     private String rltErrMsg;
 
-    /**  */
+    /** 関連チェックのフィールドエラーのリスト */
     private List<FieldError> rltFldErrLst;
 
-    /**  */
-    private Integer tmpLength;
-    
     //----------------------------------------------------------------------------------------------------
     /**
      * コンストラクタ
@@ -123,19 +117,17 @@ public class IndexService {
         fDot = Cmn.arrToCamel(F_DOT.split(Cnst.US));
         taxRate = Cmn.arrToCamel(TAX_RATE.split(Cnst.US));
         notEntered = Cmn.arrToCamel(NOT_ENTERED.split(Cnst.US));
-        
+
         Calendar calendar = GregorianCalendar.getInstance();
         thisYear = calendar.get(Calendar.YEAR);
         currentDateArr = new String[] { String.valueOf(thisYear).substring(2),
                 String.format("%02d", calendar.get(Calendar.MONTH) + 1),
                 String.format("%02d", calendar.get(Calendar.DATE)) };
-        
-        tmpLength = null;
     }
 
     //----------------------------------------------------------------------------------------------------
     /**
-     * 現在の日付を返却する
+     * 現在の日付を返す
      *
      * @return 現在の日付
      */
@@ -146,7 +138,7 @@ public class IndexService {
 
     //----------------------------------------------------------------------------------------------------
     /**
-     * 年の選択肢を返却する
+     * 年の選択肢を返す
      *
      * @return 年の選択肢
      */
@@ -157,7 +149,7 @@ public class IndexService {
 
     //----------------------------------------------------------------------------------------------------
     /**
-     * 月の選択肢を返却する
+     * 月の選択肢を返す
      *
      * @return 月の選択肢
      */
@@ -168,7 +160,7 @@ public class IndexService {
 
     //----------------------------------------------------------------------------------------------------
     /**
-     * 日の選択肢を返却する
+     * 日の選択肢を返す
      *
      * @return 日の選択肢
      */
@@ -179,7 +171,7 @@ public class IndexService {
 
     //----------------------------------------------------------------------------------------------------
     /**
-     * 科目の選択肢を返却する
+     * 科目の選択肢を返す
      *
      * @return 科目の選択肢
      */
@@ -190,7 +182,7 @@ public class IndexService {
 
     //----------------------------------------------------------------------------------------------------
     /**
-     * 消費税率の選択肢を返却する
+     * 消費税率の選択肢を返す
      *
      * @return 消費税率の選択肢
      */
@@ -201,7 +193,7 @@ public class IndexService {
 
     //----------------------------------------------------------------------------------------------------
     /**
-     * バインディングリザルトのデータを元に、エラーメッセージを組み立てて返却する
+     * バインディングリザルトのデータを元に、エラーメッセージを組み立てて返す
      *
      * @param prmResult バインディングリザルト
      * @return エラーメッセージ
@@ -213,40 +205,41 @@ public class IndexService {
             // エラーメッセージ用プロパティの取得
             errMsgPropMap = getErrMsgPrpMap();
         }
-        
+
         // フィールドエラーのフィールドをキーに、エラーメッセージを組み立てて返す
-        Stream<String> strStr =
-                prmResult.getFieldErrors().stream().map(e -> errMsgPropMap.get(e.getField().contains("tax") ? taxAmount : AMOUNT)).distinct();
-            
+        Stream<String> strStr = prmResult.getFieldErrors().stream()
+                .map(e -> errMsgPropMap.get(e.getField().contains("tax") ? taxAmount : AMOUNT)).distinct();
+
         String joined = String.join(Cnst.F_COMMA, strStr.collect(Collectors.toList()));
-            
+
         return String.join(Cnst.EMPTY, joined, errMsgPropMap.get(amountRange));
     }
 
     //----------------------------------------------------------------------------------------------------
     /**
-     * 日付の適当性、未入力項目の確認をし結果を返却する。
-     * 入力に不備がある場合はエラーメッセージの組立
+     * 日付の適当性、未入力項目の確認をし結果を返す。<br>
+     * 入力に不備がある場合はエラーメッセージの組立<br>
      * (関連チェック)
      * 
      * @param prmReceiptForm レシートフォーム
+     * @param prmSeparatePitch エラーメッセージの文字列が長い場合の改行の間隔
      * @return 入力に不備がない場合は真。不備がある場合は偽
      */
     //----------------------------------------------------------------------------------------------------
-    public boolean isRelatedItemsEntered(ReceiptForm prmReceiptForm, int prmTmpLength) {
+    public boolean isRelatedItemsEntered(ReceiptForm prmReceiptForm, int prmSeparatePitch) {
         // レシートフォーム用のフィールドエラーを生成して返す
         Function<String, FieldError> cretErr = s -> new FieldError(RECEIPT_FORM, s, null);
-        
+
         // フィールド名を組み立てて返す
         Function<String, String> bldFldNm = s -> String.join(Cnst.EMPTY, "aTAArr[0].", s);
-        
+
         //----------------------------------------------------------------------------------------------------
         // 年月日が日付として適当か確認
         boolean isCrctDt = Cmn.isCorrectDate(prmReceiptForm.getYear(), prmReceiptForm.getMonth(),
                 prmReceiptForm.getDay());
 
         // 科目・税率・金額の入力の有無の確認
-//        Map<Integer, List<String>> uentrdItemMap = pickUpUnenteredItemMap(prmReceiptForm.getATAArr());
+        //        Map<Integer, List<String>> uentrdItemMap = pickUpUnenteredItemMap(prmReceiptForm.getATAArr());
         List<AccountTaxrateAmount> uentrdItemLst = pickUpUnenteredItem(prmReceiptForm.getATAArr());
 
         // 税額の取得
@@ -255,12 +248,12 @@ public class IndexService {
 
         if (isCrctDt && uentrdItemLst != null && uentrdItemLst.size() == 0
                 && (taxAmountFor08 != null || taxAmountFor10 != null)) {
-            // 日付、科目・税率・金額、税額の入力に不備がなければ真を返却
+            // 日付、科目・税率・金額、税額の入力に不備がなければ真を返す
             return true;
         }
 
         // 以下、入力に不備がある場合の処理
-        // エラーメッセージ、フィールドエラーの作成、偽の返却
+        // エラーメッセージ、フィールドエラーの作成、偽を返す
 
         // エラーメッセージ用プロパティが取得済みか確認
         if (errMsgPropMap == null) {
@@ -291,7 +284,7 @@ public class IndexService {
             rltFldErrLst.add(cretErr.apply(bldFldNm.apply(AMOUNT)));
         } else {
             // 科目・税率・金額の組み合わせで未入力項目がある場合
-            rltErrMsgLst.addAll(buildRltErrMsgLst(uentrdItemLst, prmTmpLength));
+            rltErrMsgLst.addAll(buildRltErrMsgLst(uentrdItemLst, prmSeparatePitch));
             rltFldErrLst.addAll(buildRltFldErrLst(uentrdItemLst));
         }
 
@@ -310,7 +303,7 @@ public class IndexService {
 
     //----------------------------------------------------------------------------------------------------
     /**
-     * 関連チェックのエラーメッセージを返却する
+     * 関連チェックのエラーメッセージを返す
      * 
      * @return 関連チェックのエラーメッセージ
      */
@@ -321,7 +314,7 @@ public class IndexService {
 
     //----------------------------------------------------------------------------------------------------
     /**
-     * 関連チェックのフィールドエラーのリストを返却する
+     * 関連チェックのフィールドエラーのリストを返す
      * 
      * @return 関連チェックのフィールドエラーのリスト
      */
@@ -398,10 +391,11 @@ public class IndexService {
     private Map<String, String> getErrMsgPrpMap() {
         Stream<String> codeStream = Stream.of(AMOUNT, TAX_AMOUNT, AMOUNT_RANGE,
                 F_DOT, DATE, ACCOUNT, TAX_RATE, INCORRECT, NOT_ENTERED);
-        
-        Stream<SimpleEntry<String, String>> itemStr
-            = codeStream.map(e -> new SimpleEntry<String, String>(Cmn.arrToCamel(e.split(Cnst.US)), messageSource.getMessage(PREFIX + e, null, Locale.JAPAN)));
-        
+
+        Stream<SimpleEntry<String, String>> itemStr = codeStream
+                .map(e -> new SimpleEntry<String, String>(Cmn.arrToCamel(e.split(Cnst.US)),
+                        messageSource.getMessage(PREFIX + e, null, Locale.JAPAN)));
+
         return itemStr.collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
     }
 
@@ -409,51 +403,46 @@ public class IndexService {
     /**
      * 科目・税率・金額(の組み合わせ)で1または2個の入力の場合に未入力の項目をピックアップして返す
      * 
-     * @param prmATAArr　科目・税率・金額の配列
-     * @return 配列の全ての科目・税率・金額が未入力の場合：null。
-     *         入力の状態に不備がある場合：1以上、引数の長さ以下のList
+     * @param prmATAArr 科目・税率・金額の配列
+     * @return 配列の全ての科目・税率・金額が未入力の場合：null。<br>
+     *         入力の状態に不備がある場合：1以上、引数の長さ以下のList。<br>
      *         入力の状態に不備がない場合：size0のList
      */
     //----------------------------------------------------------------------------------------------------
     private List<AccountTaxrateAmount> pickUpUnenteredItem(AccountTaxrateAmount[] prmATAArr) {
         Integer[] sizeArr = Arrays.stream(prmATAArr).map(e -> e.getEmptyItemLst().size()).toArray(Integer[]::new);
-        
+
         if (Arrays.stream(sizeArr).filter(e -> e == 3).count() == prmATAArr.length) {
             return null;
         }
-        
+
         if (Arrays.stream(sizeArr).filter(e -> e == 0).count() == prmATAArr.length) {
             return new ArrayList<AccountTaxrateAmount>();
         }
-        
+
         List<AccountTaxrateAmount> aTALst = Arrays.asList(prmATAArr);
-        
+
         AtomicInteger aI = new AtomicInteger();
-        
+
         aTALst.forEach(e -> e.setNo(aI.getAndIncrement()));
-        
-        Stream<AccountTaxrateAmount> aTAStr = aTALst.stream().filter(e -> e.getEmptyItemLst().size() != 3).filter(e -> e.getEmptyItemLst().size() != 0);
-        
+
+        Stream<AccountTaxrateAmount> aTAStr = aTALst.stream().filter(e -> e.getEmptyItemLst().size() != 3)
+                .filter(e -> e.getEmptyItemLst().size() != 0);
+
         return aTAStr.collect(Collectors.toList());
     }
 
-    private List<String> buildRltErrMsgLst(List<AccountTaxrateAmount> prmATALst, int prmTmpLength) {
-        //        // 科目・税率・金額の組み合わせで1または2個の入力の場合にエラーメッセージを組み立てて返す
-        //        Function<AccountTaxrateAmount, String> func = t -> {
-        //            List<String> emptyItemLst = t.getEmptyItemLst();
-        //            StringBuilder sb = new StringBuilder();
-        //            sb.append(String.format("%02d", t.getNo() + 1)).append("の").append(errMsgPropMap.get(emptyItemLst.get(0)));
-        //
-        //            if (emptyItemLst.size() == 2) {
-        //                sb.append("と").append(errMsgPropMap.get(emptyItemLst.get(1)));
-        //            }
-        //
-        //            return sb.toString();
-        //        };
-        //
-        //        List<String> appliedLst = prmATALst.stream().map(e -> func.apply(e)).collect(Collectors.toList());
-
-        Stream<String> strStr = prmATALst.stream().map(e -> {
+    //----------------------------------------------------------------------------------------------------
+    /**
+     * 科目・税率・金額の組み合わせで1または2個の入力の場合にエラーメッセージを組み立てて返す
+     * 
+     * @param prmATALst 科目・税率・金額のリスト
+     * @param prmSeparatePitch 改行の間隔
+     * @return エラーメッセージ
+     */
+    //----------------------------------------------------------------------------------------------------
+    private List<String> buildRltErrMsgLst(List<AccountTaxrateAmount> prmATALst, int prmSeparatePitch) {
+        Stream<String> builtStr = prmATALst.stream().map(e -> {
             List<String> emptyItemLst = e.getEmptyItemLst();
             StringBuilder sb = new StringBuilder();
             sb.append(String.format("%02d", e.getNo() + 1)).append("の").append(errMsgPropMap.get(emptyItemLst.get(0)));
@@ -463,34 +452,33 @@ public class IndexService {
             }
 
             return sb.toString();
-
         });
 
-        List<String> appliedLst = strStr.collect(Collectors.toList());
+        List<String> builtLst = builtStr.collect(Collectors.toList());
 
         // 末尾の要素を除き、各要素の文字列の末尾に全角カンマを加える
-        appliedLst.subList(0, appliedLst.size() - 1).replaceAll(e -> String.join(Cnst.EMPTY, e, Cnst.F_COMMA));
+        builtLst.subList(0, builtLst.size() - 1).replaceAll(e -> String.join(Cnst.EMPTY, e, Cnst.F_COMMA));
 
-        // ★要素毎に改行コードを加える
+        // 改行の間隔毎に改行コードを加える
         AtomicInteger aI = new AtomicInteger();
-        
-        List<String> tmpLst = appliedLst.stream().map(e -> {
+
+        List<String> addedSprtLst = builtLst.stream().map(e -> {
             aI.incrementAndGet();
-            
-            if (aI.compareAndSet(prmTmpLength, 0)) {
+
+            if (aI.compareAndSet(prmSeparatePitch, 0)) {
                 return String.join(Cnst.EMPTY, e, Cnst.SPRT);
             } else {
                 return e;
             }
         }).collect(Collectors.toList());
-        
-        // 「…が未入力」を加える
-//        appliedLst.add(errMsgPropMap.get(notEntered));
-        tmpLst.add(String.join(Cnst.EMPTY, errMsgPropMap.get(notEntered), Cnst.SPRT));
 
-        return tmpLst;
+        // 「…が未入力」を加える
+        addedSprtLst.add(String.join(Cnst.EMPTY, errMsgPropMap.get(notEntered), Cnst.SPRT));
+
+        return addedSprtLst;
     }
 
+    //TODO:ラムダ式化検討。可能なら呼び出し元メソッド名下に移動
     private List<FieldError> buildRltFldErrLst(List<AccountTaxrateAmount> prmATALst) {
         return prmATALst.stream()
                 .flatMap(e -> e.getEmptyItemLst().stream()

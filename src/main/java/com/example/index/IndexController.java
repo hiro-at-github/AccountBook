@@ -40,15 +40,12 @@ public class IndexController {
 
     /** 登録済のレシートのリストのキー */
     private static final String REGISTERED_LST = "registeredLst";
-    
+
     /** レシートフォームのキー */
     private static final String RECEIPT_FORM = "receiptForm";
 
     /** 遷移先 */
     private static final String INDEX = "index/index";
-    
-    /**  */
-    private static final int TMP_INT_CNST = 4;
 
     /** セッション */
     @Autowired
@@ -60,9 +57,10 @@ public class IndexController {
 
     //----------------------------------------------------------------------------------------------------
     /**
-     * ダミー
-     *
-     *
+     * 初期表示
+     * 
+     * @param prmModel モデル
+     * @return 遷移先パス
      */
     //----------------------------------------------------------------------------------------------------
     @GetMapping("/index")
@@ -86,6 +84,10 @@ public class IndexController {
     /**
      * 「確認」ボタン押下の処理
      *
+     * @param prmModel モデル
+     * @param prmReceiptForm レシートフォーム
+     * @param prmResult バインディングリザルト
+     * @return 遷移先パス
      */
     //----------------------------------------------------------------------------------------------------
     @PostMapping(value = "/index", params = "confirm")
@@ -108,6 +110,10 @@ public class IndexController {
     /**
      * 「登録」ボタン押下の処理
      *
+     * @param prmModel モデル
+     * @param prmReceiptForm レシートフォーム
+     * @param prmResult バインディングリザルト
+     * @return 遷移先パス
      */
     //----------------------------------------------------------------------------------------------------
     @PostMapping(value = "/index", params = "create")
@@ -118,7 +124,7 @@ public class IndexController {
         addOptionArr(optionArr, prmModel);
 
         List<Registered> rgstedLst = Cmn.autoCast(httpSession.getAttribute(REGISTERED_LST));
-        
+
         if (validateItems(prmReceiptForm, prmBindingResult)) {
             rgstedLst = addRgistedToLst(rgstedLst, prmReceiptForm);
             httpSession.setAttribute(REGISTERED_LST, rgstedLst);
@@ -135,7 +141,7 @@ public class IndexController {
     //----------------------------------------------------------------------------------------------------
     // privateメソッド
     //----------------------------------------------------------------------------------------------------
-    
+
     //----------------------------------------------------------------------------------------------------
     /**
      * セレクトボックスの選択肢を初期化して返す
@@ -155,7 +161,7 @@ public class IndexController {
 
         return optionArr;
     }
-    
+
     //----------------------------------------------------------------------------------------------------
     /**
      * セレクトボックスの選択肢をモデルに登録する
@@ -171,7 +177,7 @@ public class IndexController {
         prmModel.addAttribute(ACCOUNT_MAP, prmOptionArr[IndexService.ACCOUNT_MAP]);
         prmModel.addAttribute(TAX_RATE_MAP, prmOptionArr[IndexService.TAX_RATE_MAP]);
     }
-    
+
     //----------------------------------------------------------------------------------------------------
     /**
      * レシートフォームの各項目の入力値の妥当性を検査してその結果を返す
@@ -189,16 +195,10 @@ public class IndexController {
             return false;
         }
 
-        if (!indexService.isRelatedItemsEntered(prmReceiptForm, TMP_INT_CNST)) {
+        if (!indexService.isRelatedItemsEntered(prmReceiptForm, 8)) {
             prmReceiptForm.setErrorMessage(indexService.getRltErrMsg());
-
-//            List<FieldError> fldErrLst = indexService.getRltFldErrLst();
-//            for (FieldError elem : fldErrLst) {
-//                prmBindingResult.addError(elem);
-//            }
-            //TODO:上記コメントアウト部分の代替処理。問題なければこのTODOと共に上記コメントアウト要削除
             indexService.getRltFldErrLst().forEach(e -> prmBindingResult.addError(e));
-            
+
             return false;
         }
 

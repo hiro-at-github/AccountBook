@@ -233,13 +233,21 @@ public class IndexService {
         // フィールド名を組み立てて返す
         Function<String, String> bldFldNm = s -> String.join(Cnst.EMPTY, "aTAArr[0].", s);
 
+        // フィールドエラーのリストを組み立てて返す
+        Function<List<AccountTaxrateAmount>, List<FieldError>> bldRltFldErrLst = e -> {
+            return e.stream()
+                    .flatMap(f -> f.getEmptyItemLst().stream()
+                            .map(g -> new FieldError(RECEIPT_FORM,
+                                    String.join(Cnst.EMPTY, String.format("aTAArr[%01d].", f.getNo()), g), null)))
+                    .collect(Collectors.toList());
+        };
+
         //----------------------------------------------------------------------------------------------------
         // 年月日が日付として適当か確認
         boolean isCrctDt = Cmn.isCorrectDate(prmReceiptForm.getYear(), prmReceiptForm.getMonth(),
                 prmReceiptForm.getDay());
 
         // 科目・税率・金額の入力の有無の確認
-        //        Map<Integer, List<String>> uentrdItemMap = pickUpUnenteredItemMap(prmReceiptForm.getATAArr());
         List<AccountTaxrateAmount> uentrdItemLst = pickUpUnenteredItem(prmReceiptForm.getATAArr());
 
         // 税額の取得
@@ -285,7 +293,7 @@ public class IndexService {
         } else {
             // 科目・税率・金額の組み合わせで未入力項目がある場合
             rltErrMsgLst.addAll(buildRltErrMsgLst(uentrdItemLst, prmSeparatePitch));
-            rltFldErrLst.addAll(buildRltFldErrLst(uentrdItemLst));
+            rltFldErrLst.addAll(bldRltFldErrLst.apply(uentrdItemLst));
         }
 
         if (taxAmountFor08 == null && taxAmountFor10 == null) {
@@ -476,14 +484,5 @@ public class IndexService {
         addedSprtLst.add(String.join(Cnst.EMPTY, errMsgPropMap.get(notEntered), Cnst.SPRT));
 
         return addedSprtLst;
-    }
-
-    //TODO:ラムダ式化検討。可能なら呼び出し元メソッド名下に移動
-    private List<FieldError> buildRltFldErrLst(List<AccountTaxrateAmount> prmATALst) {
-        return prmATALst.stream()
-                .flatMap(e -> e.getEmptyItemLst().stream()
-                        .map(f -> new FieldError(RECEIPT_FORM,
-                                String.join(Cnst.EMPTY, String.format("aTAArr[%01d].", e.getNo()), f), null)))
-                .collect(Collectors.toList());
     }
 }

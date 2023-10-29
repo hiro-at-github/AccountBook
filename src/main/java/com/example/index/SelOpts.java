@@ -1,10 +1,15 @@
 package com.example.index;
 
+import java.util.AbstractMap;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -32,6 +37,8 @@ public class SelOpts {
 
     /** 科目のキー */
     private String[] accountKeyArr;
+    
+    private Stream<String> accountKeyStr;
 
     //----------------------------------------------------------------------------------------------------
     /**
@@ -40,6 +47,8 @@ public class SelOpts {
     //----------------------------------------------------------------------------------------------------
     public SelOpts() {
         accountKeyArr = new String[] {"shokuhi", "shomohinhi", "suidokonetsuhi"};
+        
+        accountKeyStr = Stream.of("shokuhi", "shomohinhi", "suidokonetsuhi");
     }
 
     //----------------------------------------------------------------------------------------------------
@@ -53,7 +62,6 @@ public class SelOpts {
     public String[] getYearArr(Integer prmYear) {
         Integer thisYear = null;
 
-        //TODO:年の定数化
         if (prmYear == null || (prmYear < 2000 || 2100 < prmYear)) {
             thisYear = GregorianCalendar.getInstance().get(Calendar.YEAR);
         } else {
@@ -100,12 +108,37 @@ public class SelOpts {
      */
     //----------------------------------------------------------------------------------------------------
     public Map<String, String> getAccountMap() {
-        Map<String, String> accountMap = new LinkedHashMap<>();
-        accountMap.put(Cnst.EMPTY, Cnst.EMPTY);
+        //                Map<String, String> accountMap = new LinkedHashMap<>();
+        //                accountMap.put(Cnst.EMPTY, Cnst.EMPTY);
+        //        
+        //                for (String elem : accountKeyArr) {
+        //                    accountMap.put(messageSource.getMessage("account" + Cnst.PROD + elem, null, Locale.JAPAN), elem);
+        //                }
+        //        
+        //                return accountMap;
 
-        for (String elem : accountKeyArr) {
-            accountMap.put(messageSource.getMessage("account" + Cnst.PROD + elem, null, Locale.JAPAN), elem);
-        }
+//        Map<String, String> accountMap = Arrays.stream(accountKeyArr)
+//                .map(e -> new AbstractMap.SimpleEntry<String, String>(
+//                        messageSource.getMessage("account" + Cnst.PROD + e, null, Locale.JAPAN), e))
+//                .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+//        accountMap.put(Cnst.EMPTY, Cnst.EMPTY);
+
+//        SimpleEntry<String, String>[] tmpArr = (SimpleEntry<String, String>[]) accountKeyStr
+//                .map(e -> new SimpleEntry<String, String>(
+//                        messageSource.getMessage("account" + Cnst.PROD + e, null, Locale.JAPAN), e))
+//                .toArray();
+        
+        
+        Map<String, String> accountMap = accountKeyStr
+                .map(e -> new AbstractMap.SimpleEntry<String, String>(
+                        messageSource.getMessage("account" + Cnst.PROD + e, null, Locale.JAPAN), e))
+                .sorted(Entry.comparingByValue())               .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+        
+//        Map<String, String> tmpMap = new TreeMap<>(accountMap);
+        
+        
+        
+        accountMap.put(Cnst.EMPTY, Cnst.EMPTY);
 
         return accountMap;
     }
@@ -139,12 +172,14 @@ public class SelOpts {
      */
     //----------------------------------------------------------------------------------------------------
     private String[] getOptArr(int prmLength) {
-        String[] optArr = new String[prmLength];
+        //        String[] optArr = new String[prmLength];
+        //
+        //        for (int i = 0; i < optArr.length; i++) {
+        //            optArr[i] = String.format("%02d", i + 1);
+        //        }
+        //
+        //        return optArr;
 
-        for (int i = 0; i < optArr.length; i++) {
-            optArr[i] = String.format("%02d", i + 1);
-        }
-
-        return optArr;
+        return IntStream.rangeClosed(1, prmLength).boxed().map(e -> String.format("%02d", e)).toArray(String[]::new);
     }
 }

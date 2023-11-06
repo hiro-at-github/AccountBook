@@ -1,6 +1,7 @@
 package com.example.common;
 
 public class Cnst {
+    //TODO:移動検討
     /** 年の選択肢の個数 */
     public static final int LENGTH_OF_YEAR = 2;
 

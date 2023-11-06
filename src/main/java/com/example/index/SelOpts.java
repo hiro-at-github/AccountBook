@@ -1,13 +1,10 @@
 package com.example.index;
 
-import java.util.AbstractMap;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -35,9 +32,6 @@ public class SelOpts {
     @Autowired
     private MessageSource messageSource;
 
-    /** 科目のキー */
-    private String[] accountKeyArr;
-    
     private Stream<String> accountKeyStr;
 
     //----------------------------------------------------------------------------------------------------
@@ -46,8 +40,6 @@ public class SelOpts {
      */
     //----------------------------------------------------------------------------------------------------
     public SelOpts() {
-        accountKeyArr = new String[] {"shokuhi", "shomohinhi", "suidokonetsuhi"};
-        
         accountKeyStr = Stream.of("shokuhi", "shomohinhi", "suidokonetsuhi");
     }
 
@@ -68,13 +60,14 @@ public class SelOpts {
             thisYear = prmYear;
         }
 
-        String[] yearArr = new String[Cnst.LENGTH_OF_YEAR];
+//        String[] yearArr = new String[Cnst.LENGTH_OF_YEAR];
+//
+//        for (int i = 0; i < yearArr.length; i++) {
+//            yearArr[i] = String.valueOf(thisYear - yearArr.length + 1 + i).substring(2);
+//        }
 
-        for (int i = 0; i < yearArr.length; i++) {
-            yearArr[i] = String.valueOf(thisYear - yearArr.length + 1 + i).substring(2);
-        }
-
-        return yearArr;
+        return IntStream.rangeClosed(thisYear - Cnst.LENGTH_OF_YEAR + 1, thisYear).boxed()
+                .map(e -> String.valueOf(e).substring(2)).toArray(String[]::new);
     }
 
     //----------------------------------------------------------------------------------------------------
@@ -108,37 +101,13 @@ public class SelOpts {
      */
     //----------------------------------------------------------------------------------------------------
     public Map<String, String> getAccountMap() {
-        //                Map<String, String> accountMap = new LinkedHashMap<>();
-        //                accountMap.put(Cnst.EMPTY, Cnst.EMPTY);
-        //        
-        //                for (String elem : accountKeyArr) {
-        //                    accountMap.put(messageSource.getMessage("account" + Cnst.PROD + elem, null, Locale.JAPAN), elem);
-        //                }
-        //        
-        //                return accountMap;
-
-//        Map<String, String> accountMap = Arrays.stream(accountKeyArr)
-//                .map(e -> new AbstractMap.SimpleEntry<String, String>(
-//                        messageSource.getMessage("account" + Cnst.PROD + e, null, Locale.JAPAN), e))
-//                .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
-//        accountMap.put(Cnst.EMPTY, Cnst.EMPTY);
-
-//        SimpleEntry<String, String>[] tmpArr = (SimpleEntry<String, String>[]) accountKeyStr
-//                .map(e -> new SimpleEntry<String, String>(
-//                        messageSource.getMessage("account" + Cnst.PROD + e, null, Locale.JAPAN), e))
-//                .toArray();
-        
-        
-        Map<String, String> accountMap = accountKeyStr
-                .map(e -> new AbstractMap.SimpleEntry<String, String>(
-                        messageSource.getMessage("account" + Cnst.PROD + e, null, Locale.JAPAN), e))
-                .sorted(Entry.comparingByValue())               .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
-        
-//        Map<String, String> tmpMap = new TreeMap<>(accountMap);
-        
-        
-        
+        Map<String, String> accountMap = new LinkedHashMap<>();
         accountMap.put(Cnst.EMPTY, Cnst.EMPTY);
+
+        accountKeyStr
+                .forEach(e -> accountMap.put(
+                        messageSource.getMessage(String.join(Cnst.EMPTY, "account", Cnst.PROD, e), null, Locale.JAPAN),
+                        e));
 
         return accountMap;
     }
@@ -155,10 +124,11 @@ public class SelOpts {
         taxRateMap.put(Cnst.EMPTY, null);
 
         // 消費税率のキーは"no1"、"no2"だけのため直接記述
-        for (int i = 0; i < 2; i++) {
-            String msg = messageSource.getMessage("tax_rate" + Cnst.PROD + "no" + String.valueOf(i + 1), null, Locale.JAPAN);
+        Stream.of("1", "2").forEach(e -> {
+            String msg = messageSource.getMessage(String.join(Cnst.EMPTY, "tax_rate" + Cnst.PROD, "no", e), null,
+                    Locale.JAPAN);
             taxRateMap.put(msg, Integer.valueOf(msg));
-        }
+        });
 
         return taxRateMap;
     }

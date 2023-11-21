@@ -21,6 +21,7 @@ import org.springframework.validation.FieldError;
 
 import com.example.common.Cmn;
 import com.example.common.Cnst;
+import com.example.common.FileFiles;
 
 @Service
 public class IndexService {
@@ -368,17 +369,37 @@ public class IndexService {
     //----------------------------------------------------------------------------------------------------
     //TODO:メソッド名変更
     public Registered getRegistered(ReceiptForm prmReceiptForm) {
-        // 戻り値を作る処理
+        // 引数がnullであればダッシュ(文字列)を、それ以外であれば引数の文字列表現を返す
+        Function<Integer, String> intToStr = i -> i == null ? Cnst.DASH : String.valueOf(i);
+        
+        //------------------------------------------------------------------------------------------------
+        
+        // ファイルに登録する処理 --------------------
+        String aTA = Stream.of(prmReceiptForm.getATAArr()).filter(e -> e.getAmount() != null).map(
+                e -> String.join(Cnst.COMMA, e.getAccount(), e.getTaxRate(), String.valueOf(e.getAmount()), Cnst.EMPTY))
+                .collect(Collectors.joining());
+        List<String> lineLst = Arrays
+                .asList(new String[] { String.join(Cnst.EMPTY, prmReceiptForm.getDay(), Cnst.COMMA, aTA,
+                        String.valueOf(prmReceiptForm.getTaxAmountFor08()), Cnst.COMMA,
+                        String.valueOf(prmReceiptForm.getTaxAmountFor10())) });
+        //TODO:ここから
+        
+        FileFiles.write("test.csv", lineLst, null);
+        
+        
+        // 戻り値を作る処理 --------------------
         Registered registered = new Registered();
+        
+        // 日付をセット
         registered.setDate(
                 String.join(Cnst.EMPTY, prmReceiptForm.getYear(), prmReceiptForm.getMonth(), prmReceiptForm.getDay()));
 
+        // 小計、合計をセット
         String[] totalArr = getSubtotalAndSumTotalArr(prmReceiptForm);
-
         registered.setSubtotal(totalArr[0]);
         registered.setSumTotal(totalArr[1]);
 
-        Function<Integer, String> intToStr = i -> i == null ? Cnst.DASH : String.valueOf(i);
+        // 外税額8%、10%をセット
         registered.setTaxAmount1(intToStr.apply(prmReceiptForm.getTaxAmountFor08()));
         registered.setTaxAmount2(intToStr.apply(prmReceiptForm.getTaxAmountFor10()));
 

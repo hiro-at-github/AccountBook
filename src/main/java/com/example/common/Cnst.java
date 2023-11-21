@@ -18,6 +18,8 @@ public class Cnst {
     public static final String DASH = "-";
     /** スラッシュ(Slash) */
     public static final String SL = "/";
+    /** カンマ */
+    public static final String COMMA = ",";
 
     /** 文字列の0 */
     public static final String ZERO = "0";

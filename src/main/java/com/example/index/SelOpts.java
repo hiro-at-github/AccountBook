@@ -13,6 +13,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
 import com.example.common.Cnst;
+import com.example.common.FileFiles;
 
 //----------------------------------------------------------------------------------------------------
 /**
@@ -33,6 +34,8 @@ public class SelOpts {
     private MessageSource messageSource;
 
     private Stream<String> accountKeyStr;
+    
+    private String[] keyArr;
 
     //----------------------------------------------------------------------------------------------------
     /**
@@ -40,7 +43,19 @@ public class SelOpts {
      */
     //----------------------------------------------------------------------------------------------------
     public SelOpts() {
-        accountKeyStr = Stream.of("shokuhi", "shomohinhi", "suidokonetsuhi");
+//        accountKeyStr = Stream.of("shokuhi", "shomohinhi", "suidokonetsuhi");
+        
+//        String key = messageSource.getMessage("select_options.keys", null, Locale.JAPAN);
+//        
+//        System.out.println(key);
+        
+        //TODO:コンストラクタにファイル読み込み処理記述
+        keyArr = FileFiles.readAllLines("src\\main\\resources\\selectOptions.properties").get(0).split("=")[1]
+                .split(Cnst.COMMA);
+//        accountKeyStr = Stream.of(keyArr).filter(e -> e.contains("account")).peek(System.out::print);
+        
+        
+        
     }
 
     //----------------------------------------------------------------------------------------------------
@@ -101,13 +116,19 @@ public class SelOpts {
      */
     //----------------------------------------------------------------------------------------------------
     public Map<String, String> getAccountMap() {
+        String key = messageSource.getMessage("select_options.keys", null, Locale.JAPAN);
+        
+        System.out.println(key);
         Map<String, String> accountMap = new LinkedHashMap<>();
         accountMap.put(Cnst.EMPTY, Cnst.EMPTY);
 
-        accountKeyStr
-                .forEach(e -> accountMap.put(
-                        messageSource.getMessage(String.join(Cnst.EMPTY, "account", Cnst.PROD, e), null, Locale.JAPAN),
-                        e));
+//        accountKeyStr
+//                .forEach(e -> accountMap.put(
+//                        messageSource.getMessage(String.join(Cnst.EMPTY, "account", Cnst.PROD, e), null, Locale.JAPAN),
+//                        e));
+//        Stream.of(keyArr).filter(e->e.contains("account")).peek(System.out::print).forEach(e -> accountMap.put(messageSource.getMessage(e, null, Locale.JAPAN), e.split(Cnst.PROD)[1]));
+        System.out.println("peek:");
+        Stream.of(keyArr).filter(e->e.contains("account")).peek(System.out::println);
 
         return accountMap;
     }

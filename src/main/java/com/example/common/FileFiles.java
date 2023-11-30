@@ -8,6 +8,21 @@ import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 public class FileFiles {
+    //--------------------------------------------------------------------------------
+    /**
+     * ダミー
+     */
+    //--------------------------------------------------------------------------------
+    public static List<String> readAllLines(String prmPath) {
+        try {
+            return Files.readAllLines(Paths.get(prmPath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     //----------------------------------------------------------------------------------------------------
     /**
      * 文字列のリストをファイルに書き込む

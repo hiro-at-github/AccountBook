@@ -32,12 +32,23 @@ public class FileFiles {
      * @param prmOption ファイルを開く方法
      */
     //----------------------------------------------------------------------------------------------------
-    public static void write(String prmPathname, List<String> prmLineLst, StandardOpenOption prmOption) {
+//    public static void write(String prmPathname, List<String> prmLineLst, StandardOpenOption prmOption) {
+//        try {
+//            if (prmOption != null && new File(prmPathname).exists()) {
+//                Files.write(Paths.get(prmPathname), prmLineLst, prmOption);
+//            } else {
+//                Files.write(Paths.get(prmPathname), prmLineLst);
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+    public static void write(String prmPathname, List<String> prmLineLst) {
         try {
-            if (prmOption != null && new File(prmPathname).exists()) {
-                Files.write(Paths.get(prmPathname), prmLineLst, prmOption);
+            if (new File(prmPathname).exists()) {
+                Files.write(Paths.get(prmPathname), prmLineLst, StandardOpenOption.APPEND);
             } else {
-                Files.write(Paths.get(prmPathname), prmLineLst);
+                Files.write(Paths.get(prmPathname), prmLineLst, StandardOpenOption.CREATE);
             }
         } catch (IOException e) {
             e.printStackTrace();

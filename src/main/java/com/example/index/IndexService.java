@@ -1,5 +1,9 @@
 package com.example.index;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +25,6 @@ import org.springframework.validation.FieldError;
 
 import com.example.common.Cmn;
 import com.example.common.Cnst;
-import com.example.common.FileFiles;
 
 @Service
 public class IndexService {
@@ -382,10 +385,18 @@ public class IndexService {
                 .asList(new String[] { String.join(Cnst.EMPTY, prmReceiptForm.getDay(), Cnst.COMMA, aTA,
                         String.valueOf(prmReceiptForm.getTaxAmountFor08()), Cnst.COMMA,
                         String.valueOf(prmReceiptForm.getTaxAmountFor10())) });
-        //TODO:ここから
         
-        FileFiles.write("test.csv", lineLst, null);
-        
+        //TODO:外税額がnullの場合あり、どうするか←このままでよい
+        //TODO:例外に対処
+//        FileFiles.write(String.join(Cnst.EMPTY, "z_files\\y", prmReceiptForm.getYear(), prmReceiptForm.getMonth(),
+//                Cnst.PROD, "csv"), lineLst);
+        try {
+            Files.write(Paths.get(String.join(Cnst.EMPTY, "z_files\\y", prmReceiptForm.getYear(), prmReceiptForm.getMonth(),
+                    Cnst.PROD, "csv")), lineLst, StandardOpenOption.APPEND, StandardOpenOption.CREATE);
+        } catch (IOException e1) {
+            // TODO 自動生成された catch ブロック
+            e1.printStackTrace();
+        }
         
         // 戻り値を作る処理 --------------------
         Registered registered = new Registered();

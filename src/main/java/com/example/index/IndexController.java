@@ -1,5 +1,6 @@
 package com.example.index;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,7 +127,15 @@ public class IndexController {
         List<Registered> rgstedLst = Cmn.autoCast(httpSession.getAttribute(REGISTERED_LST));
 
         if (validateItems(prmReceiptForm, prmBindingResult)) {
-            rgstedLst = addRgistedToLst(rgstedLst, prmReceiptForm);
+            try {
+                rgstedLst = addRgistedToLst(rgstedLst, prmReceiptForm);
+            } catch (IOException e) {
+                prmReceiptForm.setErrorMessage(e.toString());
+                prmModel.addAttribute(RECEIPT_FORM, prmReceiptForm);
+
+                return INDEX;
+            }
+
             httpSession.setAttribute(REGISTERED_LST, rgstedLst);
 
             prmReceiptForm = new ReceiptForm(32, (String[]) optionArr[IndexService.CURRENT_DATE]);
@@ -213,9 +222,10 @@ public class IndexController {
      * @param prmRgstedLst 登録したレシートの概要のリスト
      * @param prmReceiptForm レシートフォーム
      * @return 登録したレシートの概要のリスト
+     * @throws IOException 
      */
     //----------------------------------------------------------------------------------------------------
-    private List<Registered> addRgistedToLst(List<Registered> prmRgstedLst, ReceiptForm prmReceiptForm) {
+    private List<Registered> addRgistedToLst(List<Registered> prmRgstedLst, ReceiptForm prmReceiptForm) throws IOException {
         List<Registered> rgstedLst = prmRgstedLst;
 
         if (rgstedLst == null) {

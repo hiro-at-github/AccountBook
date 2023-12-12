@@ -368,10 +368,11 @@ public class IndexService {
      *
      * @param prmReceiptForm レシートフォーム
      * @return 登録したレシートの概要
+     * @throws IOException 
      */
     //----------------------------------------------------------------------------------------------------
     //TODO:メソッド名変更
-    public Registered getRegistered(ReceiptForm prmReceiptForm) {
+    public Registered getRegistered(ReceiptForm prmReceiptForm) throws IOException {
         // 引数がnullであればダッシュ(文字列)を、それ以外であれば引数の文字列表現を返す
         Function<Integer, String> intToStr = i -> i == null ? Cnst.DASH : String.valueOf(i);
         
@@ -381,22 +382,15 @@ public class IndexService {
         String aTA = Stream.of(prmReceiptForm.getATAArr()).filter(e -> e.getAmount() != null).map(
                 e -> String.join(Cnst.COMMA, e.getAccount(), e.getTaxRate(), String.valueOf(e.getAmount()), Cnst.EMPTY))
                 .collect(Collectors.joining());
+        
+        // Notice:lineLstは外税額がnullの場合あり
         List<String> lineLst = Arrays
                 .asList(new String[] { String.join(Cnst.EMPTY, prmReceiptForm.getDay(), Cnst.COMMA, aTA,
                         String.valueOf(prmReceiptForm.getTaxAmountFor08()), Cnst.COMMA,
                         String.valueOf(prmReceiptForm.getTaxAmountFor10())) });
         
-        //TODO:外税額がnullの場合あり、どうするか←このままでよい
-        //TODO:例外に対処
-//        FileFiles.write(String.join(Cnst.EMPTY, "z_files\\y", prmReceiptForm.getYear(), prmReceiptForm.getMonth(),
-//                Cnst.PROD, "csv"), lineLst);
-        try {
-            Files.write(Paths.get(String.join(Cnst.EMPTY, "z_files\\y", prmReceiptForm.getYear(), prmReceiptForm.getMonth(),
-                    Cnst.PROD, "csv")), lineLst, StandardOpenOption.APPEND, StandardOpenOption.CREATE);
-        } catch (IOException e1) {
-            // TODO 自動生成された catch ブロック
-            e1.printStackTrace();
-        }
+        Files.write(Paths.get(String.join(Cnst.EMPTY, "z_files\\y", prmReceiptForm.getYear(), prmReceiptForm.getMonth(),
+                Cnst.PROD, "csv")), lineLst, StandardOpenOption.APPEND, StandardOpenOption.CREATE);
         
         // 戻り値を作る処理 --------------------
         Registered registered = new Registered();

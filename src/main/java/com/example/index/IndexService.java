@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -373,9 +374,8 @@ public class IndexService {
     //----------------------------------------------------------------------------------------------------
     //TODO:メソッド名変更
     public Registered getRegistered(ReceiptForm prmReceiptForm) throws IOException {
-        // 引数がnullであればダッシュ(文字列)を、それ以外であれば引数の文字列表現を返す
-        Function<Integer, String> intToStr = i -> i == null ? Cnst.DASH : String.valueOf(i);
-        
+        // 引数iがnullであれば引数sを、それ以外であれば引数の文字列表現を返す
+        BiFunction<Integer, String, String> strValOf = (i, s) -> i == null ? s : String.valueOf(i);
         //------------------------------------------------------------------------------------------------
         
         // ファイルに登録する処理 --------------------
@@ -383,11 +383,11 @@ public class IndexService {
                 e -> String.join(Cnst.COMMA, e.getAccount(), e.getTaxRate(), String.valueOf(e.getAmount()), Cnst.EMPTY))
                 .collect(Collectors.joining());
         
-        // Notice:lineLstは外税額がnullの場合あり
+        // Notice:lineLstは外税額がnullの場合有り
         List<String> lineLst = Arrays
                 .asList(new String[] { String.join(Cnst.EMPTY, prmReceiptForm.getDay(), Cnst.COMMA, aTA,
-                        String.valueOf(prmReceiptForm.getTaxAmountFor08()), Cnst.COMMA,
-                        String.valueOf(prmReceiptForm.getTaxAmountFor10())) });
+                        strValOf.apply(prmReceiptForm.getTaxAmountFor08(), Cnst.ZERO), Cnst.COMMA,
+                        strValOf.apply(prmReceiptForm.getTaxAmountFor10(), Cnst.ZERO)) });
         
         Files.write(Paths.get(String.join(Cnst.EMPTY, "z_files\\y", prmReceiptForm.getYear(), prmReceiptForm.getMonth(),
                 Cnst.PROD, "csv")), lineLst, StandardOpenOption.APPEND, StandardOpenOption.CREATE);
@@ -405,8 +405,8 @@ public class IndexService {
         registered.setSumTotal(totalArr[1]);
 
         // 外税額8%、10%をセット
-        registered.setTaxAmount1(intToStr.apply(prmReceiptForm.getTaxAmountFor08()));
-        registered.setTaxAmount2(intToStr.apply(prmReceiptForm.getTaxAmountFor10()));
+        registered.setTaxAmount1(strValOf.apply(prmReceiptForm.getTaxAmountFor08(), Cnst.DASH));
+        registered.setTaxAmount2(strValOf.apply(prmReceiptForm.getTaxAmountFor10(), Cnst.DASH));
 
         return registered;
     }

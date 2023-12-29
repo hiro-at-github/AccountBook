@@ -23,7 +23,7 @@ public class Cmn {
 
         try {
             format.parse(String.join(Cnst.EMPTY, prmDate[0], Cnst.SL, prmDate[1], Cnst.SL, prmDate[2]));
-            
+
             return true;
         } catch (Exception e) {
             return false;
@@ -39,28 +39,9 @@ public class Cmn {
      */
     //----------------------------------------------------------------------------------------------------
     public static String arrToCamel(String... prmStrArr) {
-        Stream<String> strStr =
-            Stream.of(prmStrArr).skip(1)
-                .map(e -> String.join(Cnst.EMPTY , String.valueOf(Character.toUpperCase(e.charAt(0))), e.substring(1)));
-        
-        return String.join(Cnst.EMPTY, prmStrArr[0],   String.join(Cnst.EMPTY, strStr.toArray(String[]::new)));        
-    }
+        Stream<String> strStr = Stream.of(prmStrArr).skip(1)
+                .map(e -> String.join(Cnst.EMPTY, String.valueOf(Character.toUpperCase(e.charAt(0))), e.substring(1)));
 
-    //TODO:230908暫くして不要なら削除
-    //----------------------------------------------------------------------------------------------------
-    /**
-     * スネークケースからキャメルケースに変換し返す
-     *
-     * @param prmSnakeCase スネークケースの文字列
-     * @return キャメルケースに変換した文字列
-     */
-    //----------------------------------------------------------------------------------------------------
-//    public static String snakeToCamel(String prmSnakeCase) {
-//        return arrToCamel(prmSnakeCase.split(Cnst.US));
-//    }
-    
-    
-    
-    
-    
+        return String.join(Cnst.EMPTY, prmStrArr[0], String.join(Cnst.EMPTY, strStr.toArray(String[]::new)));
+    }
 }

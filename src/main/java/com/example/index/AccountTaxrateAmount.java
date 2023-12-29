@@ -37,12 +37,12 @@ public class AccountTaxrateAmount {
 //    /** 金額(確認用) */
 //    private String amntForCnfrm;
     
-    //TODO:キーの定数化
+    //TODO:ヘッダーコメント記載
     public List<String> getEmptyItemLst() {
         List<String> emptyItemLst = new ArrayList<>();
         
         if (account.equals(Cnst.EMPTY)) {
-            emptyItemLst.add("account");
+            emptyItemLst.add(Cnst.ACCOUNT);
         }
         
         if (taxRate.equals(Cnst.EMPTY)) {
@@ -50,7 +50,7 @@ public class AccountTaxrateAmount {
         }
         
         if (amount == null) {
-            emptyItemLst.add("amount");
+            emptyItemLst.add(Cnst.AMOUNT);
         }
         
         return emptyItemLst;

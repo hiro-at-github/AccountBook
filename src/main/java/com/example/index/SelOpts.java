@@ -27,9 +27,6 @@ public class SelOpts {
     public static final String MONTH_ARR = "monthArr";
     /** 日の選択肢のキー */
     public static final String DAY_ARR = "dayArr";
-
-    //TODO:ソースコード整理
-//    private static final String ACCOUNT = "account";
     
     /** メッセージソース */
     @Autowired
@@ -60,13 +57,8 @@ public class SelOpts {
             thisYear = prmYear;
         }
 
-//        String[] yearArr = new String[Cnst.LENGTH_OF_YEAR];
-//
-//        for (int i = 0; i < yearArr.length; i++) {
-//            yearArr[i] = String.valueOf(thisYear - yearArr.length + 1 + i).substring(2);
-//        }
-
-        return IntStream.rangeClosed(thisYear - Cnst.LENGTH_OF_YEAR + 1, thisYear).boxed()
+        // 年の選択肢の個数は2
+        return IntStream.rangeClosed(thisYear - 2 + 1, thisYear).boxed()
                 .map(e -> String.valueOf(e).substring(2)).toArray(String[]::new);
     }
 
@@ -105,11 +97,11 @@ public class SelOpts {
         accountMap.put(Cnst.EMPTY, Cnst.EMPTY);
         
         String[] keyArr = messageSource.getMessage("select_options.keys", null, Locale.JAPAN).split(Cnst.COMMA);
-//        Stream.of(keyArr).filter(e -> e.contains("account"))
+//        Stream.of(keyArr).filter(e -> e.contains(Cnst.ACCOUNT))
 //                .forEach(e -> accountMap.put(messageSource.getMessage(e, null, Locale.JAPAN), e.split(Cnst.PROD)[1]));
         // 上記コメントアウトe.split(Cnst.PROD)[1]で例外発生する為
-      Stream.of(keyArr).filter(e -> e.contains("account"))
-      .forEach(e -> accountMap.put(messageSource.getMessage(e, null, Locale.JAPAN), e.substring("account".length() + 1)));
+      Stream.of(keyArr).filter(e -> e.contains(Cnst.ACCOUNT))
+      .forEach(e -> accountMap.put(messageSource.getMessage(e, null, Locale.JAPAN), e.substring(Cnst.ACCOUNT.length() + 1)));
 
         return accountMap;
     }
@@ -144,14 +136,6 @@ public class SelOpts {
      */
     //----------------------------------------------------------------------------------------------------
     private String[] getOptArr(int prmLength) {
-        //        String[] optArr = new String[prmLength];
-        //
-        //        for (int i = 0; i < optArr.length; i++) {
-        //            optArr[i] = String.format("%02d", i + 1);
-        //        }
-        //
-        //        return optArr;
-
         return IntStream.rangeClosed(1, prmLength).boxed().map(e -> String.format("%02d", e)).toArray(String[]::new);
     }
 }

@@ -48,17 +48,10 @@ public class IndexService {
     /** 税率のマップ */
     public static final int TAX_RATE_MAP = 5;
 
-    //TODO:231020現在参照一カ所により最後に直書き化
-    private static final String PREFIX = "idx.";
-
     /** "f_dot" */
     private static final String F_DOT = "f_dot";
     /** "date" */
     private static final String DATE = "date";
-    /** "account" */
-    private static final String ACCOUNT = "account";
-    /** "amount" */
-    private static final String AMOUNT = "amount";
     /** "tax_rate" */
     private static final String TAX_RATE = "tax_rate";
     /** "tax_amount" */
@@ -213,7 +206,7 @@ public class IndexService {
 
         // フィールドエラーのフィールドをキーに、エラーメッセージを組み立てて返す
         Stream<String> strStr = prmResult.getFieldErrors().stream()
-                .map(e -> errMsgPropMap.get(e.getField().contains("tax") ? taxAmount : AMOUNT)).distinct();
+                .map(e -> errMsgPropMap.get(e.getField().contains("tax") ? taxAmount : Cnst.AMOUNT)).distinct();
 
         String joined = String.join(Cnst.F_COMMA, strStr.collect(Collectors.toList()));
 
@@ -286,15 +279,15 @@ public class IndexService {
 
         if (uentrdItemLst == null) {
             // 全ての科目・税率・金額が未入力の場合
-            rltErrMsgLst.add(String.join(Cnst.EMPTY, errMsgPropMap.get(ACCOUNT),
+            rltErrMsgLst.add(String.join(Cnst.EMPTY, errMsgPropMap.get(Cnst.ACCOUNT),
                     errMsgPropMap.get(fDot),
                     errMsgPropMap.get(taxRate),
                     errMsgPropMap.get(fDot),
-                    errMsgPropMap.get(AMOUNT), errMsgPropMap.get(notEntered),
+                    errMsgPropMap.get(Cnst.AMOUNT), errMsgPropMap.get(notEntered),
                     Cnst.SPRT));
-            rltFldErrLst.add(cretErr.apply(bldFldNm.apply(ACCOUNT)));
+            rltFldErrLst.add(cretErr.apply(bldFldNm.apply(Cnst.ACCOUNT)));
             rltFldErrLst.add(cretErr.apply(bldFldNm.apply(taxRate)));
-            rltFldErrLst.add(cretErr.apply(bldFldNm.apply(AMOUNT)));
+            rltFldErrLst.add(cretErr.apply(bldFldNm.apply(Cnst.AMOUNT)));
         } else {
             // 科目・税率・金額の組み合わせで未入力項目がある場合
             rltErrMsgLst.addAll(buildRltErrMsgLst(uentrdItemLst, prmSeparatePitch));
@@ -423,12 +416,12 @@ public class IndexService {
      */
     //----------------------------------------------------------------------------------------------------
     private Map<String, String> getErrMsgPrpMap() {
-        Stream<String> codeStream = Stream.of(AMOUNT, TAX_AMOUNT, AMOUNT_RANGE,
-                F_DOT, DATE, ACCOUNT, TAX_RATE, INCORRECT, NOT_ENTERED);
+        Stream<String> codeStream = Stream.of(Cnst.AMOUNT, TAX_AMOUNT, AMOUNT_RANGE,
+                F_DOT, DATE, Cnst.ACCOUNT, TAX_RATE, INCORRECT, NOT_ENTERED);
 
         Stream<SimpleEntry<String, String>> itemStr = codeStream
                 .map(e -> new SimpleEntry<String, String>(Cmn.arrToCamel(e.split(Cnst.US)),
-                        messageSource.getMessage(PREFIX + e, null, Locale.JAPAN)));
+                        messageSource.getMessage("idx." + e, null, Locale.JAPAN)));
 
         return itemStr.collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
     }

@@ -21,16 +21,7 @@ public class Cnst {
     public static final String ACCOUNT = "account";
     /** amount */
     public static final String AMOUNT = "amount";
-    
+
     /** カンマ(全角) */
     public static final String F_COMMA = "、";
-}
-
-//TODO:下記コメントアウトして要不要確認し不要なら削除
-enum Opt {
-    CURRENT_DATE, YEAR_ARR, MONTH_ARR, DAY_ARR, ACCOUNT_MAP, TAX_RATE_MAP
-}
-
-enum CrntDt {
-    YEAR, MONTH, DAY
 }

@@ -48,7 +48,7 @@ public class ReceiptForm {
     private String errorMessage;
 
     /** 登録したレシートの合計のリスト */
-    private List<Registered> rgstedLst;
+    private List<Summary> summaryLst;
 
     //----------------------------------------------------------------------------------------------------
     /**

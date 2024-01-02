@@ -19,7 +19,7 @@ import lombok.Data;
 public class AccountTaxrateAmount {
     /** 番号 */
     private int no;
-    
+
     /** 勘定科目 */
     private String account;
 
@@ -31,28 +31,28 @@ public class AccountTaxrateAmount {
     @Max(9999999)
     private Integer amount;
 
-//    /** 番号(確認用) */
-//    private String numForCnfrm;
-//
-//    /** 金額(確認用) */
-//    private String amntForCnfrm;
-    
-    //TODO:ヘッダーコメント記載
+    //----------------------------------------------------------------------------------------------------
+    /**
+     * 未入力の項目名のリストを返す
+     * 
+     * @return 未入力の項目名のリスト
+     */
+    //----------------------------------------------------------------------------------------------------
     public List<String> getEmptyItemLst() {
         List<String> emptyItemLst = new ArrayList<>();
-        
+
         if (account.equals(Cnst.EMPTY)) {
             emptyItemLst.add(Cnst.ACCOUNT);
         }
-        
+
         if (taxRate.equals(Cnst.EMPTY)) {
             emptyItemLst.add("taxRate");
         }
-        
+
         if (amount == null) {
             emptyItemLst.add(Cnst.AMOUNT);
         }
-        
+
         return emptyItemLst;
     }
 }

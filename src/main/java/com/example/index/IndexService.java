@@ -29,12 +29,12 @@ import com.example.common.Cnst;
 
 @Service
 public class IndexService {
-//    /**  */
-//    public static final int YEAR = 0;
-//    /**  */
-//    public static final int MONTH = 1;
-//    /**  */
-//    public static final int DAY = 2;
+    //    /**  */
+    //    public static final int YEAR = 0;
+    //    /**  */
+    //    public static final int MONTH = 1;
+    //    /**  */
+    //    public static final int DAY = 2;
     /** 現在の日付 */
     public static final int CURRENT_DATE = 0;
     /** 年の配列 */
@@ -365,29 +365,28 @@ public class IndexService {
      * @throws IOException 
      */
     //----------------------------------------------------------------------------------------------------
-    //TODO:メソッド名変更
-    public Registered getRegistered(ReceiptForm prmReceiptForm) throws IOException {
+    public Summary writeReceiptAndGetSummary(ReceiptForm prmReceiptForm) throws IOException {
         // 引数iがnullであれば引数sを、それ以外であれば引数の文字列表現を返す
         BiFunction<Integer, String, String> strValOf = (i, s) -> i == null ? s : String.valueOf(i);
         //------------------------------------------------------------------------------------------------
-        
+
         // ファイルに登録する処理 --------------------
         String aTA = Stream.of(prmReceiptForm.getATAArr()).filter(e -> e.getAmount() != null).map(
                 e -> String.join(Cnst.COMMA, e.getAccount(), e.getTaxRate(), String.valueOf(e.getAmount()), Cnst.EMPTY))
                 .collect(Collectors.joining());
-        
+
         // Notice:lineLstは外税額がnullの場合有り
         List<String> lineLst = Arrays
                 .asList(new String[] { String.join(Cnst.EMPTY, prmReceiptForm.getDay(), Cnst.COMMA, aTA,
                         strValOf.apply(prmReceiptForm.getTaxAmountFor08(), Cnst.ZERO), Cnst.COMMA,
                         strValOf.apply(prmReceiptForm.getTaxAmountFor10(), Cnst.ZERO)) });
-        
+
         Files.write(Paths.get(String.join(Cnst.EMPTY, "z_files\\y", prmReceiptForm.getYear(), prmReceiptForm.getMonth(),
                 Cnst.PROD, "csv")), lineLst, StandardOpenOption.APPEND, StandardOpenOption.CREATE);
-        
+
         // 戻り値を作る処理 --------------------
-        Registered registered = new Registered();
-        
+        Summary registered = new Summary();
+
         // 日付をセット
         registered.setDate(
                 String.join(Cnst.EMPTY, prmReceiptForm.getYear(), prmReceiptForm.getMonth(), prmReceiptForm.getDay()));

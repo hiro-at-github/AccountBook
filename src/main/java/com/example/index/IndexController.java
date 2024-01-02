@@ -40,7 +40,7 @@ public class IndexController {
     private static final String OPTION_ARR = "optionArr";
 
     /** 登録済のレシートのリストのキー */
-    private static final String REGISTERED_LST = "registeredLst";
+    private static final String SUMMARY_LST = "summaryLst";
 
     /** レシートフォームのキー */
     private static final String RECEIPT_FORM = "receiptForm";
@@ -96,7 +96,7 @@ public class IndexController {
             BindingResult prmBindingResult) {
 
         addOptionArr((Object[]) httpSession.getAttribute(OPTION_ARR), prmModel);
-        prmReceiptForm.setRgstedLst(Cmn.autoCast(httpSession.getAttribute(REGISTERED_LST)));
+        prmReceiptForm.setSummaryLst(Cmn.autoCast(httpSession.getAttribute(SUMMARY_LST)));
 
         if (validateItems(prmReceiptForm, prmBindingResult)) {
             String[] ttlAndTAmntArr = indexService.getSubtotalAndSumTotalArr(prmReceiptForm);
@@ -124,11 +124,15 @@ public class IndexController {
         Object[] optionArr = (Object[]) httpSession.getAttribute(OPTION_ARR);
         addOptionArr(optionArr, prmModel);
 
-        List<Registered> rgstedLst = Cmn.autoCast(httpSession.getAttribute(REGISTERED_LST));
+        List<Summary> summaryLst = Cmn.autoCast(httpSession.getAttribute(SUMMARY_LST));
+
+        if (summaryLst == null) {
+            summaryLst = new ArrayList<>();
+        }
 
         if (validateItems(prmReceiptForm, prmBindingResult)) {
             try {
-                rgstedLst = addRgistedToLst(rgstedLst, prmReceiptForm);
+                summaryLst.add(0, indexService.writeReceiptAndGetSummary(prmReceiptForm));
             } catch (IOException e) {
                 prmReceiptForm.setErrorMessage(e.toString());
                 prmModel.addAttribute(RECEIPT_FORM, prmReceiptForm);
@@ -136,12 +140,12 @@ public class IndexController {
                 return INDEX;
             }
 
-            httpSession.setAttribute(REGISTERED_LST, rgstedLst);
+            httpSession.setAttribute(SUMMARY_LST, summaryLst);
 
             prmReceiptForm = new ReceiptForm(32, (String[]) optionArr[IndexService.CURRENT_DATE]);
         }
 
-        prmReceiptForm.setRgstedLst(rgstedLst);
+        prmReceiptForm.setSummaryLst(summaryLst);
         prmModel.addAttribute(RECEIPT_FORM, prmReceiptForm);
 
         return INDEX;
@@ -212,28 +216,5 @@ public class IndexController {
         }
 
         return true;
-    }
-
-    //----------------------------------------------------------------------------------------------------
-    /**
-     * レシートフォームの各項目の入力値を登録する。
-     * その後、登録したレシートの概要をリストに加えて返す
-     * 
-     * @param prmRgstedLst 登録したレシートの概要のリスト
-     * @param prmReceiptForm レシートフォーム
-     * @return 登録したレシートの概要のリスト
-     * @throws IOException 
-     */
-    //----------------------------------------------------------------------------------------------------
-    private List<Registered> addRgistedToLst(List<Registered> prmRgstedLst, ReceiptForm prmReceiptForm) throws IOException {
-        List<Registered> rgstedLst = prmRgstedLst;
-
-        if (rgstedLst == null) {
-            rgstedLst = new ArrayList<>();
-        }
-
-        rgstedLst.add(0, indexService.getRegistered(prmReceiptForm));
-
-        return rgstedLst;
     }
 }
